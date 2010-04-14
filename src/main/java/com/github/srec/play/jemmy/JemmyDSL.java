@@ -1,7 +1,7 @@
 package com.github.srec.play.jemmy;
 
-import com.github.srec.play.IllegalParametersException;
 import com.github.srec.Utils;
+import com.github.srec.play.IllegalParametersException;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.JemmyProperties;
 import org.netbeans.jemmy.Timeouts;
@@ -11,23 +11,28 @@ import org.testng.Assert;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
 public class JemmyDSL {
     private static Container currentContainer;
+    private static Properties props = new Properties();
+
+    static {
+        props.put("DialogWaiter.WaitDialogTimeout", "10000");
+        props.put("FrameWaiter.WaitFrameTimeout", "10000");
+        props.put("Waiter.WaitingTime", "10000");
+        props.put("WindowWaiter.WaitWindowTimeout", "10000");
+        props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
+        props.put("JSliderOperator.WholeScrollTimeout", "10000");
+        props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
+        props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
+    }
 
     public static void init() throws IOException {
-        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("timeouts.properties");
-        if (is != null) {
-            Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
-
-            Properties props = new Properties();
-            props.load(is);
-            for (Map.Entry<Object, Object> entry : props.entrySet()) {
-                timeouts.setTimeout((String) entry.getKey(), 2000L);
-            }
+        Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
+        for (Map.Entry<Object, Object> entry : props.entrySet()) {
+            timeouts.setTimeout((String) entry.getKey(), Long.parseLong((String) entry.getValue()));
         }
     }
 
@@ -167,8 +172,10 @@ public class JemmyDSL {
             if (locator.indexOf('=') == -1) return new NameComponentChooser(locator);
             locator = locator.trim();
             String[] locatorParsed = locator.split("=");
-            if (locatorParsed.length != 2) throw new IllegalArgumentException("Could not understand locator: " + locator);
-            if (locatorParsed[0].trim().equals("text")) return new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorParsed[1].trim());
+            if (locatorParsed.length != 2)
+                throw new IllegalArgumentException("Could not understand locator: " + locator);
+            if (locatorParsed[0].trim().equals("text"))
+                return new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorParsed[1].trim());
             throw new IllegalArgumentException("Could not understand locator: " + locator);
         }
 
