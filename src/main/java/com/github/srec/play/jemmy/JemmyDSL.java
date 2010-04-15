@@ -10,7 +10,6 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 import org.testng.Assert;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -30,11 +29,12 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaitComponentTimeout", "10000");
     }
 
-    public static void init() throws IOException {
+    public static void init() {
         Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
         for (Map.Entry<Object, Object> entry : props.entrySet()) {
             timeouts.setTimeout((String) entry.getKey(), Long.parseLong((String) entry.getValue()));
         }
+        currentContainer = null;
     }
 
     public static Frame frame(String title) {

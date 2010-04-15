@@ -1,13 +1,11 @@
 package com.github.srec.play;
 
 import com.github.srec.RecorderEvent;
-import com.github.srec.play.exception.PlayerException;
 import com.github.srec.play.exception.TimeoutException;
 import com.github.srec.play.exception.UnsupportedCommandException;
 import com.github.srec.play.jemmy.*;
 import org.netbeans.jemmy.TimeoutExpiredException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +40,7 @@ public class Player {
         addCommand(new SelectCommand());
         addCommand(new CloseCommand());
 
-        try {
-            JemmyDSL.init();
-        } catch (IOException e) {
-            throw new PlayerException(e.getMessage());
-        }
+        JemmyDSL.init();
     }
 
     public void play(final List<RecorderEvent> events) {
