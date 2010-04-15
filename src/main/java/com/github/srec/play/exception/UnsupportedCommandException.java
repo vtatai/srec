@@ -1,4 +1,4 @@
-package com.github.srec.play;
+package com.github.srec.play.exception;
 
 public class UnsupportedCommandException extends PlayerException {
     public UnsupportedCommandException(String command) {

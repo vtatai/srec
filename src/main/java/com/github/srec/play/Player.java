@@ -1,8 +1,11 @@
 package com.github.srec.play;
 
 import com.github.srec.RecorderEvent;
-import com.github.srec.play.Command;
+import com.github.srec.play.exception.PlayerException;
+import com.github.srec.play.exception.TimeoutException;
+import com.github.srec.play.exception.UnsupportedCommandException;
 import com.github.srec.play.jemmy.*;
+import org.netbeans.jemmy.TimeoutExpiredException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +18,16 @@ public class Player {
     public void play(String command, String... params) {
         final Command cmd = commandMap.get(command);
         if (cmd == null) throw new UnsupportedCommandException(command);
-        cmd.run(params);
+        try {
+            cmd.run(params);
+        } catch (RuntimeException e) {
+            throw convertException(e, cmd, params);
+        }
+    }
+
+    private RuntimeException convertException(RuntimeException e, Command cmd, String[] params) {
+        if (e instanceof TimeoutExpiredException) throw new TimeoutException(cmd, params);
+        throw new IllegalArgumentException();
     }
 
     public void addCommand(Command cmd) {

@@ -1,4 +1,4 @@
-package com.github.srec.play;
+package com.github.srec.play.exception;
 
 public class PlayerException extends RuntimeException {
 
@@ -7,5 +7,9 @@ public class PlayerException extends RuntimeException {
 
     public PlayerException(String message) {
         super(message);
+    }
+
+    public PlayerException(Throwable throwable) {
+        super(throwable);
     }
 }

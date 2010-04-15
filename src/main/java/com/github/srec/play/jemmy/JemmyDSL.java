@@ -1,7 +1,7 @@
 package com.github.srec.play.jemmy;
 
 import com.github.srec.Utils;
-import com.github.srec.play.IllegalParametersException;
+import com.github.srec.play.exception.IllegalParametersException;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.JemmyProperties;
 import org.netbeans.jemmy.Timeouts;
@@ -27,6 +27,7 @@ public class JemmyDSL {
         props.put("JSliderOperator.WholeScrollTimeout", "10000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
         props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
+        props.put("ComponentOperator.WaitComponentTimeout", "10000");
     }
 
     public static void init() throws IOException {

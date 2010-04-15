@@ -8,6 +8,7 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,5 +77,22 @@ public final class Utils {
         } catch (IllegalAccessException e1) {
             throw new MainMethodRunningException("Incorrect signature for main method");
         }
+    }
+
+    /**
+     * Close all windows.
+     */
+    public static void closeWindows(Window... exceptions) {
+        Window[] ws = Window.getWindows();
+        for (Window w : ws) {
+            if (!contains(exceptions, w)) w.dispose();
+        }
+    }
+
+    private static boolean contains(Window[] windows, Window w) {
+        for (Window window : windows) {
+            if (window == w) return true;
+        }
+        return false;
     }
 }

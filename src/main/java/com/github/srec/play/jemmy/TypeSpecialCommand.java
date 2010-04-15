@@ -2,7 +2,7 @@ package com.github.srec.play.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.play.Command;
-import com.github.srec.play.IllegalParametersException;
+import com.github.srec.play.exception.IllegalParametersException;
 
 import java.awt.event.KeyEvent;
 
@@ -21,5 +21,10 @@ public class TypeSpecialCommand implements Command {
         if (params[1].equals("Tab")) key = KeyEvent.VK_TAB;
         else throw new UnsupportedFeatureException("Type special for " + params[1] + " not supported");
         textField(params[0]).type(key);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

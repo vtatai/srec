@@ -8,7 +8,7 @@ import static com.github.srec.play.jemmy.JemmyDSL.*;
 
 @Test
 public class RecordingTest {
-    public void record() {
+    public void record() throws InterruptedException {
         SRecForm.main(new String[] { });
         frame("srec");
         button("text=Launch").click();

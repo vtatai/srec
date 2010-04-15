@@ -1,13 +1,19 @@
 package com.github.srec.play;
 
+import com.github.srec.Utils;
+import com.github.srec.play.exception.PlayerException;
 import org.apache.commons.lang.StringUtils;
 
+import java.awt.*;
 import java.io.*;
 
+import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
 
 public class ScriptPlayer {
     private Player player = new Player();
+    private ScriptPlayerError error;
+    private boolean throwError;
 
     public ScriptPlayer init() {
         player.init();
@@ -23,10 +29,23 @@ public class ScriptPlayer {
     }
 
     public void play(BufferedReader reader) throws IOException {
+        int lineCounter = 1;
+        error = null;
         String line;
         while ((line = reader.readLine()) != null) {
-            play(line);
+            try {
+                play(line);
+            } catch (PlayerException e) {
+                handleError(lineCounter, e);
+                if (throwError) throw e;
+                return;
+            }
+            lineCounter++;
         }
+    }
+
+    private void handleError(int line, PlayerException e) {
+        error = new ScriptPlayerError(line, e);
     }
 
     public void play(String line) {
@@ -49,8 +68,50 @@ public class ScriptPlayer {
         player.play(line.substring(0, i), params);
     }
 
-    public static void main(String[] args) throws IOException {
+    public ScriptPlayerError getError() {
+        return error;
+    }
+
+    public boolean isThrowError() {
+        return throwError;
+    }
+
+    public void setThrowError(boolean throwError) {
+        this.throwError = throwError;
+    }
+
+    public static void main(final String[] args) throws IOException {
         runMain(args[0], null);
-        new ScriptPlayer().init().play(new File(args[1]));
+
+        ScriptPlayer scriptPlayer = new ScriptPlayer().init();
+        scriptPlayer.play(new File(args[1]));
+        if (scriptPlayer.getError() != null) {
+            System.err.println(scriptPlayer.getError());
+        }
+
+        closeWindows();
+    }
+
+    public static class ScriptPlayerError {
+        private int line;
+        private PlayerException originatingException;
+
+        public ScriptPlayerError(int line, PlayerException originatingException) {
+            this.line = line;
+            this.originatingException = originatingException;
+        }
+
+        public int getLine() {
+            return line;
+        }
+
+        public PlayerException getOriginatingException() {
+            return originatingException;
+        }
+
+        @Override
+        public String toString() {
+            return "Script error on line " + line + ", message:\n" + originatingException.getMessage();
+        }
     }
 }
