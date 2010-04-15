@@ -2,6 +2,7 @@ package com.github.srec.play.jemmy;
 
 import com.github.srec.Utils;
 import com.github.srec.play.exception.IllegalParametersException;
+import org.apache.log4j.Logger;
 import org.netbeans.jemmy.ComponentChooser;
 import org.netbeans.jemmy.JemmyProperties;
 import org.netbeans.jemmy.Timeouts;
@@ -10,13 +11,17 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 import org.testng.Assert;
 
 import javax.swing.*;
-import java.util.Map;
-import java.util.Properties;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
+/**
+ * A DSL wrapper for Jemmy operators.
+ */
 public class JemmyDSL {
+    private static final Logger logger = Logger.getLogger(JemmyDSL.class);
     private static Container currentContainer;
     private static Properties props = new Properties();
-
     static {
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "10000");
@@ -28,13 +33,15 @@ public class JemmyDSL {
         props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
         props.put("ComponentOperator.WaitComponentTimeout", "10000");
     }
+    private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
 
-    public static void init() {
+    public static void init(java.awt.Container... ignored) {
         Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
         for (Map.Entry<Object, Object> entry : props.entrySet()) {
             timeouts.setTimeout((String) entry.getKey(), Long.parseLong((String) entry.getValue()));
         }
         currentContainer = null;
+        JemmyDSL.ignored = Arrays.asList(ignored);
     }
 
     public static Frame frame(String title) {
@@ -47,7 +54,30 @@ public class JemmyDSL {
         return (Frame) currentContainer;
     }
 
-    private static Container container() {
+    public static Container container() {
+        if (currentContainer == null) {
+            logger.info("No current container found, trying to find one.");
+            // Try to find a container
+            Window[] windows = JFrame.getWindows();
+            for (Window w : windows) {
+                if (ignored.contains(w)) continue;
+                if (w instanceof JFrame) {
+                    currentContainer = new Frame((JFrame) w);
+                    break;
+                } else if (w instanceof JDialog) {
+                    currentContainer = new Dialog((JDialog) w);
+                    break;
+                } else {
+                    logger.info("Found a window which is neither a JFrame or JDialog");
+                }
+            }
+            logger.info("Using as current container: " + currentContainer.getComponent().getSource());
+        }
+        return currentContainer;
+    }
+
+    public static Container container(JFrame frame) {
+        currentContainer = new Frame(frame);
         return currentContainer;
     }
 
@@ -84,6 +114,10 @@ public class JemmyDSL {
             component = new JFrameOperator(title);
         }
 
+        public Frame(JFrame frame) {
+            component = new JFrameOperator(frame);
+        }
+
         public Frame close() {
             component.requestClose();
             return this;
@@ -104,6 +138,10 @@ public class JemmyDSL {
 
         public Dialog(String title) {
             component = new JDialogOperator((WindowOperator) container().getComponent(), title);
+        }
+
+        public Dialog(JDialog dialog) {
+            component = new JDialogOperator(dialog);
         }
 
         public Dialog close() {

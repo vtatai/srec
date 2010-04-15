@@ -1,4 +1,4 @@
-package com.github.srec;
+package com.github.srec.rec;
 
 import com.github.srec.rec.Recorder;
 

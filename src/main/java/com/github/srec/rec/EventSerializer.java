@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;

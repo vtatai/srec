@@ -1,6 +1,6 @@
 package com.github.srec.ui;
 
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 import com.github.srec.play.Player;
 import com.github.srec.rec.EventSerializer;
 import com.github.srec.rec.Recorder;
@@ -36,7 +36,7 @@ public class SRecForm {
 
     protected EventsTableModel tableModel;
 
-    protected JFrame frame;
+    protected JFrame frame = new JFrame("srec");;
 
     private Action openAction = new AbstractAction("Open") {
         @Override
@@ -50,6 +50,24 @@ public class SRecForm {
             saveScript();
         }
     };
+    private Action recordAction = new AbstractAction("Record") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (recorder.isRecording()) {
+                recorder.setRecording(false);
+                recordButton.setText("Record");
+            } else {
+                recorder.setRecording(true);
+                recordButton.setText("Stop");
+            }
+        }
+    };
+    private Action playAction = new AbstractAction("Play") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            play(recorder.getEvents());
+        }
+    };
 
     public SRecForm() {
         $$$setupUI$$$();
@@ -59,18 +77,7 @@ public class SRecForm {
             }
         });
         recorder.init();
-        player.init();
-        recordButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (recorder.isRecording()) {
-                    recorder.setRecording(false);
-                    recordButton.setText("Record");
-                } else {
-                    recorder.setRecording(true);
-                    recordButton.setText("Stop");
-                }
-            }
-        });
+        player.init(frame);
         recorder.addListener(new RecorderEventListener() {
             @Override
             public void eventAdded(RecorderEvent event) {
@@ -92,25 +99,64 @@ public class SRecForm {
                 tableModel.update(index, recorderEvents);
             }
         });
+        recordButton.setAction(recordAction);
         saveButton.setAction(saveAction);
         openButton.setAction(openAction);
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.play(recorder.getEvents());
-            }
-        });
+        playButton.setAction(playAction);
 
         // Setup mnemonics
         saveButton.setMnemonic(KeyEvent.VK_S);
         openButton.setMnemonic(KeyEvent.VK_O);
         playButton.setMnemonic(KeyEvent.VK_P);
         recordButton.setMnemonic(KeyEvent.VK_E);
+        launchButton.setMnemonic(KeyEvent.VK_L);
     }
+
+    public void play(final List<RecorderEvent> events) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                int currentIndex = eventsTbl.getSelectedRow();
+                if (currentIndex < 0) currentIndex = 0;
+                for (int i = currentIndex; i < events.size(); i++) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    RecorderEvent event = events.get(i);
+                    eventsTbl.getSelectionModel().setSelectionInterval(i, i);
+                    play(event);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        };
+        t.start();
+    }
+
+    private void play(RecorderEvent event) {
+        int length = event.getComponentLocator() == null ? 0 : 1;
+        length += event.getArgs().length;
+        String[] args = new String[length];
+        int dif = 0;
+        if (event.getComponentLocator() != null) {
+            args[0] = event.getComponentLocator();
+            dif = 1;
+        }
+        for (int i = 0; i < event.getArgs().length; i++) {
+            String arg = event.getArgs()[i];
+            args[i + dif] = arg;
+        }
+        player.play(event.getCommand(), args);
+    }
+
 
     public void showFrame(String[] args) {
         // Init frame
-        frame = new JFrame("srec");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(createMenuBar());
@@ -217,9 +263,17 @@ public class SRecForm {
 
         menuBar.add(file);
 
-        JMenu record = new JMenu("Record");
+        JMenu record = new JMenu("Recording");
         record.setMnemonic(KeyEvent.VK_R);
         menuBar.add(record);
+
+        final JMenuItem recordMenuItem = new JMenuItem("Record", KeyEvent.VK_R);
+        recordMenuItem.setAction(recordAction);
+        record.add(recordMenuItem);
+
+        final JMenuItem playMenuItem = new JMenuItem("Play", KeyEvent.VK_P);
+        playMenuItem.setAction(playAction);
+        record.add(playMenuItem);
 
         return menuBar;
     }
@@ -236,6 +290,7 @@ public class SRecForm {
     private void createUIComponents() {
         tableModel = new EventsTableModel();
         eventsTbl = new JTable(tableModel);
+        eventsTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**

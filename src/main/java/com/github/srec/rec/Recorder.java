@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
 import com.github.srec.rec.RecorderEventListener;

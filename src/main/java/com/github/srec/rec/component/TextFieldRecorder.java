@@ -1,7 +1,7 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.rec.EventRecorder;
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 import com.github.srec.Utils;
 import org.apache.log4j.Logger;
 

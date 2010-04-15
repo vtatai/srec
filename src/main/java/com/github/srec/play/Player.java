@@ -1,13 +1,12 @@
 package com.github.srec.play;
 
-import com.github.srec.RecorderEvent;
 import com.github.srec.play.exception.TimeoutException;
 import com.github.srec.play.exception.UnsupportedCommandException;
 import com.github.srec.play.jemmy.*;
 import org.netbeans.jemmy.TimeoutExpiredException;
 
+import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Player {
@@ -25,14 +24,14 @@ public class Player {
 
     private RuntimeException convertException(RuntimeException e, Command cmd, String[] params) {
         if (e instanceof TimeoutExpiredException) throw new TimeoutException(cmd, params);
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException(e);
     }
 
     public void addCommand(Command cmd) {
         commandMap.put(cmd.getName(), cmd);
     }
 
-    public void init() {
+    public void init(Container... ignored) {
         addCommand(new ClickCommand());
         addCommand(new TypeCommand());
         addCommand(new TypeSpecialCommand());
@@ -40,34 +39,6 @@ public class Player {
         addCommand(new SelectCommand());
         addCommand(new CloseCommand());
 
-        JemmyDSL.init();
-    }
-
-    public void play(final List<RecorderEvent> events) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                for (RecorderEvent event : events) {
-                    play(event);
-                }
-            }
-        };
-        t.start();
-    }
-
-    private void play(RecorderEvent event) {
-        int length = event.getComponentLocator() == null ? 0 : 1;
-        length += event.getArgs().length;
-        String[] args = new String[length];
-        int dif = 0;
-        if (event.getComponentLocator() != null) {
-            args[0] = event.getComponentLocator();
-            dif = 1;
-        }
-        for (int i = 0; i < event.getArgs().length; i++) {
-            String arg = event.getArgs()[i];
-            args[i + dif] = arg;
-        }
-        play(event.getCommand(), args);
+        JemmyDSL.init(ignored);
     }
 }

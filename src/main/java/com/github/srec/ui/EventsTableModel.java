@@ -1,6 +1,6 @@
 package com.github.srec.ui;
 
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.rec.EventRecorder;
-import com.github.srec.RecorderEvent;
+import com.github.srec.rec.RecorderEvent;
 
 import javax.swing.*;
 import java.awt.*;
