@@ -3,6 +3,7 @@ package com.github.srec.play;
 import com.github.srec.play.exception.TimeoutException;
 import com.github.srec.play.exception.UnsupportedCommandException;
 import com.github.srec.play.jemmy.*;
+import com.github.srec.rec.component.CheckTextRecorder;
 import org.netbeans.jemmy.TimeoutExpiredException;
 
 import java.awt.*;
@@ -38,7 +39,8 @@ public class Player {
         addCommand(new WindowActivateCommand());
         addCommand(new SelectCommand());
         addCommand(new CloseCommand());
-
+        addCommand(new AssertCommand());
+        
         JemmyDSL.init(ignored);
     }
 }

@@ -3,17 +3,19 @@ package com.github.srec.play.jemmy;
 import com.github.srec.Utils;
 import com.github.srec.play.exception.IllegalParametersException;
 import org.apache.log4j.Logger;
-import org.netbeans.jemmy.ComponentChooser;
-import org.netbeans.jemmy.JemmyProperties;
-import org.netbeans.jemmy.Timeouts;
+import org.netbeans.jemmy.*;
 import org.netbeans.jemmy.operators.*;
 import org.netbeans.jemmy.util.NameComponentChooser;
-import org.testng.Assert;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.List;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * A DSL wrapper for Jemmy operators.
@@ -34,6 +36,7 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaitComponentTimeout", "10000");
     }
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
+    private static Map<String, JComponentOperator> idMap = new HashMap<String, JComponentOperator>();
 
     public static void init(java.awt.Container... ignored) {
         Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
@@ -68,7 +71,7 @@ public class JemmyDSL {
                     currentContainer = new Dialog((JDialog) w);
                     break;
                 } else {
-                    logger.info("Found a window which is neither a JFrame or JDialog");
+                    logger.info("Found a window which is neither a JFrame nor JDialog");
                 }
             }
             logger.info("Using as current container: " + currentContainer.getComponent().getSource());
@@ -103,7 +106,89 @@ public class JemmyDSL {
         return new Table(locator);
     }
 
-    private interface Container {
+    /**
+     * Finds a component and stores it under the given id. The component can later be used on other commands using the
+     * locator "id=ID_ASSIGNED".
+     *
+     * @param locator The locator
+     * @param id The id
+     * @return The component found
+     */
+    public static <X extends JComponentOperator> X find(String locator, Class<X> cl, String id) {
+        X x = find(locator, cl);
+        idMap.put(id, x);
+        return x;
+    }
+
+    public static void assertText(String locator, String text) {
+        JTextComponentOperator component = find(locator, JTextComponentOperator.class);
+        assertEquals(component.getText(), text);
+    }
+
+    public static void click(String locator) {
+        find(locator, AbstractButtonOperator.class).push();
+    }
+
+    public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
+        Map<String, String> locatorMap = Utils.parseLocator(locator);
+        X component;
+        if (locatorMap.containsKey("name")) {
+            component = newInstance(clazz, container().getComponent(), new NameComponentChooser(locator));
+        } else if (locatorMap.containsKey("label")) {
+            JLabelOperator jlabel = new JLabelOperator(container().getComponent(), locatorMap.get("label"));
+            if (!(jlabel.getLabelFor() instanceof JTextComponent)) {
+                throw new JemmyDSLException("Associated component for " + locator + " is not a JTextComponent");
+            }
+            component = newInstance(clazz, (AbstractButton) jlabel.getLabelFor());
+        } else if (locatorMap.containsKey("text")) {
+            if (JTextComponentOperator.class.isAssignableFrom(clazz)) {
+                component = newInstance(clazz, container().getComponent(), new JTextComponentOperator.JTextComponentByTextFinder(locatorMap.get("text")));
+            } else if (AbstractButtonOperator.class.isAssignableFrom(clazz)) {
+                component = newInstance(clazz, container().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
+            } else {
+                throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
+            }
+        } else if (locatorMap.containsKey("id")) {
+            JComponentOperator operator = idMap.get(locatorMap.get("id"));
+            if (!clazz.isAssignableFrom(operator.getClass())) {
+                throw new JemmyDSLException("Cannot convert component with " + locator + " from "
+                        + operator.getClass().getName() + "to " + clazz.getName());
+            }
+            component = (X) operator;
+        } else {
+            throw new JemmyDSLException("Unsupported locator: " + locator);
+        }
+        return component;
+    }
+
+    private static <X extends JComponentOperator> X newInstance(Class<X> clazz, ContainerOperator parent,
+                                                                ComponentChooser chooser) {
+        try {
+            Constructor<X> c = clazz.getConstructor(ContainerOperator.class, ComponentChooser.class);
+            return c.newInstance(parent, chooser);
+        } catch (Exception e) {
+            // Check to see if the nested exception was caused by a regular Jemmy exception
+            if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
+            throw new JemmyDSLException(e);
+        }
+    }
+
+    private static <X extends JComponentOperator> X newInstance(Class<X> clazz, JComponent component) {
+        try {
+            Constructor<X> c = clazz.getConstructor(component.getClass());
+            return c.newInstance(component);
+        } catch (Exception e) {
+            // Check to see if the nested exception was caused by a regular Jemmy exception
+            if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
+            throw new JemmyDSLException(e);
+        }
+    }
+
+    private interface Component {
+        ComponentOperator getComponent();
+    }
+
+    private interface Container extends Component {
         ContainerOperator getComponent();
     }
 
@@ -112,10 +197,12 @@ public class JemmyDSL {
 
         public Frame(String title) {
             component = new JFrameOperator(title);
+            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Frame(JFrame frame) {
             component = new JFrameOperator(frame);
+            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Frame close() {
@@ -138,10 +225,12 @@ public class JemmyDSL {
 
         public Dialog(String title) {
             component = new JDialogOperator((WindowOperator) container().getComponent(), title);
+            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Dialog(JDialog dialog) {
             component = new JDialogOperator(dialog);
+            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Dialog close() {
@@ -154,20 +243,11 @@ public class JemmyDSL {
         }
     }
 
-    public static class TextField {
+    public static class TextField implements Component {
         private JTextFieldOperator component;
 
         public TextField(String locator) {
-            Map<String, String> locatorMap = Utils.parseLocator(locator);
-            if (locatorMap.containsKey("name")) {
-                component = new JTextFieldOperator(container().getComponent(), new NameComponentChooser(locator));
-            } else if (locatorMap.containsKey("label")) {
-                JLabelOperator jlabel = new JLabelOperator(container().getComponent(), locatorMap.get("label"));
-                if (!(jlabel.getLabelFor() instanceof JTextField)) {
-                    throw new IllegalParametersException("Associated component for " + locator + " is not a JTextField");
-                }
-                component = new JTextFieldOperator((JTextField) jlabel.getLabelFor());
-            }
+            component = find(locator, JTextFieldOperator.class);
         }
 
         public TextField type(String text) {
@@ -186,9 +266,13 @@ public class JemmyDSL {
         public String text() {
             return component.getText();
         }
+
+        public JTextFieldOperator getComponent() {
+            return component;
+        }
     }
 
-    public static class ComboBox {
+    public static class ComboBox implements Component {
         private JComboBoxOperator component;
 
         public ComboBox(String name) {
@@ -198,9 +282,17 @@ public class JemmyDSL {
         public void select(String text) {
             component.selectItem(text);
         }
+
+        public void select(int index) {
+            component.selectItem(index);
+        }
+
+        public JComboBoxOperator getComponent() {
+            return component;
+        }
     }
 
-    public static class Button {
+    public static class Button implements Component {
         private JButtonOperator component;
 
         public Button(String locator) {
@@ -221,9 +313,13 @@ public class JemmyDSL {
         public void click() {
             component.push();
         }
+
+        public JButtonOperator getComponent() {
+            return component;
+        }
     }
 
-    public static class Table {
+    public static class Table implements Component {
         private JTableOperator component;
 
         public Table(String locator) {
@@ -238,6 +334,10 @@ public class JemmyDSL {
         public Row row(int index) {
             return new Row(component, index);
         }
+
+        public JTableOperator getComponent() {
+            return component;
+        }
     }
 
     public static class Row {
@@ -251,7 +351,7 @@ public class JemmyDSL {
 
         public Row assertColumn(int col, String value) {
             String realValue = component.getValueAt(index, col).toString();
-            Assert.assertEquals(realValue, value);
+            assertEquals(realValue, value);
             return this;
         }
     }

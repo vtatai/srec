@@ -1,6 +1,5 @@
 package com.github.srec;
 
-import com.github.srec.ui.LaunchDialog;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
@@ -8,11 +7,17 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 public final class Utils {
+    /**
+     * Flag which indicates whether the recorder should scan for labels if the text field has no name.
+     */
+    private static final boolean SCAN_FOR_LABELS = true;
+
     private Utils() {}
 
     public static String quote(String str) {
@@ -81,11 +86,13 @@ public final class Utils {
 
     /**
      * Close all windows.
+     *
+     * @param windows The windows to close
      */
-    public static void closeWindows(Window... exceptions) {
+    public static void closeWindows(Window... windows) {
         Window[] ws = Window.getWindows();
         for (Window w : ws) {
-            if (!contains(exceptions, w)) w.dispose();
+            if (!contains(windows, w)) w.dispose();
         }
     }
 
@@ -94,5 +101,24 @@ public final class Utils {
             if (window == w) return true;
         }
         return false;
+    }
+
+    public static String getLocator(Component component) {
+        String locator = component.getName();
+        if (isBlank(locator) && SCAN_FOR_LABELS) {
+            JLabel label = getLabelFor(component.getParent(), component);
+            if (label != null) locator = "label=" + label.getText();
+        }
+        return locator;
+    }
+
+    public static String asString(String[] parameters) {
+        if (parameters == null || parameters.length == 0) return "";
+        StringBuilder strb = new StringBuilder(parameters[0]);
+        for (int i = 1; i < parameters.length; i++) {
+            String parameter = parameters[i];
+            strb.append(", ").append(parameter);
+        }
+        return strb.toString();
     }
 }

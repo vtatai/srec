@@ -20,8 +20,16 @@ public class ScriptPlayer {
         return this;
     }
 
-    public void play(File file) throws IOException {
+    public ScriptPlayer play(File file) throws IOException {
         play(new FileInputStream(file));
+        return this;
+    }
+
+    public ScriptPlayer startAndPlay(File file, String className, String[] args) throws IOException {
+        Utils.runMain(className, args);
+        play(file);
+        closeWindows();
+        return this;
     }
 
     public void play(InputStream is) throws IOException {

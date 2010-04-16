@@ -1,9 +1,7 @@
 package com.github.srec.rec;
 
-import com.github.srec.rec.RecorderEvent;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
-import com.github.srec.rec.RecorderEventListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -26,6 +24,7 @@ public class Recorder implements EventRecorder {
         componentRecorders.add(new WindowActivationRecorder(this));
         componentRecorders.add(new TextFieldRecorder(this, new DefaultComponentVisibility()));
         componentRecorders.add(new SelectDropDownRecorder(this, new DefaultComponentDecoder(), new DefaultComponentVisibility()));
+        componentRecorders.add(new CheckTextRecorder(this));
     }
 
     public void init() {

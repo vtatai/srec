@@ -1,13 +1,12 @@
 package com.github.srec.rec;
 
-import com.github.srec.rec.Recorder;
-
 import java.awt.*;
 import java.util.Arrays;
 
 public class RecorderEvent {
     private String command;
     private String componentLocator;
+    // TODO probably not needed
     private Component component;
     private String[] args;
     /**

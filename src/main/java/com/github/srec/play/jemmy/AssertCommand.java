@@ -3,19 +3,18 @@ package com.github.srec.play.jemmy;
 import com.github.srec.play.Command;
 import com.github.srec.play.exception.IllegalParametersException;
 
-import static com.github.srec.play.jemmy.JemmyDSL.button;
-import static com.github.srec.play.jemmy.JemmyDSL.click;
+import static com.github.srec.play.jemmy.JemmyDSL.assertText;
 
-public class ClickCommand implements Command {
+public class AssertCommand implements Command {
     @Override
     public String getName() {
-        return "click";
+        return "assert";
     }
 
     @Override
     public void run(String... params) {
-        if (params.length != 1) throw new IllegalParametersException("Missing button locator");
-        click(params[0]);
+        if (params.length != 2) throw new IllegalParametersException("Missing parameters to assert");
+        assertText(params[0], params[1]);
     }
 
     @Override

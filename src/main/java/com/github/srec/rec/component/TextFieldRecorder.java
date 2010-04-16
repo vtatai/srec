@@ -1,8 +1,8 @@
 package com.github.srec.rec.component;
 
+import com.github.srec.Utils;
 import com.github.srec.rec.EventRecorder;
 import com.github.srec.rec.RecorderEvent;
-import com.github.srec.Utils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -15,22 +15,16 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-
 /**
  * Understands recording text entered in text fields.
  *
  * @author Vivek Prahlad
+ * @author Victor Tatai
  */
 public class TextFieldRecorder extends AbstractComponentRecorder {
     private static final Logger logger = Logger.getLogger(TextFieldRecorder.class);
     private Map<JTextComponent, DocumentListener> listenerMap = new HashMap<JTextComponent, DocumentListener>();
     private ComponentVisibility visibility;
-
-    /**
-     * Flag which indicates whether the recorder should scan for labels if the text field has no name.
-     */
-    private boolean scanForLabels = true;
 
     public TextFieldRecorder(EventRecorder recorder, ComponentVisibility visibility) {
         super(recorder, JTextField.class);
@@ -47,7 +41,6 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
                 if (((KeyEvent) event).getKeyChar() == '\t' && event.getSource() instanceof JTextField) {
                     JTextField tf = (JTextField) event.getSource();
                     recorder.record(new RecorderEvent("type_special", tf.getName(), tf, false, "Tab"));
-
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -85,11 +78,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
 
         private void record() {
             if (!visibility.isShowingAndHasFocus(textField)) return;
-            String locator = textField.getName();
-            if (isBlank(locator) && scanForLabels) {
-                JLabel label = Utils.getLabelFor(textField.getParent(), textField);
-                if (label != null) locator = "label=" + label.getText();
-            }
+            String locator = Utils.getLocator(textField);
             logger.debug("TextField event registered: '" + locator + "', value: '" + textField.getText() + "'");
             recorder.record(new RecorderEvent("type", locator, textField, textField.getText()));
         }

@@ -9,22 +9,32 @@ import java.io.IOException;
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.fail;
 
 @Test
 public class ScriptPlayerTest {
     public void test() throws IOException {
-        ScriptPlayer.main(new String[] {"com.github.srec.ui.TestForm", "src/test/resources/test_form.rb"});
-    }
-
-    public void testError() throws IOException {
-        runMain("com.github.srec.ui.TestForm", new String[0]);
-        ScriptPlayer player = new ScriptPlayer().init();
         try {
-            player.play(new File("src/test/resources/test_form_error.rb"));
+            ScriptPlayer player = new ScriptPlayer()
+                    .init()
+                    .startAndPlay(new File("src/test/resources/test_form.rb"), "com.github.srec.ui.TestForm", new String[0]);
+            assertNull(player.getError());
         } catch (Throwable t) {
             t.printStackTrace();
+            fail();
         }
-        assertEquals(player.getError().getLine(), 3);
-        closeWindows();
+    }
+
+    public void testError() throws IOException {        
+        try {
+            ScriptPlayer player = new ScriptPlayer()
+                    .init()
+                    .startAndPlay(new File("src/test/resources/test_form_error.rb"), "com.github.srec.ui.TestForm", new String[0]);
+            assertEquals(player.getError().getLine(), 3);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            fail();
+        }
     }
 }

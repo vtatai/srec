@@ -1,9 +1,9 @@
 package com.github.srec.ui;
 
-import com.github.srec.rec.RecorderEvent;
 import com.github.srec.play.Player;
 import com.github.srec.rec.EventSerializer;
 import com.github.srec.rec.Recorder;
+import com.github.srec.rec.RecorderEvent;
 import com.github.srec.rec.RecorderEventListener;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -36,7 +36,7 @@ public class SRecForm {
 
     protected EventsTableModel tableModel;
 
-    protected JFrame frame = new JFrame("srec");;
+    protected JFrame frame = new JFrame("srec");
 
     private Action openAction = new AbstractAction("Open") {
         @Override
