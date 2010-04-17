@@ -22,6 +22,23 @@ import static org.testng.Assert.assertEquals;
  */
 public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
+    public enum ComponentType {
+        text_field(JTextFieldOperator.class),
+        combo_box(JComboBoxOperator.class),
+        button(JButtonOperator.class),
+        radio_button(JRadioButtonOperator.class),
+        check_box(JCheckBoxOperator.class);
+
+        private Class associatedClass;
+
+        ComponentType(Class associatedClass) {
+            this.associatedClass = associatedClass;
+        }
+
+        public Class getAssociatedClass() {
+            return associatedClass;
+        }
+    }
     private static Container currentContainer;
     private static Properties props = new Properties();
     static {
@@ -45,6 +62,20 @@ public class JemmyDSL {
         }
         currentContainer = null;
         JemmyDSL.ignored = Arrays.asList(ignored);
+        JemmyProperties.setCurrentOutput(new TestOut(System.in, (PrintStream) null, null));
+        robotMode();
+    }
+
+    public static void robotMode() {
+        JemmyProperties.setCurrentDispatchingModel(JemmyProperties.ROBOT_MODEL_MASK);
+    }
+
+    public static void dispatchingMode() {
+        JemmyProperties.setCurrentDispatchingModel(JemmyProperties.QUEUE_MODEL_MASK);
+    }
+
+    public static boolean isRobotMode() {
+        return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.ROBOT_MODEL_MASK;
     }
 
     public static Frame frame(String title) {
@@ -111,10 +142,33 @@ public class JemmyDSL {
      * locator "id=ID_ASSIGNED".
      *
      * @param locator The locator
+     * @param findType The find type name
      * @param id The id
      * @return The component found
      */
-    public static <X extends JComponentOperator> X find(String locator, Class<X> cl, String id) {
+    public static JComponentOperator find(String locator, String id, String findType) {
+        return find(locator, id, translateFindType(findType));
+    }
+
+    private static Class translateFindType(String findType) {
+        if (findType.equals(ComponentType.combo_box.name())) return ComponentType.combo_box.getAssociatedClass();
+        if (findType.equals(ComponentType.text_field.name())) return ComponentType.text_field.getAssociatedClass();
+        if (findType.equals(ComponentType.check_box.name())) return ComponentType.check_box.getAssociatedClass();
+        if (findType.equals(ComponentType.radio_button.name())) return ComponentType.radio_button.getAssociatedClass();
+        if (findType.equals(ComponentType.button.name())) return ComponentType.button.getAssociatedClass();
+        throw new JemmyDSLException("Unsupported find type " + findType);
+    }
+
+    /**
+     * Finds a component and stores it under the given id. The component can later be used on other commands using the
+     * locator "id=ID_ASSIGNED".
+     *
+     * @param locator The locator
+     * @param id The id
+     * @param cl The type
+     * @return The component found
+     */
+    private static <X extends JComponentOperator> X find(String locator, String id, Class<X> cl) {
         X x = find(locator, cl);
         idMap.put(id, x);
         return x;
@@ -197,12 +251,10 @@ public class JemmyDSL {
 
         public Frame(String title) {
             component = new JFrameOperator(title);
-            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Frame(JFrame frame) {
             component = new JFrameOperator(frame);
-            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Frame close() {
@@ -225,12 +277,10 @@ public class JemmyDSL {
 
         public Dialog(String title) {
             component = new JDialogOperator((WindowOperator) container().getComponent(), title);
-            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Dialog(JDialog dialog) {
             component = new JDialogOperator(dialog);
-            component.setOutput(new TestOut(System.in, (PrintStream) null, null));
         }
 
         public Dialog close() {
@@ -258,8 +308,16 @@ public class JemmyDSL {
             return this;
         }
 
-        public TextField type(int key) {
-            component.pressKey(key);
+        public TextField type(char key) {
+            component.typeKey(key);
+            if (!isRobotMode()) {
+                // This is a hack because type key in queue mode does not wait for events to be fired
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new JemmyDSLException(e);
+                }
+            }
             return this;
         }
 
@@ -304,10 +362,10 @@ public class JemmyDSL {
             locator = locator.trim();
             String[] locatorParsed = locator.split("=");
             if (locatorParsed.length != 2)
-                throw new IllegalArgumentException("Could not understand locator: " + locator);
+                throw new IllegalParametersException("Could not understand locator: " + locator);
             if (locatorParsed[0].trim().equals("text"))
                 return new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorParsed[1].trim());
-            throw new IllegalArgumentException("Could not understand locator: " + locator);
+            throw new IllegalParametersException("Could not understand locator: " + locator);
         }
 
         public void click() {

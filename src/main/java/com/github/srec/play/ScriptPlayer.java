@@ -4,8 +4,12 @@ import com.github.srec.Utils;
 import com.github.srec.play.exception.PlayerException;
 import org.apache.commons.lang.StringUtils;
 
-import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
@@ -67,13 +71,15 @@ public class ScriptPlayer {
             player.play(line);
             return;
         }
-        String[] params = line.substring(i + 1).split(",");
-        for (int j = 0; j < params.length; j++) {
-            String param = params[j].trim();
-            if (param.startsWith("\"") && param.endsWith("\"")) param = param.substring(1, param.length() - 1);
-            params[j] = param;
+        Pattern pattern = Pattern.compile("\"(.*?)\"");
+        Matcher m = pattern.matcher(line);
+        List<String> params = new ArrayList<String>();
+        int lastmatch = 0;
+        while (m.find(lastmatch)) {
+            params.add(m.group(1));
+            lastmatch = m.end();
         }
-        player.play(line.substring(0, i), params);
+        player.play(line.substring(0, i), params.toArray(new String[params.size()]));
     }
 
     public ScriptPlayerError getError() {

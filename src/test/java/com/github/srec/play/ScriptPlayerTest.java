@@ -19,6 +19,10 @@ public class ScriptPlayerTest {
             ScriptPlayer player = new ScriptPlayer()
                     .init()
                     .startAndPlay(new File("src/test/resources/test_form.rb"), "com.github.srec.ui.TestForm", new String[0]);
+            if (player.getError() != null) {
+                System.err.println("Error on line " + player.getError().getLine());
+                player.getError().getOriginatingException().printStackTrace();
+            }
             assertNull(player.getError());
         } catch (Throwable t) {
             t.printStackTrace();

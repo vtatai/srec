@@ -14,7 +14,7 @@ public class RecordingTest {
         frame("srec");
         button("text=Launch").click();
         dialog("Launch");
-        textField("mainClassTF").type("com.github.srec.ui.TestForm").type(KeyEvent.VK_TAB);
+        textField("mainClassTF").type("com.github.srec.ui.TestForm").type('\t');
         button("text=Launch").click();
         frame("srec");
         button("text=Record").click();

@@ -25,7 +25,7 @@ public class Player {
 
     private RuntimeException convertException(RuntimeException e, Command cmd, String[] params) {
         if (e instanceof TimeoutExpiredException) throw new TimeoutException(cmd, params);
-        throw new IllegalArgumentException(e);
+        return e;
     }
 
     public void addCommand(Command cmd) {
@@ -40,7 +40,9 @@ public class Player {
         addCommand(new SelectCommand());
         addCommand(new CloseCommand());
         addCommand(new AssertCommand());
-        
+        addCommand(new FindCommand());
+        addCommand(new PauseCommand());
+
         JemmyDSL.init(ignored);
     }
 }
