@@ -129,8 +129,8 @@ public class JemmyDSL {
         return new Button(locator);
     }
 
-    public static ComboBox comboBox(String name) {
-        return new ComboBox(name);
+    public static ComboBox comboBox(String locator) {
+        return new ComboBox(locator);
     }
 
     public static Table table(String locator) {
@@ -333,8 +333,8 @@ public class JemmyDSL {
     public static class ComboBox implements Component {
         private JComboBoxOperator component;
 
-        public ComboBox(String name) {
-            component = new JComboBoxOperator(container().getComponent(), new NameComponentChooser(name));
+        public ComboBox(String locator) {
+            component = find(locator, JComboBoxOperator.class);
         }
 
         public void select(String text) {
@@ -354,18 +354,7 @@ public class JemmyDSL {
         private JButtonOperator component;
 
         public Button(String locator) {
-            component = new JButtonOperator(container().getComponent(), parseLocator(locator));
-        }
-
-        private ComponentChooser parseLocator(String locator) {
-            if (locator.indexOf('=') == -1) return new NameComponentChooser(locator);
-            locator = locator.trim();
-            String[] locatorParsed = locator.split("=");
-            if (locatorParsed.length != 2)
-                throw new IllegalParametersException("Could not understand locator: " + locator);
-            if (locatorParsed[0].trim().equals("text"))
-                return new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorParsed[1].trim());
-            throw new IllegalParametersException("Could not understand locator: " + locator);
+            component = find(locator, JButtonOperator.class);
         }
 
         public void click() {
@@ -381,12 +370,7 @@ public class JemmyDSL {
         private JTableOperator component;
 
         public Table(String locator) {
-            component = new JTableOperator(container().getComponent(), parseLocator(locator));
-        }
-
-        private ComponentChooser parseLocator(String locator) {
-            if (locator.indexOf('=') == -1) return new NameComponentChooser(locator);
-            throw new IllegalParametersException("Locator " + locator + " not supported.");
+            component = find(locator, JTableOperator.class);
         }
 
         public Row row(int index) {
