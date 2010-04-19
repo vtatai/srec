@@ -15,11 +15,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Maven: net.java.dev:jemmy:2.3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: commons-lang:commons-lang:2.4" level="project" />
-    <orderEntry type="library" exported="" name="Maven: log4j:log4j:1.2.15" level="project" />
-    <orderEntry type="library" exported="" name="Maven: com.intellij:forms_rt:9.0.1" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.testng:testng:jdk15:5.11" level="project" />
   </component>
 </module>
 
