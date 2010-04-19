@@ -37,6 +37,7 @@ public class Player {
         addCommand(new TypeCommand());
         addCommand(new TypeSpecialCommand());
         addCommand(new WindowActivateCommand());
+        addCommand(new DialogActivateCommand());
         addCommand(new SelectCommand());
         addCommand(new CloseCommand());
         addCommand(new AssertCommand());

@@ -18,6 +18,7 @@ public class ScriptPlayer {
     private Player player = new Player();
     private ScriptPlayerError error;
     private boolean throwError;
+    private long commandInterval = 0;
 
     public ScriptPlayer init() {
         player.init();
@@ -51,6 +52,11 @@ public class ScriptPlayer {
                 handleError(lineCounter, e);
                 if (throwError) throw e;
                 return;
+            }
+            try {
+                Thread.sleep(commandInterval);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
             lineCounter++;
         }

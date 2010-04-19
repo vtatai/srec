@@ -276,7 +276,7 @@ public class JemmyDSL {
         private JDialogOperator component;
 
         public Dialog(String title) {
-            component = new JDialogOperator((WindowOperator) container().getComponent(), title);
+            component = new JDialogOperator(title);
         }
 
         public Dialog(JDialog dialog) {

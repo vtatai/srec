@@ -16,7 +16,7 @@ public class EventsTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -29,6 +29,8 @@ public class EventsTableModel extends AbstractTableModel {
                 return evt.getComponentLocator();
             case 2:
                 return evt.getArgs() != null && evt.getArgs().length > 0 ? evt.getArgs()[0] : null;
+            case 3:
+                return evt.getArgs() != null && evt.getArgs().length > 1 ? evt.getArgs()[1] : null;
             default:
                 return null;
         }
@@ -47,7 +49,9 @@ public class EventsTableModel extends AbstractTableModel {
             case 1:
                 return "Target";
             case 2:
-                return "Parameter";            
+                return "Parameter 1";
+            case 3:
+                return "Parameter 2";
         }
         throw new IllegalArgumentException();
     }

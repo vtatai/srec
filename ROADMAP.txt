@@ -1,0 +1,4 @@
+Version 1.0
+
+- Rec/Play: Support for JTable components
+- UI:       Allow editing of scripts
