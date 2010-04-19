@@ -15,7 +15,7 @@ actively maintained, and supports both AWT event queue and Robot playback - it i
 AWT players are generally faster and more stable, they fail in some scenarios, for instance by not firing events
  / document listeners / document filters attached to text fields.
 
-Much of the recording code is reused from project Frankenstein (http://frankenstein.openqa.org). However its replay
+Much of the recording code was adapted from project Frankenstein (http://frankenstein.openqa.org). However its replay
 infrastructure is not as powerful as Jemmy's and the project is no longer actively maintained. Many thanks to them though
 for the great work.
 
