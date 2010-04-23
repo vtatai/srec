@@ -1,4 +1,6 @@
 srec - a Java Swing record, replay, testing tool
+
+ATTENTION THIS IS STILL IN EARLY ALPHA STAGES
 ========================================================================================================================
 About
 
@@ -36,8 +38,8 @@ The backend for srec is provided by Jemmy (https://jemmy.dev.java.net/). Why Jem
  if you can, the Robot if you must.
 
 Much of the recording code was adapted from project Frankenstein (http://frankenstein.openqa.org). However its replay
-infrastructure is not as powerful as Jemmy's and the project is no longer actively maintained. Many thanks to them
-though for the great work.
+ infrastructure is not as powerful as Jemmy's and the project is no longer actively maintained. Many thanks to them
+ though for the great work.
 
 For development IntelliJ IDEA was used, but this only should be relevant in case you want to edit the recording GUI as
  it was made with IDEA's GUI Designer.

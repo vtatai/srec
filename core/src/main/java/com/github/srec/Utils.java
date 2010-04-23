@@ -88,14 +88,14 @@ public final class Utils {
     }
 
     /**
-     * Close all windows.
+     * Close all ignoredWindows.
      *
-     * @param windows The windows to close
+     * @param ignoredWindows The ignoredWindows to ignore
      */
-    public static void closeWindows(Window... windows) {
+    public static void closeWindows(Window... ignoredWindows) {
         Window[] ws = Window.getWindows();
         for (Window w : ws) {
-            if (!contains(windows, w)) w.dispose();
+            if (!contains(ignoredWindows, w)) w.dispose();
         }
     }
 
