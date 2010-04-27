@@ -11,7 +11,11 @@ import com.intellij.uiDesigner.core.Spacer;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -19,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +31,10 @@ import java.util.List;
  */
 public class SRecForm {
     private static final Logger logger = Logger.getLogger(SRecForm.class);
+    /**
+     * The limit for the recent files list (Reopen menu).
+     */
+    private static final int RECENT_FILES_LIMIT = 5;
     private JButton recordButton;
     private JButton playButton;
     private JTable eventsTbl;
@@ -33,18 +42,26 @@ public class SRecForm {
     private JButton launchButton;
     private JButton saveButton;
     private JButton openButton;
+    private JTree fileTree;
+    private DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+    private DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
     private Recorder recorder = new Recorder();
     private Player player = new Player();
 
     protected EventsTableModel tableModel;
 
+    private JMenuBar menuBar;
+    private JMenuItem reopenMenu;
+
+    private List<String> recentFiles = new ArrayList<String>();
+
     protected JFrame frame = new JFrame("srec");
 
     private Action openAction = new AbstractAction("Open") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            openScript();
+            load();
         }
     };
     private Action saveAction = new AbstractAction("Save") {
@@ -163,7 +180,7 @@ public class SRecForm {
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(createMenuBar());
-        frame.setSize(400, 400);
+        frame.setSize(800, 800);
         frame.setLocation(100, 100);
         frame.pack();
         frame.addWindowListener(new WindowAdapter() {
@@ -185,40 +202,93 @@ public class SRecForm {
             Class cl = Class.forName(args[0]);
             Method m = cl.getMethod("main", String[].class);
             if (!Modifier.isStatic(m.getModifiers())) {
-                JOptionPane.showMessageDialog(frame, "Incorrect signature for main method", "Error", JOptionPane.ERROR_MESSAGE);
+                error("Incorrect signature for main method", null);
                 return;
             }
             if (!m.getReturnType().equals(void.class)) {
-                JOptionPane.showMessageDialog(frame, "Incorrect signature for main method", "Error", JOptionPane.ERROR_MESSAGE);
+                error("Incorrect signature for main method", null);
                 return;
             }
             String[] newArgs = new String[args.length - 1];
             if (newArgs.length > 0) System.arraycopy(args, 1, newArgs, 0, newArgs.length);
             m.invoke(null, new Object[]{newArgs});
         } catch (ClassNotFoundException e1) {
-            JOptionPane.showMessageDialog(frame, "Main class not found", "Error", JOptionPane.ERROR_MESSAGE);
+            error("Main class not found", e1);
         } catch (NoSuchMethodException e1) {
-            JOptionPane.showMessageDialog(frame, "Main method not found", "Error", JOptionPane.ERROR_MESSAGE);
+            error("Main method not found", e1);
         } catch (InvocationTargetException e1) {
-            JOptionPane.showMessageDialog(frame, "Main method not found", "Error", JOptionPane.ERROR_MESSAGE);
+            error("Main method not found", e1);
         } catch (IllegalAccessException e1) {
-            JOptionPane.showMessageDialog(frame, "Main method not found", "Error", JOptionPane.ERROR_MESSAGE);
+            error("Main method not found", e1);
         }
     }
 
-    private void openScript() {
+    private void error(String message, Exception e) {
+        JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
+    /**
+     * Loads a file or directory by presenting the user a file chooser.
+     */
+    private void load() {
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         int returnVal = fc.showOpenDialog(mainPanel);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            try {
-                List<RecorderEvent> events = EventSerializer.read(file);
-                recorder.emptyEvents();
-                recorder.addEvents(events);
-            } catch (IOException e) {
-                ErrorDialog.show(e);
+            load(file);
+        }
+    }
+
+    /**
+     * Loads a directory or a script file, handling the UI tree view.
+     *
+     * @param file The file or directory
+     */
+    public void load(File file) {
+        if (!file.exists()) {
+            error("File does not exist", null);
+            return;
+        }
+        if (file.isDirectory()) {
+            List<UITestFileManager.FileNode> nodes = UITestFileManager.scanFiles(file);
+            root.setUserObject(file.getAbsolutePath());
+            root.removeAllChildren();
+            for (UITestFileManager.FileNode node : nodes) {
+                root.add(node);
             }
+            treeModel.reload();
+        } else {
+            loadScript(file);
+            if (file.getParentFile() != null) load(file.getParentFile());
+        }
+        try {
+            addRecentFile(file.getCanonicalPath());
+            updateReopenMenu();
+        } catch (IOException e) {
+            error("Unexpected error obtaining file path", e);
+        }
+    }
+
+    /**
+     * Loads a script file.
+     *
+     * @param file The script file
+     */
+    private void loadScript(File file) {
+        if (!file.exists()) {
+            error("File does not exist", null);
+            return;
+        }
+        assert !file.isDirectory();
+        try {
+            List<RecorderEvent> events = EventSerializer.read(file);
+            recorder.emptyEvents();
+            recorder.addEvents(events);
+        } catch (IOException e) {
+            error("Error loading script", e);
         }
     }
 
@@ -242,8 +312,8 @@ public class SRecForm {
         logger.debug("Opening: " + file.getName());
         try {
             EventSerializer.write(file, recorder.getEvents());
-        } catch (IOException ex) {
-            ErrorDialog.show(ex);
+        } catch (IOException e) {
+            error("Error saving script", e);
         }
     }
 
@@ -252,8 +322,8 @@ public class SRecForm {
     }
 
     private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu file = new JMenu("File");
+        menuBar = new JMenuBar();
+        final JMenu file = new JMenu("File");
         file.setMnemonic(KeyEvent.VK_F);
 
         final JMenuItem openMenuItem = new JMenuItem("Open", KeyEvent.VK_O);
@@ -263,6 +333,16 @@ public class SRecForm {
         final JMenuItem saveMenuItem = new JMenuItem("Save", KeyEvent.VK_S);
         saveMenuItem.setAction(saveAction);
         file.add(saveMenuItem);
+
+        reopenMenu = new JMenu("Reopen");
+        reopenMenu.setMnemonic(KeyEvent.VK_E);
+        try {
+            recentFiles = RecentFilesSerializer.read();
+        } catch (IOException e) {
+            error("Error reading recent files list", e);
+        }
+        updateReopenMenu();
+        file.add(reopenMenu);
 
         menuBar.add(file);
 
@@ -281,6 +361,36 @@ public class SRecForm {
         return menuBar;
     }
 
+    private void updateReopenMenu() {
+        reopenMenu.removeAll();
+        for (String recentFile : recentFiles) {
+            JMenuItem menuItem = new JMenuItem(recentFile);
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JMenuItem menuItem = (JMenuItem) e.getSource();
+                    load(new File(menuItem.getText()));
+                    addRecentFile(menuItem.getText());
+                    updateReopenMenu();
+                }
+            });
+            reopenMenu.add(menuItem);
+        }
+        if (reopenMenu.getParent() != null) ((JPopupMenu) reopenMenu.getParent()).pack();
+    }
+
+    private void addRecentFile(String fileName) {
+        recentFiles.remove(fileName);
+        recentFiles.add(0, fileName);
+        if (recentFiles.size() > RECENT_FILES_LIMIT) recentFiles.remove(RECENT_FILES_LIMIT);
+        try {
+            RecentFilesSerializer.save(recentFiles);
+        } catch (IOException e) {
+            error("Error saving recent files list", e);
+            e.printStackTrace();
+        }
+    }
+
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -294,6 +404,18 @@ public class SRecForm {
         tableModel = new EventsTableModel();
         eventsTbl = new JTable(tableModel);
         eventsTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        fileTree = new JTree(treeModel);
+        fileTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        fileTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+                if (!(node instanceof UITestFileManager.FileNode)) return;
+                UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
+                loadScript(fileNode.getFile());
+            }
+        });
     }
 
     /**
@@ -307,6 +429,7 @@ public class SRecForm {
         createUIComponents();
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setPreferredSize(new Dimension(600, 600));
         final JToolBar toolBar1 = new JToolBar();
         mainPanel.add(toolBar1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
         recordButton = new JButton();
@@ -337,14 +460,16 @@ public class SRecForm {
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel2.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 20), null, null, 0, false));
-        panel3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null));
+        final JSplitPane splitPane1 = new JSplitPane();
+        splitPane1.setDividerLocation(200);
+        panel2.add(splitPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        splitPane1.setRightComponent(scrollPane1);
         eventsTbl.setName("eventsTbl");
         scrollPane1.setViewportView(eventsTbl);
+        final JScrollPane scrollPane2 = new JScrollPane();
+        splitPane1.setLeftComponent(scrollPane2);
+        scrollPane2.setViewportView(fileTree);
     }
 
     /**
