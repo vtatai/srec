@@ -69,7 +69,7 @@
                 <configuration>
                     <jvmArgs>
                         <jvmArg>-Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.PicoFactory</jvmArg>
-                        <!-- Include the following args to connect with a debugger -->
+                        <!-- Include the following params to connect with a debugger -->
                         <!--
                         <jvmArg>-Xdebug</jvmArg>
                         <jvmArg>-Xnoagent</jvmArg>

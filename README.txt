@@ -13,7 +13,7 @@ srec is a Swing record-replay testing tool useful for testing Swing applications
 Using
 
 Using srec is quite easy - once you have included the srec jar in your project you have three options:
-1. Write the test in Java using directly the class com.github.srec.play.jemmy.JemmyDSL
+1. Write the test in Java using directly the class com.github.srec.jemmy.JemmyDSL
 2. Record your basic test script running the class com.github.srec.ui.SRecForm
 3. Write the test in Ruby using the provided Ruby DSL - check the examples module for samples
 

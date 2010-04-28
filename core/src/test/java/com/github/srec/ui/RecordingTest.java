@@ -2,9 +2,7 @@ package com.github.srec.ui;
 
 import org.testng.annotations.Test;
 
-import java.awt.event.KeyEvent;
-
-import static com.github.srec.play.jemmy.JemmyDSL.*;
+import static com.github.srec.jemmy.JemmyDSL.*;
 
 @Test
 public class RecordingTest {

@@ -1,6 +1,8 @@
 package com.github.srec.play;
 
 import com.github.srec.Utils;
+import com.github.srec.command.CommandSerializer;
+import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.play.exception.PlayerException;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,6 +15,7 @@ import java.util.regex.Pattern;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Class which plays srec script files.
@@ -20,13 +23,12 @@ import static com.github.srec.Utils.runMain;
  * @author Victor Tatai
  */
 public class ScriptPlayer {
-    private Player player = new Player();
     private ScriptPlayerError error;
     private boolean throwError;
     private long commandInterval = 0;
 
     public ScriptPlayer init() {
-        player.init();
+        JemmyDSL.init();
         return this;
     }
 
@@ -46,20 +48,26 @@ public class ScriptPlayer {
         play(new BufferedReader(new InputStreamReader(is)));
     }
 
+    /**
+     * Executes line by line the script. Does not load the entire script at once in order to speed up test start,
+     *
+     * @param reader The reader
+     * @throws IOException In case there is a problem reading from reader
+     */
     public void play(BufferedReader reader) throws IOException {
         int lineCounter = 1;
         error = null;
         String line;
         while ((line = reader.readLine()) != null) {
             try {
-                play(line);
+                CommandSerializer.parse(line).run();
             } catch (PlayerException e) {
                 handleError(lineCounter, e);
                 if (throwError) throw e;
                 return;
             }
             try {
-                Thread.sleep(commandInterval);
+                if (commandInterval > 0) Thread.sleep(commandInterval);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -69,28 +77,6 @@ public class ScriptPlayer {
 
     private void handleError(int line, PlayerException e) {
         error = new ScriptPlayerError(line, e);
-    }
-
-    public void play(String line) {
-        assert line != null;
-        if (line.indexOf("#") != -1) {
-            line = line.substring(0, line.indexOf("#"));
-        }
-        if (StringUtils.isBlank(line)) return;
-        int i = line.indexOf(' ');
-        if (i == -1) {
-            player.play(line);
-            return;
-        }
-        Pattern pattern = Pattern.compile("\"(.*?)\"");
-        Matcher m = pattern.matcher(line);
-        List<String> params = new ArrayList<String>();
-        int lastmatch = 0;
-        while (m.find(lastmatch)) {
-            params.add(m.group(1));
-            lastmatch = m.end();
-        }
-        player.play(line.substring(0, i), params.toArray(new String[params.size()]));
     }
 
     public ScriptPlayerError getError() {

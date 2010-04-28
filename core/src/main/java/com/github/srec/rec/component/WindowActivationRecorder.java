@@ -1,6 +1,6 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.rec.RecorderEvent;
+import com.github.srec.command.jemmy.WindowActivateCommand;
 import com.github.srec.rec.EventRecorder;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class WindowActivationRecorder implements ComponentRecorder, AWTEventList
             if (windowEvent.getID() == WindowEvent.WINDOW_ACTIVATED) {
                 if (windowEvent.getWindow() instanceof JFrame) {
                     JFrame frame = (JFrame) windowEvent.getWindow();
-                    recorder.record(new RecorderEvent("window_activate", frame.getTitle(), frame));
+                    recorder.record(new WindowActivateCommand(frame.getTitle(), frame));
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.github.srec.play.jemmy;
+package com.github.srec.jemmy;
 
 import com.github.srec.Utils;
 import com.github.srec.play.exception.IllegalParametersException;
@@ -44,15 +44,16 @@ public class JemmyDSL {
     private static Container currentContainer;
     private static Properties props = new Properties();
     static {
-        props.put("DialogWaiter.WaitDialogTimeout", "10000");
-        props.put("FrameWaiter.WaitFrameTimeout", "10000");
-        props.put("Waiter.WaitingTime", "10000");
-        props.put("WindowWaiter.WaitWindowTimeout", "10000");
-        props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
-        props.put("JSliderOperator.WholeScrollTimeout", "10000");
-        props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
-        props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
-        props.put("ComponentOperator.WaitComponentTimeout", "10000");
+        props.put("DialogWaiter.WaitDialogTimeout", "5000");
+        props.put("FrameWaiter.WaitFrameTimeout", "5000");
+        props.put("Waiter.WaitingTime", "5000");
+        props.put("WindowWaiter.WaitWindowTimeout", "5000");
+        props.put("JScrollBarOperator.WholeScrollTimeout", "5000");
+        props.put("JSliderOperator.WholeScrollTimeout", "5000");
+        props.put("JSplitPaneOperator.WholeScrollTimeout", "5000");
+        props.put("ScrollbarOperator.WholeScrollTimeout", "5000");
+        props.put("ComponentOperator.WaitComponentTimeout", "5000");
+        props.put("ComponentOperator.WaiStateTimeout", "5000");
     }
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
     private static Map<String, JComponentOperator> idMap = new HashMap<String, JComponentOperator>();

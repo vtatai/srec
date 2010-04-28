@@ -1,8 +1,8 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.Utils;
+import com.github.srec.command.jemmy.AssertCommand;
 import com.github.srec.rec.EventRecorder;
-import com.github.srec.rec.RecorderEvent;
 
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -20,6 +20,6 @@ public class CheckTextRecorder extends AbstractCheckRecorder {
 
     protected void check(Component source) {
         JTextComponent component = (JTextComponent) source;
-        recorder.record(new RecorderEvent("assert", Utils.getLocator(component), component, component.getText()));
+        recorder.record(new AssertCommand(Utils.getLocator(component), component, component.getText()));
     }
 }

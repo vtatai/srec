@@ -124,4 +124,17 @@ public final class Utils {
         }
         return strb.toString();
     }
+
+    /**
+     * Trims all elements inside the array, modifying the original array.
+     *
+     * @param strings The string array
+     * @return The passed string array, trimmed
+     */
+    public static String[] trimArray(String[] strings) {
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = strings[i].trim();
+        }
+        return strings;
+    }
 }

@@ -1,8 +1,9 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.Utils;
+import com.github.srec.command.jemmy.TypeCommand;
+import com.github.srec.command.jemmy.TypeSpecialCommand;
 import com.github.srec.rec.EventRecorder;
-import com.github.srec.rec.RecorderEvent;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -40,7 +41,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
                 if (event.getID() != KeyEvent.KEY_TYPED) return;
                 if (((KeyEvent) event).getKeyChar() == '\t' && event.getSource() instanceof JTextField) {
                     JTextField tf = (JTextField) event.getSource();
-                    recorder.record(new RecorderEvent("type_special", tf.getName(), tf, false, "Tab"));
+                    recorder.record(new TypeSpecialCommand(tf.getName(), tf, "Tab"));
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -80,7 +81,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
             if (!visibility.isShowingAndHasFocus(textField)) return;
             String locator = Utils.getLocator(textField);
             logger.debug("TextField event registered: '" + locator + "', value: '" + textField.getText() + "'");
-            recorder.record(new RecorderEvent("type", locator, textField, textField.getText()));
+            recorder.record(new TypeCommand(locator, textField, textField.getText()));
         }
 
         public void removeUpdate(DocumentEvent e) {

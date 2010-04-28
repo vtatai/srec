@@ -1,5 +1,7 @@
 package com.github.srec.rec;
 
+import com.github.srec.command.Command;
+import com.github.srec.command.EventCommand;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
 import org.apache.commons.lang.StringUtils;
@@ -17,15 +19,15 @@ import java.util.List;
  */
 public class Recorder implements EventRecorder {
     private static final Logger logger = Logger.getLogger(Recorder.class);
-    private List<RecorderEvent> events = new ArrayList<RecorderEvent>();
+    private List<Command> commands = new ArrayList<Command>();
     private List<ComponentRecorder> componentRecorders = new ArrayList<ComponentRecorder>();
-    private List<RecorderEventListener> listeners = new ArrayList<RecorderEventListener>();
+    private List<RecorderCommandListener> listeners = new ArrayList<RecorderCommandListener>();
     /**
      * The list of ignored containers, such as the recording frame itself.
      */
     private List<Container> ignoredContainers = new ArrayList<Container>();
     private boolean recording;
-    private RecorderEvent lastEvent;
+    private EventCommand lastEvent;
 
     public Recorder() {
         componentRecorders.add(new ButtonClickRecorder(this));
@@ -47,14 +49,19 @@ public class Recorder implements EventRecorder {
         }
     }
 
-    public void record(RecorderEvent event) {
+    public void record(EventCommand event) {
         if (!recording || isIgnored(event.getComponent()) || isOnJavaConsole(event.getComponent())) return;
         if (StringUtils.isBlank(event.getComponentLocator())) {
             logger.warn("Component has no way of being located (no name or label): " + event.getComponent());
             return;
         }
         event.record(this, lastEvent);
-        lastEvent = events.isEmpty() ? null : events.get(events.size() - 1);
+        lastEvent = extractLastEvent();
+    }
+
+    private EventCommand extractLastEvent() {
+        int lastIndex = commands.size() - 1;
+        return commands.isEmpty() || !(commands.get(lastIndex) instanceof EventCommand) ? null : (EventCommand) commands.get(lastIndex);
     }
 
     protected boolean isIgnored(Component component) {
@@ -87,39 +94,39 @@ public class Recorder implements EventRecorder {
     }
 
 
-    public void addEvent(RecorderEvent event) {
+    public void addEvent(EventCommand event) {
         logger.debug("Logging event: " + event);
         fireEventAdded(event);
-        events.add(event);
+        commands.add(event);
     }
 
-    public void replaceLastEvent(RecorderEvent event) {
-        events.set(events.size() - 1, event);
+    public void replaceLastEvent(EventCommand event) {
+        commands.set(commands.size() - 1, event);
         logger.debug("Replacing the last event with: " + event);
-        fireEventUpdated(events.size() - 1);
+        fireEventUpdated(commands.size() - 1);
     }
 
     private void fireEventUpdated(int index) {
-        for (RecorderEventListener listener : listeners) {
-            listener.eventsUpdated(index, events.subList(index, index + 1));
+        for (RecorderCommandListener listener : listeners) {
+            listener.eventsUpdated(index, commands.subList(index, index + 1));
         }
     }
 
-    private void fireEventAdded(RecorderEvent event) {
-        for (RecorderEventListener listener : listeners) {
+    private void fireEventAdded(EventCommand event) {
+        for (RecorderCommandListener listener : listeners) {
             listener.eventAdded(event);
         }
     }
 
     private void fireEventsRemoved() {
-        for (RecorderEventListener listener : listeners) {
+        for (RecorderCommandListener listener : listeners) {
             listener.eventsRemoved();
         }
     }
 
-    private void fireEventsAdded(List<RecorderEvent> events) {
-        for (RecorderEventListener listener : listeners) {
-            listener.eventsAdded(events);
+    private void fireEventsAdded(List<Command> commands) {
+        for (RecorderCommandListener listener : listeners) {
+            listener.commandsAdded(commands);
         }
     }
 
@@ -127,7 +134,7 @@ public class Recorder implements EventRecorder {
         ignoredContainers.add(container);
     }
 
-    public void addListener(RecorderEventListener listener) {
+    public void addListener(RecorderCommandListener listener) {
         listeners.add(listener);
     }
 
@@ -139,25 +146,25 @@ public class Recorder implements EventRecorder {
         this.recording = recording;
     }
 
-    public List<RecorderEvent> getEvents() {
-        return events;
+    public List<Command> getCommands() {
+        return commands;
     }
 
-    public void setEvents(List<RecorderEvent> events) {
-        this.events = events;
+    public void setCommands(List<Command> commands) {
+        this.commands = commands;
     }
 
-    public void emptyEvents() {
-        events.clear();
+    public void emptyCommands() {
+        commands.clear();
         fireEventsRemoved();
     }
 
-    public void addEvents(List<RecorderEvent> events) {
-        this.events.addAll(events);
-        fireEventsAdded(events);
+    public void addCommands(List<Command> commands) {
+        this.commands.addAll(commands);
+        fireEventsAdded(commands);
     }
 
-    public RecorderEvent getLastEvent() {
+    public EventCommand getLastEvent() {
         return lastEvent;
     }
 }

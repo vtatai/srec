@@ -1,6 +1,8 @@
 package com.github.srec.ui;
 
-import com.github.srec.rec.RecorderEvent;
+import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.Command;
+import com.github.srec.command.EventCommand;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -9,12 +11,12 @@ import java.util.List;
 /**
  * @author Victor Tatai
  */
-public class EventsTableModel extends AbstractTableModel {
-    private List<RecorderEvent> events = new ArrayList<RecorderEvent>();
+public class CommandsTableModel extends AbstractTableModel {
+    private List<Command> commands = new ArrayList<Command>();
 
     @Override
     public int getRowCount() {
-        return events.size();
+        return commands.size();
     }
 
     @Override
@@ -24,16 +26,19 @@ public class EventsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        RecorderEvent evt = events.get(rowIndex);
+        if (!(commands.get(rowIndex) instanceof EventCommand)) {
+            throw new UnsupportedFeatureException("Command not supported: " + commands.get(rowIndex));
+        }
+        EventCommand evt = (EventCommand) commands.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return evt.getCommand();
+                return evt.getName();
             case 1:
                 return evt.getComponentLocator();
             case 2:
-                return evt.getArgs() != null && evt.getArgs().length > 0 ? evt.getArgs()[0] : null;
+                return evt.getParams() != null && evt.getParams().length > 0 ? evt.getParams()[0] : null;
             case 3:
-                return evt.getArgs() != null && evt.getArgs().length > 1 ? evt.getArgs()[1] : null;
+                return evt.getParams() != null && evt.getParams().length > 1 ? evt.getParams()[1] : null;
             default:
                 return null;
         }
@@ -59,30 +64,30 @@ public class EventsTableModel extends AbstractTableModel {
         throw new IllegalArgumentException();
     }
 
-    public void add(RecorderEvent event) {
-        events.add(event);
-        int index = events.size() - 1;
+    public void add(EventCommand event) {
+        commands.add(event);
+        int index = commands.size() - 1;
         fireTableRowsInserted(index, index);
     }
 
-    public void add(List<RecorderEvent> newEvents) {
+    public void add(List<Command> newEvents) {
         if (newEvents == null || newEvents.isEmpty()) return;
-        int startIndex = events.size();
-        events.addAll(newEvents);
+        int startIndex = commands.size();
+        commands.addAll(newEvents);
         fireTableRowsInserted(startIndex, startIndex + newEvents.size() - 1);
     }
 
     public void clear() {
-        if (events.isEmpty()) return;
-        final int lastIndex = events.size() - 1;
-        events.clear();
+        if (commands.isEmpty()) return;
+        final int lastIndex = commands.size() - 1;
+        commands.clear();
         fireTableRowsDeleted(0, lastIndex);
     }
 
-    public void update(int index, List<RecorderEvent> events) {
+    public void update(int index, List<Command> events) {
         assert events != null && events.size() > 0;
         for (int i = index; i < index + events.size(); i++) {
-            this.events.set(i, events.get(i - index));
+            this.commands.set(i, events.get(i - index));
         }
         fireTableRowsUpdated(index, index + events.size() - 1);
     }

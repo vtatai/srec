@@ -1,17 +1,20 @@
 package com.github.srec.ui;
 
-import com.github.srec.play.Player;
-import com.github.srec.rec.EventSerializer;
+import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.Command;
+import com.github.srec.command.CommandSerializer;
+import com.github.srec.command.EventCommand;
+import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.rec.Recorder;
-import com.github.srec.rec.RecorderEvent;
-import com.github.srec.rec.RecorderEventListener;
+import com.github.srec.rec.RecorderCommandListener;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -47,11 +50,9 @@ public class SRecForm {
     private DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
     private Recorder recorder = new Recorder();
-    private Player player = new Player();
 
-    protected EventsTableModel tableModel;
+    protected CommandsTableModel tableModel;
 
-    private JMenuBar menuBar;
     private JMenuItem reopenMenu;
 
     private List<String> recentFiles = new ArrayList<String>();
@@ -85,7 +86,7 @@ public class SRecForm {
     private Action playAction = new AbstractAction("Play") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            play(recorder.getEvents());
+            play(recorder.getCommands());
         }
     };
 
@@ -97,10 +98,10 @@ public class SRecForm {
             }
         });
         recorder.init();
-        player.init(frame);
-        recorder.addListener(new RecorderEventListener() {
+        JemmyDSL.init(frame);
+        recorder.addListener(new RecorderCommandListener() {
             @Override
-            public void eventAdded(RecorderEvent event) {
+            public void eventAdded(EventCommand event) {
                 tableModel.add(event);
             }
 
@@ -110,13 +111,13 @@ public class SRecForm {
             }
 
             @Override
-            public void eventsAdded(List<RecorderEvent> events) {
-                tableModel.add(events);
+            public void commandsAdded(List<Command> commands) {
+                tableModel.add(commands);
             }
 
             @Override
-            public void eventsUpdated(int index, List<RecorderEvent> recorderEvents) {
-                tableModel.update(index, recorderEvents);
+            public void eventsUpdated(int index, List<Command> commands) {
+                tableModel.update(index, commands);
             }
         });
         recordButton.setAction(recordAction);
@@ -132,7 +133,7 @@ public class SRecForm {
         launchButton.setMnemonic(KeyEvent.VK_L);
     }
 
-    public void play(final List<RecorderEvent> events) {
+    public void play(final List<Command> events) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -144,9 +145,9 @@ public class SRecForm {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    RecorderEvent event = events.get(i);
+                    Command command = events.get(i);
                     eventsTbl.getSelectionModel().setSelectionInterval(i, i);
-                    play(event);
+                    play(command);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -158,22 +159,10 @@ public class SRecForm {
         t.start();
     }
 
-    private void play(RecorderEvent event) {
-        int length = event.getComponentLocator() == null ? 0 : 1;
-        length += event.getArgs().length;
-        String[] args = new String[length];
-        int dif = 0;
-        if (event.getComponentLocator() != null) {
-            args[0] = event.getComponentLocator();
-            dif = 1;
-        }
-        for (int i = 0; i < event.getArgs().length; i++) {
-            String arg = event.getArgs()[i];
-            args[i + dif] = arg;
-        }
-        player.play(event.getCommand(), args);
+    private void play(Command command) {
+        if (command instanceof EventCommand) command.run();
+        throw new UnsupportedFeatureException("Command not supported: " + command);
     }
-
 
     public void showFrame(String[] args) {
         // Init frame
@@ -284,16 +273,16 @@ public class SRecForm {
         }
         assert !file.isDirectory();
         try {
-            List<RecorderEvent> events = EventSerializer.read(file);
-            recorder.emptyEvents();
-            recorder.addEvents(events);
+            List<Command> commands = CommandSerializer.read(file);
+            recorder.emptyCommands();
+            recorder.addCommands(commands);
         } catch (IOException e) {
             error("Error loading script", e);
         }
     }
 
     private void saveScript() {
-        if (recorder.getEvents().isEmpty()) {
+        if (recorder.getCommands().isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Nothing to save.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -311,7 +300,7 @@ public class SRecForm {
     private void saveScript(File file) {
         logger.debug("Opening: " + file.getName());
         try {
-            EventSerializer.write(file, recorder.getEvents());
+            CommandSerializer.write(file, recorder.getCommands());
         } catch (IOException e) {
             error("Error saving script", e);
         }
@@ -322,7 +311,7 @@ public class SRecForm {
     }
 
     private JMenuBar createMenuBar() {
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         final JMenu file = new JMenu("File");
         file.setMnemonic(KeyEvent.VK_F);
 
@@ -401,7 +390,7 @@ public class SRecForm {
     }
 
     private void createUIComponents() {
-        tableModel = new EventsTableModel();
+        tableModel = new CommandsTableModel();
         eventsTbl = new JTable(tableModel);
         eventsTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

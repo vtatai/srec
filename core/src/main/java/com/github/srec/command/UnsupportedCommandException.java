@@ -1,4 +1,6 @@
-package com.github.srec.play.exception;
+package com.github.srec.command;
+
+import com.github.srec.play.exception.PlayerException;
 
 /**
  * @author Victor Tatai

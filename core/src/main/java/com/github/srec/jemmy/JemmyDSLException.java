@@ -1,4 +1,4 @@
-package com.github.srec.play.jemmy;
+package com.github.srec.jemmy;
 
 /**
  * @author Victor Tatai

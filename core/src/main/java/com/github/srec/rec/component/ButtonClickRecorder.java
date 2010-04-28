@@ -1,7 +1,7 @@
 package com.github.srec.rec.component;
 
+import com.github.srec.command.jemmy.ClickCommand;
 import com.github.srec.rec.EventRecorder;
-import com.github.srec.rec.RecorderEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class ButtonClickRecorder extends AbstractComponentRecorder implements Ac
 
     public void actionPerformed(ActionEvent e) {
         AbstractButton button = (AbstractButton) e.getSource();
-        recorder.record(new RecorderEvent("click", extractComponentLocator(button), button));
+        recorder.record(new ClickCommand(extractComponentLocator(button), button));
     }
 
     private String extractComponentLocator(AbstractButton button) {
