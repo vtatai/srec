@@ -33,5 +33,9 @@
             <artifactId>testng</artifactId>
             <classifier>jdk15</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr</artifactId>
+        </dependency>
     </dependencies>
 </project>
