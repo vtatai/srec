@@ -1,0 +1,12 @@
+Version 1.0
+
+- UI:       Allow creation of functions / cleanup JemmyDSL usages
+- Core:     Package missing Maven dependency jars
+- Rec/Play: Debug / breakpoints
+- Rec/Play: Remove TestNG assertions usage in main code
+- Rec/Play: Support for JTable components
+- UI:       Allow editing of scripts
+
+Version 2.0
+- Rec/Play: Allow easy running of tests remotely in order to speed up development builds
+- Play:     ??? Allow play using JRuby to directly interpret Scripts / commands
