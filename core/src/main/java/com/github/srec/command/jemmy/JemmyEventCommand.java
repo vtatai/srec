@@ -1,31 +1,27 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
-import com.github.srec.command.EventCommand;
-import com.github.srec.play.exception.TimeoutException;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.MethodCommand;
+import com.github.srec.command.exception.TimeoutException;
 import org.netbeans.jemmy.JemmyException;
 import org.netbeans.jemmy.TimeoutExpiredException;
-
-import java.awt.*;
 
 /**
  * @author Victor Tatai
  */
-public abstract class JemmyEventCommand extends EventCommand {
-    protected JemmyEventCommand(String name, String componentLocator, Component component, String... params) {
-        super(name, componentLocator, component, params);
-    }
+public abstract class JemmyEventCommand extends MethodCommand {
 
-    protected JemmyEventCommand(String name, String componentLocator, Component component, boolean collapseMultiple, String... params) {
-        super(name, componentLocator, component, collapseMultiple, params);
+    protected JemmyEventCommand(String name, String... params) {
+        super(name, params);
     }
 
     @Override
-    public void run() {
+    public void callMethod(ExecutionContext context, String... params) {
         try {
-            runJemmy();
+            runJemmy(context, params);
         } catch (JemmyException e) {
-            if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, params, e);
+            if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, parameters, e);
             throw new UnsupportedFeatureException(e.getMessage());
         }
     }
@@ -34,7 +30,14 @@ public abstract class JemmyEventCommand extends EventCommand {
      * Method which should be overridden by subclasses which run Jemmy commands. It is called by this class run method
      * and handles the exception translation.
      *
+     * @param ctx The execution context
+     * @param params The parameters to the method
      * @throws JemmyException The exception which may need to be translated
      */
-    protected abstract void runJemmy() throws JemmyException;
+    protected abstract void runJemmy(ExecutionContext ctx, String... params) throws JemmyException;
+
+    @Override
+    public boolean isNative() {
+        return true;
+    }
 }

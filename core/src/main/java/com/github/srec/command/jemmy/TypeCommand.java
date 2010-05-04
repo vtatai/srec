@@ -1,6 +1,7 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.EventCommand;
+import com.github.srec.command.ExecutionContext;
+import org.netbeans.jemmy.JemmyException;
 
 import java.awt.*;
 
@@ -10,12 +11,12 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
  * @author Victor Tatai
  */
 public class TypeCommand extends JemmyEventCommand {
-    public TypeCommand(String componentLocator, Component component, String text) {
-        super("type", componentLocator, component, true, text);
+    public TypeCommand() {
+        super("type", "componentLocator", "text");
     }
 
     @Override
-    public void runJemmy() {
-        textField(componentLocator).type(params[0]);
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
+        textField(params[0]).type(params[1]);
     }
 }

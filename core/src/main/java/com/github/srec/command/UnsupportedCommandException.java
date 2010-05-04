@@ -1,11 +1,11 @@
 package com.github.srec.command;
 
-import com.github.srec.play.exception.PlayerException;
+import com.github.srec.command.exception.CommandExecutionException;
 
 /**
  * @author Victor Tatai
  */
-public class UnsupportedCommandException extends PlayerException {
+public class UnsupportedCommandException extends CommandExecutionException {
     public UnsupportedCommandException(String command) {
         super("Command '" + command + "' not supported.");
     }

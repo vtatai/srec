@@ -1,9 +1,9 @@
 package com.github.srec.ui;
 
 import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
 import com.github.srec.command.CommandSerializer;
-import com.github.srec.command.EventCommand;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.rec.Recorder;
 import com.github.srec.rec.RecorderCommandListener;
@@ -101,7 +101,7 @@ public class SRecForm {
         JemmyDSL.init(frame);
         recorder.addListener(new RecorderCommandListener() {
             @Override
-            public void eventAdded(EventCommand event) {
+            public void eventAdded(CallEventCommand event) {
                 tableModel.add(event);
             }
 
@@ -160,7 +160,8 @@ public class SRecForm {
     }
 
     private void play(Command command) {
-        if (command instanceof EventCommand) command.run();
+//        if (command instanceof CallEventCommand) command.run(executionContext);
+        // TODO
         throw new UnsupportedFeatureException("Command not supported: " + command);
     }
 
@@ -272,13 +273,14 @@ public class SRecForm {
             return;
         }
         assert !file.isDirectory();
-        try {
-            List<Command> commands = CommandSerializer.read(file);
-            recorder.emptyCommands();
-            recorder.addCommands(commands);
-        } catch (IOException e) {
-            error("Error loading script", e);
-        }
+        // TODO
+//        try {
+//            List<Command> commands = CommandSerializer.read(file);
+//            recorder.emptyCommands();
+//            recorder.addCommands(commands);
+//        } catch (IOException e) {
+//            error("Error loading script", e);
+//        }
     }
 
     private void saveScript() {

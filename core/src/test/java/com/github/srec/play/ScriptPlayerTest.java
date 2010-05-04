@@ -19,10 +19,6 @@ public class ScriptPlayerTest {
             ScriptPlayer player = new ScriptPlayer()
                     .init()
                     .startAndPlay(new File("src/test/resources/test_form.rb"), "com.github.srec.ui.TestForm", new String[0]);
-            if (player.getError() != null) {
-                System.err.println("Error on line " + player.getError().getLine());
-                player.getError().getOriginatingException().printStackTrace();
-            }
             assertNull(player.getError());
         } catch (Throwable t) {
             t.printStackTrace();
@@ -30,7 +26,7 @@ public class ScriptPlayerTest {
         }
     }
 
-    public void testError() throws IOException {        
+    public void testError() throws IOException {
         try {
             ScriptPlayer player = new ScriptPlayer()
                     .init()
@@ -41,4 +37,18 @@ public class ScriptPlayerTest {
             fail();
         }
     }
+
+    @Test(enabled = false)
+    public void testMethod() throws IOException {
+        try {
+            ScriptPlayer player = new ScriptPlayer()
+                    .init()
+                    .startAndPlay(new File("src/test/resources/test_form_method_call.rb"), "com.github.srec.ui.TestForm", new String[0]);
+            assertNull(player.getError());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            fail();
+        }
+    }
+
 }

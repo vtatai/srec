@@ -1,4 +1,4 @@
-package com.github.srec.play.exception;
+package com.github.srec.command.exception;
 
 import com.github.srec.Utils;
 import com.github.srec.command.Command;
@@ -6,7 +6,7 @@ import com.github.srec.command.Command;
 /**
  * @author Victor Tatai
  */
-public class TimeoutException extends PlayerException {
+public class TimeoutException extends CommandExecutionException {
     private Command command;
     private String[] parameters;
 

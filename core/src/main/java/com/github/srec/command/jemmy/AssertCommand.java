@@ -1,9 +1,7 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.EventCommand;
-import com.github.srec.play.exception.IllegalParametersException;
-
-import java.awt.*;
+import com.github.srec.command.ExecutionContext;
+import org.netbeans.jemmy.JemmyException;
 
 import static com.github.srec.jemmy.JemmyDSL.assertText;
 
@@ -11,12 +9,12 @@ import static com.github.srec.jemmy.JemmyDSL.assertText;
  * @author Victor Tatai
  */
 public class AssertCommand extends JemmyEventCommand {
-    public AssertCommand(String componentLocator, Component component, String param) {
-        super("assert", componentLocator, component, param);
+    public AssertCommand() {
+        super("assert", "componentLocator");
     }
 
     @Override
-    public void runJemmy() {
-        assertText(componentLocator, params[0]);
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
+        assertText(params[0], params[1]);
     }
 }

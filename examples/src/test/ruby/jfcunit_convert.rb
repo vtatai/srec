@@ -72,5 +72,5 @@ class XmlListener
   end
 end
 
-source = File.new "../resources/demo1.xml"
+source = File.new ARGV[0]
 Document.parse_stream source, XmlListener.new

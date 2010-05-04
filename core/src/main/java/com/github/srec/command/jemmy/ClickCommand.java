@@ -1,8 +1,7 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.EventCommand;
-
-import java.awt.*;
+import com.github.srec.command.ExecutionContext;
+import org.netbeans.jemmy.JemmyException;
 
 import static com.github.srec.jemmy.JemmyDSL.click;
 
@@ -10,12 +9,12 @@ import static com.github.srec.jemmy.JemmyDSL.click;
  * @author Victor Tatai
  */
 public class ClickCommand extends JemmyEventCommand {
-    public ClickCommand(String componentLocator, Component component) {
-        super("click", componentLocator, component);
+    public ClickCommand() {
+        super("click", "componentLocator");
     }
 
     @Override
-    public void runJemmy() {
-        click(componentLocator);
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
+        click(params[0]);
     }
 }

@@ -1,8 +1,7 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.EventCommand;
-
-import java.awt.*;
+import com.github.srec.command.ExecutionContext;
+import org.netbeans.jemmy.JemmyException;
 
 import static com.github.srec.jemmy.JemmyDSL.frame;
 
@@ -10,12 +9,12 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
  * @author Victor Tatai
  */
 public class CloseCommand extends JemmyEventCommand {
-    public CloseCommand(String componentLocator, Component component) {
-        super("close", componentLocator, component);
+    public CloseCommand() {
+        super("close", "componentLocator");
     }
 
     @Override
-    public void runJemmy() {
-        frame(componentLocator).close();
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
+        frame(params[0]).close();
     }
 }

@@ -1,40 +1,35 @@
 package com.github.srec.command;
 
 import com.github.srec.rec.Recorder;
+import org.antlr.runtime.tree.CommonTree;
 
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * An actual event which was recorded.
  *
  * @author Victor Tatai
  */
-public abstract class EventCommand implements Command {
-    protected String name;
-    protected String componentLocator;
+public class CallEventCommand extends CallCommand {
     // TODO probably not needed
     protected Component component;
-    protected String[] params;
     /**
      * Indicates whether events with the same target should be collapsed into a single name. The real collapsing
-     * though is done by the caller of {@link #record(com.github.srec.rec.Recorder, EventCommand)}.
+     * though is done by the caller of {@link #record(com.github.srec.rec.Recorder, CallEventCommand)}.
      */
     private boolean collapseMultiple = true;
 
-    public EventCommand(String name, String componentLocator, Component component, String... params) {
-        this.componentLocator = componentLocator;
-        this.name = name;
+    public CallEventCommand(String name, Component component, CommonTree tree, String... params) {
+        super(name, tree, params);
         this.component = component;
-        this.params = params;
     }
 
-    public EventCommand(String name, String componentLocator, Component component, boolean collapseMultiple, String... params) {
-        this(name, componentLocator, component, params);
+    public CallEventCommand(String name, Component component, CommonTree tree, boolean collapseMultiple, String... params) {
+        this(name, component, tree, params);
         this.collapseMultiple = collapseMultiple;
     }
 
-    public void record(Recorder recorder, EventCommand lastEvent) {
+    public void record(Recorder recorder, CallEventCommand lastEvent) {
         if (collapseMultiple && isSameTargetAs(lastEvent)) {
             recorder.replaceLastEvent(this);
         } else {
@@ -42,12 +37,12 @@ public abstract class EventCommand implements Command {
         }
     }
 
-    protected boolean isSameTargetAs(EventCommand lastEvent) {
-        return lastEvent != null && name.equals(lastEvent.getName()) && componentLocator.equals(lastEvent.getComponentLocator());
+    protected boolean isSameTargetAs(CallEventCommand lastEvent) {
+        return lastEvent != null && name.equals(lastEvent.getName()) && getComponentLocator().equals(lastEvent.getComponentLocator());
     }
 
     public String getComponentLocator() {
-        return componentLocator;
+        return parameters == null || parameters.length == 0 ? null : parameters[0];
     }
 
     public String getName() {
@@ -60,10 +55,6 @@ public abstract class EventCommand implements Command {
 
     public void setComponent(Component component) {
         this.component = component;
-    }
-
-    public String[] getParams() {
-        return params;
     }
 
     @Override

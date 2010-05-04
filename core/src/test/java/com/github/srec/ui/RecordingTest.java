@@ -14,13 +14,13 @@ public class RecordingTest {
         dialog("Launch");
         textField("mainClassTF").type("com.github.srec.ui.TestForm").type('\t');
         button("text=Launch").click();
-        frame("srec");
+        frame("srec").activate();
         button("text=Record").click();
         frame("TestForm").activate();
         textField("initialValueTF").type("100");
         button("text=Ok").click();
         comboBox("calculationCB").select("Future Value");
-        frame("srec");
+        frame("srec").activate();
         button("text=Stop");
 
         table("eventsTbl").row(0).assertColumn(0, "window_activate").assertColumn(1, "TestForm");

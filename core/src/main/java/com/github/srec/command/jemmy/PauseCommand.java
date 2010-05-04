@@ -1,8 +1,9 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.EventCommand;
-import com.github.srec.play.exception.PlayerException;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.exception.CommandExecutionException;
 import org.apache.log4j.Logger;
+import org.netbeans.jemmy.JemmyException;
 
 /**
  * @author Victor Tatai
@@ -12,16 +13,16 @@ public class PauseCommand extends JemmyEventCommand {
     private static final int PAUSE_INTERVAL = 5000;
 
     public PauseCommand() {
-        super("pause", null, null);
+        super("pause");
     }
 
     @Override
-    public void runJemmy() {
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
         logger.debug("Pausing execution for " + PAUSE_INTERVAL + "ms");
         try {
             Thread.sleep(PAUSE_INTERVAL);
         } catch (InterruptedException e) {
-            throw new PlayerException(e);
+            throw new CommandExecutionException(e);
         }
     }
 }

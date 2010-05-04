@@ -6,6 +6,7 @@ Version 1.0
 - Rec/Play: Remove TestNG assertions usage in main code
 - Rec/Play: Support for JTable components
 - UI:       Allow editing of scripts
+- Rec:      Image snapshots of failing tests
 
 Version 2.0
 - Rec/Play: Allow easy running of tests remotely in order to speed up development builds

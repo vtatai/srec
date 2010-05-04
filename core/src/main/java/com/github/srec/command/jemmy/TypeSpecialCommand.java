@@ -1,8 +1,8 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
-import com.github.srec.command.EventCommand;
-import com.github.srec.play.exception.IllegalParametersException;
+import com.github.srec.command.ExecutionContext;
+import org.netbeans.jemmy.JemmyException;
 
 import java.awt.*;
 
@@ -12,15 +12,15 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
  * @author Victor Tatai
  */
 public class TypeSpecialCommand extends JemmyEventCommand {
-    public TypeSpecialCommand(String componentLocator, Component component, String text) {
-        super("type_special", componentLocator, component, text);
+    public TypeSpecialCommand() {
+        super("type_special", "componentLocator", "text");
     }
 
     @Override
-    public void runJemmy() {
+    protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
         char key;
-        if (params[0].equals("Tab")) key = '\t';
-        else throw new UnsupportedFeatureException("Type special for " + params[0] + " not supported");
-        textField(componentLocator).type(key);
+        if (params[1].equals("Tab")) key = '\t';
+        else throw new UnsupportedFeatureException("Type special for " + params[1] + " not supported");
+        textField(params[0]).type(key);
     }
 }

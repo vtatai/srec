@@ -1,6 +1,6 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.command.jemmy.SelectCommand;
+import com.github.srec.command.CallEventCommand;
 import com.github.srec.rec.EventRecorder;
 import com.github.srec.rec.common.ComponentDecoder;
 
@@ -43,7 +43,7 @@ public class SelectDropDownRecorder extends AbstractComponentRecorder implements
             if (!visibility.isShowingAndHasFocus(combo)) return;
             ListCellRenderer renderer = combo.getRenderer();
             Component rendererComponent = renderer.getListCellRendererComponent(DUMMY_LIST, combo.getSelectedItem(), combo.getSelectedIndex(), false, false);
-            recorder.record(new SelectCommand(combo.getName(), combo, decoder.decode(rendererComponent)));
+            recorder.record(new CallEventCommand("select", combo, null, combo.getName(), decoder.decode(rendererComponent)));
         }
     }
 }

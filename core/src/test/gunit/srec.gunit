@@ -1,0 +1,20 @@
+gunit srec;
+@header{package com.github.srec.command.parser;}
+
+method_call_or_varref:
+
+"click" -> (METHOD_CALL_OR_VARREF click)
+"click 5"  -> (METHOD_CALL click (LITNUMBER 5))
+"click(5)"  -> (METHOD_CALL click (LITNUMBER 5))
+"click(5,'bla')" -> (METHOD_CALL click (LITNUMBER 5) (LITSTRING bla))
+"click 5, 'bla'" -> (METHOD_CALL click (LITNUMBER 5) (LITSTRING bla))
+
+method_def:
+
+def1.rb -> (METHOD_DEF foo METHOD_DEF_PARAMS METHOD_BODY)
+def2.rb -> (METHOD_DEF foo (METHOD_DEF_PARAMS x y) METHOD_BODY)
+
+script:
+
+"require 'dir/foo.rb'\n" -> (SCRIPT (REQUIRE dir/foo.rb))
+"require 'doc settings/foo.rb'\n" -> (SCRIPT (REQUIRE doc settings/foo.rb))

@@ -1,7 +1,7 @@
 package com.github.srec.jemmy;
 
 import com.github.srec.Utils;
-import com.github.srec.play.exception.IllegalParametersException;
+import com.github.srec.command.exception.IllegalParametersException;
 import org.apache.log4j.Logger;
 import org.netbeans.jemmy.*;
 import org.netbeans.jemmy.operators.*;
@@ -54,6 +54,7 @@ public class JemmyDSL {
         props.put("ScrollbarOperator.WholeScrollTimeout", "5000");
         props.put("ComponentOperator.WaitComponentTimeout", "5000");
         props.put("ComponentOperator.WaiStateTimeout", "5000");
+        props.put("JComboBoxOperator.WaitListTimeout", "5000");
     }
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
     private static Map<String, JComponentOperator> idMap = new HashMap<String, JComponentOperator>();

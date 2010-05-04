@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.command.EventCommand;
+import com.github.srec.command.CallEventCommand;
 
 /**
  * Low level event recorder.
@@ -10,6 +10,6 @@ import com.github.srec.command.EventCommand;
 public interface EventRecorder {
     void init();
     void shutdown();
-    void record(EventCommand event);
-    EventCommand getLastEvent();
+    void record(CallEventCommand event);
+    CallEventCommand getLastEvent();
 }

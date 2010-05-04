@@ -1,8 +1,8 @@
 package com.github.srec.ui;
 
 import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
-import com.github.srec.command.EventCommand;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -26,19 +26,19 @@ public class CommandsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (!(commands.get(rowIndex) instanceof EventCommand)) {
+        if (!(commands.get(rowIndex) instanceof CallEventCommand)) {
             throw new UnsupportedFeatureException("Command not supported: " + commands.get(rowIndex));
         }
-        EventCommand evt = (EventCommand) commands.get(rowIndex);
+        CallEventCommand evt = (CallEventCommand) commands.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return evt.getName();
             case 1:
                 return evt.getComponentLocator();
             case 2:
-                return evt.getParams() != null && evt.getParams().length > 0 ? evt.getParams()[0] : null;
+                return evt.getParameter(1);
             case 3:
-                return evt.getParams() != null && evt.getParams().length > 1 ? evt.getParams()[1] : null;
+                return evt.getParameter(2);
             default:
                 return null;
         }
@@ -64,7 +64,7 @@ public class CommandsTableModel extends AbstractTableModel {
         throw new IllegalArgumentException();
     }
 
-    public void add(EventCommand event) {
+    public void add(CallEventCommand event) {
         commands.add(event);
         int index = commands.size() - 1;
         fireTableRowsInserted(index, index);
