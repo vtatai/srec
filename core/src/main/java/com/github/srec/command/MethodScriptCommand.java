@@ -1,5 +1,8 @@
 package com.github.srec.command;
 
+import com.github.srec.Utils;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,7 @@ import java.util.List;
  * @author Victor Tatai
  */
 public class MethodScriptCommand extends MethodCommand {
+    private static final Logger logger = Logger.getLogger(MethodScriptCommand.class);
     protected List<Command> commands = new ArrayList<Command>();
 
     public MethodScriptCommand(String name, String... parameters) {
@@ -17,8 +21,8 @@ public class MethodScriptCommand extends MethodCommand {
 
     @Override
     public void callMethod(ExecutionContext context, String... params) {
-        // TODO
-        throw new UnsupportedCommandException("Def command unsupported.");
+        logger.debug("Call method " + name + "(" + Utils.asString(params) + ")");
+        context.getPlayer().play(context, commands);
     }
 
     /**

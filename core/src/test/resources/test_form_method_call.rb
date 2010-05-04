@@ -1,4 +1,4 @@
-require 'test_form_def.rb'
+require 'test_form_method_def.rb'
 
 window_activate "TestForm"
 select "calculationCB", "Future Value"

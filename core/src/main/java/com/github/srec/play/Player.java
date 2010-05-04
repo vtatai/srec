@@ -13,40 +13,47 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
 
 /**
- * Class which plays srec script files.
+ * Class which plays srec scripts / commands.
  *  
  * @author Victor Tatai
  */
-public class ScriptPlayer {
-    private ScriptPlayerError error;
+public class Player {
+    private PlayerError error;
     private boolean throwError;
     private long commandInterval = 50;
 
-    public ScriptPlayer init() {
+    public Player init() {
         JemmyDSL.init();
         return this;
     }
 
-    public ScriptPlayer startAndPlay(File file, String className, String[] args) throws IOException, RecognitionException {
+    public Player startAndPlay(File file, String className, String[] args) throws IOException, RecognitionException {
         Utils.runMain(className, args);
         play(file);
         closeWindows();
         return this;
     }
 
-    public ScriptPlayer play(File file) throws IOException, RecognitionException {
-        return play(new FileInputStream(file));
+    public Player play(File file) throws IOException, RecognitionException {
+        return play(new FileInputStream(file), file.getParentFile().getCanonicalPath());
     }
 
-    public ScriptPlayer play(InputStream is) throws IOException, RecognitionException {
-        ExecutionContext context = new JemmyExecutionContextFactory().create();
+    public Player play(InputStream is, String currentPath) throws IOException, RecognitionException {
+        ExecutionContext context = new JemmyExecutionContextFactory().create(currentPath);
         ScriptParser.parse(context, is);
-        for (Command command : context.getCommands()) {
+        context.setPlayer(this);
+        play(context, context.getCommands());
+        return this;
+    }
+
+    public void play(ExecutionContext context, List<Command> commands) {
+        for (Command command : commands) {
             try {
                 command.run(context);
             } catch (CommandExecutionException e) {
@@ -59,17 +66,16 @@ public class ScriptPlayer {
                 throw new RuntimeException(e);
             }
         }
-        return this;
     }
 
     private void handleError(Command command, CommandExecutionException e) {
-        error = new ScriptPlayerError(command.getTree().getLine(), command.getTree().getText(), e);
+        error = new PlayerError(command.getTree().getLine(), command.getTree().getText(), e);
         System.err.println("Error on line " + command.getTree().getLine() + ":");
         System.err.println(command.getTree().toStringTree());
         e.printStackTrace(System.err);
     }
 
-    public ScriptPlayerError getError() {
+    public PlayerError getError() {
         return error;
     }
 
@@ -92,10 +98,10 @@ public class ScriptPlayer {
     public static void main(final String[] args) throws IOException, RecognitionException {
         runMain(args[0], null);
 
-        ScriptPlayer scriptPlayer = new ScriptPlayer().init();
-        scriptPlayer.play(new File(args[1]));
-        if (scriptPlayer.getError() != null) {
-            System.err.println(scriptPlayer.getError());
+        Player player = new Player().init();
+        player.play(new File(args[1]));
+        if (player.getError() != null) {
+            System.err.println(player.getError());
         }
 
         closeWindows();

@@ -1,10 +1,13 @@
 package com.github.srec.command.parser;
 
 import com.github.srec.command.*;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,7 @@ public class Visitor {
         this.context = initialContext;
     }
 
-    public void visit(CommonTree t, CommonTree parent) {
+    public void visit(CommonTree t, CommonTree parent) throws IOException, RecognitionException {
         if (t == null || t.getChildren() == null) return;
         for (Object o : t.getChildren()) {
             if (!(o instanceof CommonTree)) throw new IllegalStateException();
@@ -41,6 +44,8 @@ public class Visitor {
                 visitMETHOD_DEF_PARAMS(child, t);
             } else if (commandName.equals("METHOD_BODY")) {
                 visit(child, t);
+            } else if (commandName.equals("REQUIRE")) {
+                visitREQUIRE(child, t);
             } else if (StringUtils.isBlank(commandName)) {
             } else {
                 throw new UnsupportedCommandException(commandName);
@@ -65,7 +70,7 @@ public class Visitor {
         return params;
     }
 
-    private void visitMETHOD_DEF(CommonTree t, CommonTree parent) {
+    private void visitMETHOD_DEF(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         if (currentMethod != null) {
             error(t, "Nested methods are not allowed");
             return;
@@ -76,6 +81,7 @@ public class Visitor {
         visit((CommonTree) t.getChild(1), t);
         visit((CommonTree) t.getChild(2), t);
         currentMethod = null;
+        context.addMethod(method);
     }
 
     private void visitMETHOD_DEF_PARAMS(CommonTree t, CommonTree parent) {
@@ -97,6 +103,16 @@ public class Visitor {
             params[i] = child.getText();
         }
         return params;
+    }
+
+    private void visitREQUIRE(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
+        ExecutionContext newContext = new ExecutionContext(context.getPlayer(), context.getPath());
+        ScriptParser.parse(newContext, new File(context.getPath() + File.separator + t.getChild(0).getText()));
+        merge(context, newContext);
+    }
+
+    private void merge(ExecutionContext context, ExecutionContext newContext) {
+        context.addAllSymbols(newContext);
     }
 
     private void error(CommonTree t, String message) {

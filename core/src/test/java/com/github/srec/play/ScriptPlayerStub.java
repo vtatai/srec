@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public class ScriptPlayerStub {
     public static void main(String[] args) throws IOException, RecognitionException {
-        ScriptPlayer.main(args);
+        Player.main(args);
     }
 }

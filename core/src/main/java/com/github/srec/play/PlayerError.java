@@ -7,7 +7,7 @@ import com.github.srec.command.exception.CommandExecutionException;
  * 
 * @author Victor Tatai
 */
-public class ScriptPlayerError {
+public class PlayerError {
     /**
      * The line number.
      */
@@ -21,7 +21,7 @@ public class ScriptPlayerError {
      */
     private CommandExecutionException originatingException;
 
-    public ScriptPlayerError(int line, String text, CommandExecutionException originatingException) {
+    public PlayerError(int line, String text, CommandExecutionException originatingException) {
         this.line = line;
         this.text = text;
         this.originatingException = originatingException;

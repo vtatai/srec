@@ -6,5 +6,5 @@ package com.github.srec.command;
  * @author Victor Tatai
  */
 public interface ExecutionContextFactory {
-    ExecutionContext create();
+    ExecutionContext create(String currentPath);
 }

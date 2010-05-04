@@ -38,6 +38,6 @@ public class ScriptParser {
     }
 
     public static void main(String[] args) throws RecognitionException, IOException {
-        ScriptParser.parse(new ExecutionContext(), new File(args[0]));
+        ScriptParser.parse(new ExecutionContext(System.getProperty("user.dir")), new File(args[0]));
     }
 }

@@ -8,8 +8,8 @@ import com.github.srec.command.ExecutionContextFactory;
  */
 public class JemmyExecutionContextFactory implements ExecutionContextFactory {
     @Override
-    public ExecutionContext create() {
-        ExecutionContext ctx = new ExecutionContext();
+    public ExecutionContext create(String currentPath) {
+        ExecutionContext ctx = new ExecutionContext(currentPath);
         ctx.addMethod(new AssertCommand());
         ctx.addMethod(new ClickCommand());
         ctx.addMethod(new CloseCommand());
