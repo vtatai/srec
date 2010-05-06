@@ -20,9 +20,10 @@ public class MethodScriptCommand extends MethodCommand {
     }
 
     @Override
-    public void callMethod(ExecutionContext context, String... params) {
+    public String callMethod(ExecutionContext context, String... params) {
         logger.debug("Call method " + name + "(" + Utils.asString(params) + ")");
-        context.getPlayer().play(context, commands);
+        context.getPlayer().play(new NestedExecutionContext(context, context.getFile()), commands);
+        return null;
     }
 
     /**

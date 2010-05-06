@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-04-30 19:30:25
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-05 14:01:43
 
 package com.github.srec.command.parser;
 
@@ -14,7 +14,7 @@ import org.antlr.runtime.tree.*;
 
 public class srecParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "SCRIPT", "REQUIRE", "ASSIGN", "METHOD_CALL_OR_VARREF", "METHOD_CALL", "METHOD_DEF", "METHOD_DEF_PARAMS", "METHOD_BODY", "LITNUMBER", "LITBOOLEAN", "LITSTRING", "LITNULL", "QNAME", "STRING", "NEWLINE", "ID", "NUMBER", "BOOLEAN", "NULL", "DIGIT", "LETTER", "ALPHANUM", "WS", "'require'", "'('", "')'", "','", "'='", "'def'", "'end'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "SCRIPT", "REQUIRE", "ASSIGN", "METHOD_CALL_OR_VARREF", "METHOD_CALL", "METHOD_DEF", "METHOD_DEF_PARAMS", "METHOD_BODY", "LITNUMBER", "LITBOOLEAN", "LITSTRING", "LITNIL", "QNAME", "STRING", "NEWLINE", "ID", "NUMBER", "BOOLEAN", "NULL", "DIGIT", "LETTER", "ALPHANUM", "WS", "'require'", "'('", "')'", "','", "'='", "'def'", "'end'"
     };
     public static final int SCRIPT=4;
     public static final int T__29=29;
@@ -24,7 +24,6 @@ public class srecParser extends Parser {
     public static final int METHOD_DEF=9;
     public static final int NULL=22;
     public static final int NUMBER=20;
-    public static final int LITNULL=15;
     public static final int ID=19;
     public static final int EOF=-1;
     public static final int REQUIRE=5;
@@ -43,6 +42,7 @@ public class srecParser extends Parser {
     public static final int METHOD_BODY=11;
     public static final int ASSIGN=6;
     public static final int LITBOOLEAN=13;
+    public static final int LITNIL=15;
     public static final int METHOD_CALL_OR_VARREF=7;
     public static final int DIGIT=23;
     public static final int STRING=17;
@@ -153,7 +153,7 @@ public class srecParser extends Parser {
 
 
             // AST REWRITE
-            // elements: script_stmt_block, require
+            // elements: require, script_stmt_block
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -784,7 +784,7 @@ public class srecParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, method_call_param
+                    // elements: method_call_param, ID
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -868,7 +868,7 @@ public class srecParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: method_call_param, ID
+                    // elements: ID, method_call_param
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1098,7 +1098,7 @@ public class srecParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ID, method_call_or_varref, literal
+            // elements: method_call_or_varref, literal, ID
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1365,7 +1365,7 @@ public class srecParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: method_body, ID
+                    // elements: ID, method_body
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1437,7 +1437,7 @@ public class srecParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ID, method_body, method_def_params
+                    // elements: method_body, ID, method_def_params
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1713,7 +1713,7 @@ public class srecParser extends Parser {
     };
 
     // $ANTLR start "literal"
-    // /home/victor/srec/core/src/main/antlr/srec.g:98:1: literal : ( NUMBER -> ^( LITNUMBER NUMBER ) | BOOLEAN -> ^( LITBOOLEAN BOOLEAN ) | STRING -> ^( LITSTRING STRING ) | NULL -> LITNULL );
+    // /home/victor/srec/core/src/main/antlr/srec.g:98:1: literal : ( NUMBER -> ^( LITNUMBER NUMBER ) | BOOLEAN -> ^( LITBOOLEAN BOOLEAN ) | STRING -> ^( LITSTRING STRING ) | NULL -> LITNIL );
     public final srecParser.literal_return literal() throws RecognitionException {
         srecParser.literal_return retval = new srecParser.literal_return();
         retval.start = input.LT(1);
@@ -1735,7 +1735,7 @@ public class srecParser extends Parser {
         RewriteRuleTokenStream stream_NUMBER=new RewriteRuleTokenStream(adaptor,"token NUMBER");
 
         try {
-            // /home/victor/srec/core/src/main/antlr/srec.g:99:2: ( NUMBER -> ^( LITNUMBER NUMBER ) | BOOLEAN -> ^( LITBOOLEAN BOOLEAN ) | STRING -> ^( LITSTRING STRING ) | NULL -> LITNULL )
+            // /home/victor/srec/core/src/main/antlr/srec.g:99:2: ( NUMBER -> ^( LITNUMBER NUMBER ) | BOOLEAN -> ^( LITBOOLEAN BOOLEAN ) | STRING -> ^( LITSTRING STRING ) | NULL -> LITNIL )
             int alt14=4;
             switch ( input.LA(1) ) {
             case NUMBER:
@@ -1898,9 +1898,9 @@ public class srecParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (CommonTree)adaptor.nil();
-                    // 109:3: -> LITNULL
+                    // 109:3: -> LITNIL
                     {
-                        adaptor.addChild(root_0, (CommonTree)adaptor.create(LITNULL, "LITNULL"));
+                        adaptor.addChild(root_0, (CommonTree)adaptor.create(LITNIL, "LITNIL"));
 
                     }
 

@@ -2,8 +2,6 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 
-import java.awt.*;
-
 import static com.github.srec.jemmy.JemmyDSL.find;
 
 /**

@@ -36,9 +36,9 @@ public class CommandsTableModel extends AbstractTableModel {
             case 1:
                 return evt.getComponentLocator();
             case 2:
-                return evt.getParameter(1);
+                return evt.getParameterString(1);
             case 3:
-                return evt.getParameter(2);
+                return evt.getParameterString(2);
             default:
                 return null;
         }

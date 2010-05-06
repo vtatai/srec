@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Parses a script using ANTLR.
@@ -17,11 +18,13 @@ import java.io.InputStream;
  * @author Victor Tatai
  */
 public class ScriptParser {
-    public static void parse(ExecutionContext context, File file) throws IOException, RecognitionException {
+    private Visitor visitor;
+
+    public void parse(ExecutionContext context, File file) throws IOException, RecognitionException {
         parse(context, new FileInputStream(file));
     }
 
-    public static void parse(ExecutionContext context, InputStream is) throws IOException, RecognitionException {
+    public void parse(ExecutionContext context, InputStream is) throws IOException, RecognitionException {
         ANTLRInputStream input = new ANTLRInputStream(is);
 
         srecLexer lexer = new srecLexer(input);
@@ -32,12 +35,15 @@ public class ScriptParser {
 
         CommonTree t = (CommonTree) r.getTree();
 
-        Visitor v = new Visitor(context);
-        v.visit(t, null);
-        v.getContext();
+        visitor = new Visitor(context);
+        visitor.visit(t, null);
+    }
+
+    public List<ParseError> getErrors() {
+        return visitor.getErrors();
     }
 
     public static void main(String[] args) throws RecognitionException, IOException {
-        ScriptParser.parse(new ExecutionContext(System.getProperty("user.dir")), new File(args[0]));
+        new ScriptParser().parse(new ExecutionContext(null), new File(args[0]));
     }
 }

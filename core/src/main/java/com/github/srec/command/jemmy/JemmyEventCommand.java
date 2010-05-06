@@ -17,13 +17,14 @@ public abstract class JemmyEventCommand extends MethodCommand {
     }
 
     @Override
-    public void callMethod(ExecutionContext context, String... params) {
+    public String callMethod(ExecutionContext context, String... params) {
         try {
             runJemmy(context, params);
         } catch (JemmyException e) {
             if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, parameters, e);
             throw new UnsupportedFeatureException(e.getMessage());
         }
+        return null;
     }
 
     /**

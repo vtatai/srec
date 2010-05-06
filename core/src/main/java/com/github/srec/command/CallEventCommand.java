@@ -1,5 +1,6 @@
 package com.github.srec.command;
 
+import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.rec.Recorder;
 import org.antlr.runtime.tree.CommonTree;
 
@@ -20,13 +21,21 @@ public class CallEventCommand extends CallCommand {
     private boolean collapseMultiple = true;
 
     public CallEventCommand(String name, Component component, CommonTree tree, String... params) {
-        super(name, tree, params);
+        super(name, tree);
         this.component = component;
+        addParams(params);
+    }
+
+    private void addParams(String[] params) {
+        for (String param : params) {
+            parameters.add(new LiteralCommand(param));
+        }
     }
 
     public CallEventCommand(String name, Component component, CommonTree tree, boolean collapseMultiple, String... params) {
-        this(name, component, tree, params);
+        this(name, component, tree);
         this.collapseMultiple = collapseMultiple;
+        addParams(params);
     }
 
     public void record(Recorder recorder, CallEventCommand lastEvent) {
@@ -42,7 +51,10 @@ public class CallEventCommand extends CallCommand {
     }
 
     public String getComponentLocator() {
-        return parameters == null || parameters.length == 0 ? null : parameters[0];
+        if (parameters == null || parameters.size() == 0) return null;
+        if (!(parameters.get(0) instanceof LiteralCommand)) throw new CommandExecutionException(
+                "Component locator can only be determined during runtime");
+        return parameters.get(0).getValue(null);
     }
 
     public String getName() {

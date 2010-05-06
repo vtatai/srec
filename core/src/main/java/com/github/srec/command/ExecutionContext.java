@@ -2,6 +2,8 @@ package com.github.srec.command;
 
 import com.github.srec.play.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,26 +17,32 @@ import java.util.Map;
  */
 public class ExecutionContext {
     private List<Command> commands = new ArrayList<Command>();
-    private Map<String, MethodCommand> symbols = new HashMap<String, MethodCommand>();
+    private Map<String, CommandSymbol> symbols = new HashMap<String, CommandSymbol>();
     /**
      * The player executing this context.
      */
     private Player player;
     /**
-     * Path where this execution context was read. Might be null.
+     * File from where this EC was read from. May be null.
      */
-    private String path;
+    private File file;
 
-    public ExecutionContext(String path) {
-        this.path = path;
+    public ExecutionContext(File file) {
+        this.file = file;
     }
 
-    public ExecutionContext(Player player, String path) {
+    public ExecutionContext(Player player, File file) {
         this.player = player;
-        this.path = path;
+        this.file = file;
     }
 
-    public MethodCommand getSymbol(String name) {
+    /**
+     * Method that should be used to effectively locate symbols.
+     *
+     * @param name The symbol name
+     * @return The symbol
+     */
+    public CommandSymbol findSymbol(String name) {
         return symbols.get(name);
     }
     
@@ -42,28 +50,24 @@ public class ExecutionContext {
         commands.add(command);
     }
 
-    public void addMethod(MethodCommand cmd) {
+    public void addSymbol(CommandSymbol cmd) {
         symbols.put(cmd.getName(), cmd);
     }
 
     public void addAllSymbols(ExecutionContext context) {
-        symbols.putAll(context.getSymbols());
+        symbols.putAll(context.symbols);
     }
 
     public List<Command> getCommands() {
         return commands;
     }
 
-    public Map<String, MethodCommand> getSymbols() {
-        return symbols;
+    public String getPath() throws IOException {
+        return file.getParentFile().getCanonicalPath();
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
+    public File getFile() {
+        return file;
     }
 
     public Player getPlayer() {

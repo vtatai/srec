@@ -1,4 +1,4 @@
-package com.github.srec.command;
+package com.github.srec.command.exception;
 
 import com.github.srec.command.exception.CommandExecutionException;
 

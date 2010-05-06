@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-04-30 19:30:26
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-05 14:01:43
 
 package com.github.srec.command.parser;
 
@@ -17,7 +17,6 @@ public class srecLexer extends Lexer {
     public static final int METHOD_DEF=9;
     public static final int NULL=22;
     public static final int NUMBER=20;
-    public static final int LITNULL=15;
     public static final int ID=19;
     public static final int EOF=-1;
     public static final int REQUIRE=5;
@@ -36,6 +35,7 @@ public class srecLexer extends Lexer {
     public static final int METHOD_BODY=11;
     public static final int ASSIGN=6;
     public static final int LITBOOLEAN=13;
+    public static final int LITNIL=15;
     public static final int METHOD_CALL_OR_VARREF=7;
     public static final int DIGIT=23;
     public static final int STRING=17;

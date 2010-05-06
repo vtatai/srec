@@ -3,23 +3,25 @@ package com.github.srec.command.jemmy;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextFactory;
 
+import java.io.File;
+
 /**
  * @author Victor Tatai
  */
 public class JemmyExecutionContextFactory implements ExecutionContextFactory {
     @Override
-    public ExecutionContext create(String currentPath) {
-        ExecutionContext ctx = new ExecutionContext(currentPath);
-        ctx.addMethod(new AssertCommand());
-        ctx.addMethod(new ClickCommand());
-        ctx.addMethod(new CloseCommand());
-        ctx.addMethod(new DialogActivateCommand());
-        ctx.addMethod(new FindCommand());
-        ctx.addMethod(new PauseCommand());
-        ctx.addMethod(new SelectCommand());
-        ctx.addMethod(new TypeCommand());
-        ctx.addMethod(new TypeSpecialCommand());
-        ctx.addMethod(new WindowActivateCommand());
+    public ExecutionContext create(File file) {
+        ExecutionContext ctx = new ExecutionContext(file);
+        ctx.addSymbol(new AssertCommand());
+        ctx.addSymbol(new ClickCommand());
+        ctx.addSymbol(new CloseCommand());
+        ctx.addSymbol(new DialogActivateCommand());
+        ctx.addSymbol(new FindCommand());
+        ctx.addSymbol(new PauseCommand());
+        ctx.addSymbol(new SelectCommand());
+        ctx.addSymbol(new TypeCommand());
+        ctx.addSymbol(new TypeSpecialCommand());
+        ctx.addSymbol(new WindowActivateCommand());
         return ctx;
     }
 }

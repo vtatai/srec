@@ -15,7 +15,7 @@ public abstract class BaseCommand implements Command {
     }
 
     protected BaseCommand(String name, CommonTree tree) {
-        this.name = name;
+        this(name);
         this.tree = tree;
     }
 

@@ -38,15 +38,15 @@ public class CommandSerializer {
     private static void print(CallEventCommand event, Writer writer) {
         if (StringUtils.isBlank(event.getComponentLocator())) return;
         StringBuilder strb = new StringBuilder(event.getName()).append(" ").append(quote(event.getComponentLocator()));
-        for (String arg : event.getParameters()) {
-            strb.append(", ").append(quote(arg));
+        for (ValueCommand arg : event.getParameters()) {
+            strb.append(", ").append(quote(arg.getName()));
         }
         writer.println(strb.toString());
     }
 
     private static void print(CallCommand command, Writer writer) {
         StringBuilder strb = new StringBuilder(command.getName());
-        for (String arg : command.getParameters()) {
+        for (ValueCommand arg : command.getParameters()) {
             strb.append(arg).append(", ");
         }
         String s = strb.toString();

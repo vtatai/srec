@@ -5,6 +5,7 @@ import com.github.srec.command.Command;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
+import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
 import org.antlr.runtime.RecognitionException;
@@ -41,12 +42,14 @@ public class Player {
     }
 
     public Player play(File file) throws IOException, RecognitionException {
-        return play(new FileInputStream(file), file.getParentFile().getCanonicalPath());
+        return play(new FileInputStream(file), file);
     }
 
-    public Player play(InputStream is, String currentPath) throws IOException, RecognitionException {
-        ExecutionContext context = new JemmyExecutionContextFactory().create(currentPath);
-        ScriptParser.parse(context, is);
+    public Player play(InputStream is, File file) throws IOException, RecognitionException {
+        ExecutionContext context = new JemmyExecutionContextFactory().create(file);
+        ScriptParser parser = new ScriptParser();
+        parser.parse(context, is);
+        if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         context.setPlayer(this);
         play(context, context.getCommands());
         return this;

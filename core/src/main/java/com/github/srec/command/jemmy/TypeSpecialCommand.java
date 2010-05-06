@@ -4,8 +4,6 @@ import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.ExecutionContext;
 import org.netbeans.jemmy.JemmyException;
 
-import java.awt.*;
-
 import static com.github.srec.jemmy.JemmyDSL.textField;
 
 /**

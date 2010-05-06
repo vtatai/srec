@@ -26,8 +26,9 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
      *
      * @param context The execution context
      * @param params The parameters to run the method
+     * @return The return value from the method call
      */
-    public abstract void callMethod(ExecutionContext context, String... params);
+    public abstract String callMethod(ExecutionContext context, String... params);
 
     @Override
     public void run(ExecutionContext context) {

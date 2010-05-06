@@ -5,7 +5,6 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.IllegalParametersException;
 import org.netbeans.jemmy.JemmyException;
 
-import java.awt.*;
 import java.util.Map;
 
 import static com.github.srec.jemmy.JemmyDSL.comboBox;

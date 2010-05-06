@@ -1,5 +1,7 @@
 package com.github.srec.play;
 
+import com.github.srec.command.parser.ParseException;
+import org.antlr.runtime.RecognitionException;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -35,15 +37,15 @@ public class ScriptPlayerTest {
         }
     }
 
-    public void testMethod() throws IOException {
+    public void testMethod() throws IOException, RecognitionException {
         try {
             Player player = new Player()
                     .init()
                     .startAndPlay(new File("src/test/resources/test_form_method_call.rb"), "com.github.srec.ui.TestForm", new String[0]);
             assertNull(player.getError());
-        } catch (Throwable t) {
-            t.printStackTrace();
-            fail();
+        } catch (ParseException e) {
+            e.printErrors();
+            throw e;
         }
     }
 

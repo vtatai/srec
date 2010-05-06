@@ -22,7 +22,7 @@ tokens {
 	LITNUMBER;
 	LITBOOLEAN;
 	LITSTRING;
-	LITNULL;
+	LITNIL;
 	
 	QNAME;
 }
@@ -106,7 +106,7 @@ literal
 		-> ^(LITSTRING STRING)
 		
 	|	NULL
-		-> LITNULL
+		-> LITNIL
 	;
 
 
