@@ -1,3 +1,3 @@
 def close_test_form(name)
-  close name 
+  close names 
 end

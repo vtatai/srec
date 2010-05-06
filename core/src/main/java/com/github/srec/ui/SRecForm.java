@@ -273,14 +273,13 @@ public class SRecForm {
             return;
         }
         assert !file.isDirectory();
-        // TODO
-//        try {
-//            List<Command> commands = CommandSerializer.read(file);
-//            recorder.emptyCommands();
-//            recorder.addCommands(commands);
-//        } catch (IOException e) {
-//            error("Error loading script", e);
-//        }
+        try {
+            List<Command> commands = CommandSerializer.load(file);
+            recorder.emptyCommands();
+            recorder.addCommands(commands);
+        } catch (IOException e) {
+            error("Error loading script", e);
+        }
     }
 
     private void saveScript() {

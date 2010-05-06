@@ -20,23 +20,27 @@ import java.util.List;
 public class ScriptParser {
     private Visitor visitor;
 
-    public void parse(ExecutionContext context, File file) throws IOException, RecognitionException {
+    public void parse(ExecutionContext context, File file) throws IOException {
         parse(context, new FileInputStream(file));
     }
 
-    public void parse(ExecutionContext context, InputStream is) throws IOException, RecognitionException {
-        ANTLRInputStream input = new ANTLRInputStream(is);
+    public void parse(ExecutionContext context, InputStream is) throws IOException {
+        try {
+            ANTLRInputStream input = new ANTLRInputStream(is);
 
-        srecLexer lexer = new srecLexer(input);
+            srecLexer lexer = new srecLexer(input);
 
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        srecParser parser = new srecParser(tokens);
-        srecParser.script_return r = parser.script();
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            srecParser parser = new srecParser(tokens);
+            srecParser.script_return r = parser.script();
 
-        CommonTree t = (CommonTree) r.getTree();
+            CommonTree t = (CommonTree) r.getTree();
 
-        visitor = new Visitor(context);
-        visitor.visit(t, null);
+            visitor = new Visitor(context);
+            visitor.visit(t, null);
+        } catch (RecognitionException e) {
+            throw new ParseException(e);
+        }
     }
 
     public List<ParseError> getErrors() {

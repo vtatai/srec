@@ -1,6 +1,7 @@
 package com.github.srec.ui;
 
 import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.CallCommand;
 import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
 
@@ -26,19 +27,19 @@ public class CommandsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (!(commands.get(rowIndex) instanceof CallEventCommand)) {
+        if (!(commands.get(rowIndex) instanceof CallCommand)) {
             throw new UnsupportedFeatureException("Command not supported: " + commands.get(rowIndex));
         }
-        CallEventCommand evt = (CallEventCommand) commands.get(rowIndex);
+        CallCommand command = (CallCommand) commands.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return evt.getName();
+                return command.getName();
             case 1:
-                return evt.getComponentLocator();
+                return command.getParameterString(0);
             case 2:
-                return evt.getParameterString(1);
+                return command.getParameterString(1);
             case 3:
-                return evt.getParameterString(2);
+                return command.getParameterString(2);
             default:
                 return null;
         }

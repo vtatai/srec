@@ -10,8 +10,8 @@ import java.io.File;
  */
 public class JemmyExecutionContextFactory implements ExecutionContextFactory {
     @Override
-    public ExecutionContext create(File file) {
-        ExecutionContext ctx = new ExecutionContext(file);
+    public ExecutionContext create(File file, String... loadPath) {
+        ExecutionContext ctx = new ExecutionContext(file, loadPath);
         ctx.addSymbol(new AssertCommand());
         ctx.addSymbol(new ClickCommand());
         ctx.addSymbol(new CloseCommand());

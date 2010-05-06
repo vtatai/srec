@@ -1,15 +1,12 @@
 package com.github.srec.play;
 
 import com.github.srec.command.parser.ParseException;
-import org.antlr.runtime.RecognitionException;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 @Test
 public class ScriptPlayerTest {
@@ -37,7 +34,7 @@ public class ScriptPlayerTest {
         }
     }
 
-    public void testMethod() throws IOException, RecognitionException {
+    public void testMethod() throws IOException {
         try {
             Player player = new Player()
                     .init()

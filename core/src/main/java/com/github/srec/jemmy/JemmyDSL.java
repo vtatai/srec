@@ -194,10 +194,10 @@ public class JemmyDSL {
             component = newInstance(clazz, container().getComponent(), new NameComponentChooser(locator));
         } else if (locatorMap.containsKey("label")) {
             JLabelOperator jlabel = new JLabelOperator(container().getComponent(), locatorMap.get("label"));
-            if (!(jlabel.getLabelFor() instanceof JTextComponent)) {
+            if (!(jlabel.getLabelFor() instanceof JTextField)) {
                 throw new JemmyDSLException("Associated component for " + locator + " is not a JTextComponent");
             }
-            component = newInstance(clazz, (AbstractButton) jlabel.getLabelFor());
+            component = newInstance(clazz, JTextField.class, (JTextField) jlabel.getLabelFor());
         } else if (locatorMap.containsKey("text")) {
             if (JTextComponentOperator.class.isAssignableFrom(clazz)) {
                 component = newInstance(clazz, container().getComponent(), new JTextComponentOperator.JTextComponentByTextFinder(locatorMap.get("text")));
@@ -231,9 +231,9 @@ public class JemmyDSL {
         }
     }
 
-    private static <X extends JComponentOperator> X newInstance(Class<X> clazz, JComponent component) {
+    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz, Class<Y> componentClass, JComponent component) {
         try {
-            Constructor<X> c = clazz.getConstructor(component.getClass());
+            Constructor<X> c = clazz.getConstructor(componentClass);
             return c.newInstance(component);
         } catch (Exception e) {
             // Check to see if the nested exception was caused by a regular Jemmy exception

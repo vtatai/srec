@@ -17,7 +17,7 @@ public class LiteralCommand extends BaseCommand implements ValueCommand {
     }
 
     public LiteralCommand(CommonTree tree, String value) {
-        super(null, tree);
+        super(value, tree);
         this.value = value;
     }
 

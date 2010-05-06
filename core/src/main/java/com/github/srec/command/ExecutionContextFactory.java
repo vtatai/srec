@@ -8,5 +8,5 @@ import java.io.File;
  * @author Victor Tatai
  */
 public interface ExecutionContextFactory {
-    ExecutionContext create(File file);
+    ExecutionContext create(File file, String... loadPath);
 }

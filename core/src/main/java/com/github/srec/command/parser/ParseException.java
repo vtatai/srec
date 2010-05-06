@@ -18,6 +18,10 @@ public class ParseException extends SRecException {
         this.errors = errors;
     }
 
+    public ParseException(Throwable cause) {
+        super(cause);
+    }
+
     public List<ParseError> getErrors() {
         return errors;
     }

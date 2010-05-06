@@ -15,9 +15,11 @@ public class ParseError {
     private Severity severity;
     private CommonTree tree;
     private String message;
+    private String file;
 
-    public ParseError(Severity severity, CommonTree tree, String message) {
+    public ParseError(Severity severity, String file, CommonTree tree, String message) {
         this.severity = severity;
+        this.file = file;
         this.tree = tree;
         this.message = message;
     }
@@ -36,6 +38,6 @@ public class ParseError {
 
     @Override
     public String toString() {
-        return severity + ": line " + tree.getLine() + ", " + message;
+        return severity + " on " + file + ", line " + tree.getLine() + ": " + message;
     }
 }

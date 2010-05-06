@@ -1,6 +1,9 @@
 package com.github.srec.command;
 
+import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
+import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.rec.EventReaderException;
+import org.antlr.runtime.RecognitionException;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
@@ -14,6 +17,13 @@ import static com.github.srec.Utils.quote;
  * @author Victor Tatai
  */
 public class CommandSerializer {
+    public static List<Command> load(File file) throws IOException {
+        ExecutionContext context = new JemmyExecutionContextFactory().create(file, file.getParentFile().getCanonicalPath());
+        ScriptParser p = new ScriptParser();
+        p.parse(context, file);
+        return context.getCommands();
+    }
+
     public static void write(File file, List<Command> commands) throws IOException {
         Writer writer = new Writer(file);
         try {

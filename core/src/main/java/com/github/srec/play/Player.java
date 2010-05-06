@@ -8,7 +8,6 @@ import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
-import org.antlr.runtime.RecognitionException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,19 +33,19 @@ public class Player {
         return this;
     }
 
-    public Player startAndPlay(File file, String className, String[] args) throws IOException, RecognitionException {
+    public Player startAndPlay(File file, String className, String[] args) throws IOException {
         Utils.runMain(className, args);
         play(file);
         closeWindows();
         return this;
     }
 
-    public Player play(File file) throws IOException, RecognitionException {
+    public Player play(File file) throws IOException {
         return play(new FileInputStream(file), file);
     }
 
-    public Player play(InputStream is, File file) throws IOException, RecognitionException {
-        ExecutionContext context = new JemmyExecutionContextFactory().create(file);
+    public Player play(InputStream is, File file) throws IOException {
+        ExecutionContext context = new JemmyExecutionContextFactory().create(file, file.getParentFile().getCanonicalPath());
         ScriptParser parser = new ScriptParser();
         parser.parse(context, is);
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
@@ -98,7 +97,7 @@ public class Player {
         this.commandInterval = commandInterval;
     }
 
-    public static void main(final String[] args) throws IOException, RecognitionException {
+    public static void main(final String[] args) throws IOException {
         runMain(args[0], null);
 
         Player player = new Player().init();

@@ -4,10 +4,7 @@ import com.github.srec.play.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a script execution context, containing commands to be executed and a very simple symbol table which
@@ -26,14 +23,19 @@ public class ExecutionContext {
      * File from where this EC was read from. May be null.
      */
     private File file;
+    /**
+     * Load paths from where required scripts should be searched.
+     */
+    private List<String> loadPath = new ArrayList<String>();
 
-    public ExecutionContext(File file) {
+    public ExecutionContext(File file, String... loadPaths) {
         this.file = file;
+        loadPath.addAll(Arrays.asList(loadPaths));
     }
 
-    public ExecutionContext(Player player, File file) {
+    public ExecutionContext(Player player, File file, String... loadPaths) {
+        this(file, loadPaths);
         this.player = player;
-        this.file = file;
     }
 
     /**
@@ -76,5 +78,9 @@ public class ExecutionContext {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public List<String> getLoadPath() {
+        return loadPath;
     }
 }

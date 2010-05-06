@@ -1,5 +1,7 @@
 package com.github.srec.ui;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
  * @author Victor Tatai
  */
 public class RecentFilesSerializer {
+    private static final Logger logger = Logger.getLogger(RecentFilesSerializer.class);
+
     public static List<String> read() throws IOException {
         File file = getRecentFilesFile();
         List<String> list = new ArrayList<String>();
@@ -19,7 +23,7 @@ public class RecentFilesSerializer {
             reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                logger.debug("Adding file to recent file list: " + line);
                 list.add(line);
             }
         } finally {

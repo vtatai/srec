@@ -131,9 +131,17 @@ public class Visitor {
     private void visitREQUIRE(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         ExecutionContext newContext = new ExecutionContext(context.getPlayer(), context.getFile());
         ScriptParser parser = new ScriptParser();
-        parser.parse(newContext, new File(context.getPath() + File.separator + t.getChild(0).getText()));
+        parser.parse(newContext, locateRequiredFile(t.getChild(0).getText()));
         merge(context, newContext);
         errors.addAll(parser.getErrors());
+    }
+
+    private File locateRequiredFile(String name) throws IOException {
+        for (String path : context.getLoadPath()) {
+            File f = new File(path + File.separator + name);
+            if (f.exists()) return f;
+        }
+        return null;
     }
 
     private void merge(ExecutionContext context, ExecutionContext newContext) {
@@ -157,7 +165,11 @@ public class Visitor {
     }
 
     private void error(CommonTree t, String message) {
-        errors.add(new ParseError(ParseError.Severity.ERROR, t, message));
+        try {
+            errors.add(new ParseError(ParseError.Severity.ERROR, context.getFile().getCanonicalPath(), t, message));
+        } catch (IOException e) {
+            throw new ParseException(e);
+        }
     }
 
     private void add(Command command) {
