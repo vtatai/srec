@@ -4,7 +4,7 @@
     <groupId>com.github.srec</groupId>
     <artifactId>srec</artifactId>
     <packaging>pom</packaging>
-    <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
+    <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
     <name>srec</name>
     <description>srec is a Java Swing record / replay tool</description>
     <url>http://github.com/</url>
@@ -23,9 +23,9 @@
     </developers>
 
     <scm>
-        <url>http://github.com/vtatai/srec/</url>
-        <connection>git://github.com/vtatai/srec.git</connection>
-        <developerConnection>git@github.com:vtatai/srec.git</developerConnection>
+        <url>scm:git:git@github.com:vtatai/srec.git</url>
+        <connection>scm:git:git@github.com:vtatai/srec.git</connection>
+        <developerConnection>scm:git:git@github.com:vtatai/srec.git</developerConnection>
     </scm>
 
     <repositories>
@@ -271,12 +271,12 @@
             <dependency>
                 <groupId>com.github.srec</groupId>
                 <artifactId>srec-core</artifactId>
-                <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
+                <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
             </dependency>
             <dependency>
                 <groupId>com.github.srec</groupId>
                 <artifactId>srec-core</artifactId>
-                <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
+                <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
                 <type>test-jar</type>
             </dependency>
         </dependencies>
