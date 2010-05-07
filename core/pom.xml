@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.github.srec</groupId>
         <artifactId>srec</artifactId>
-        <version><!-- GLOBAL VERSION-->0.1<!-- GLOBAL VERSION--></version>
+        <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
     </parent>
     <dependencies>
         <dependency>
