@@ -4,12 +4,11 @@
     <groupId>com.github.srec</groupId>
     <artifactId>srec-hadoop</artifactId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
     <name>srec-hadoop</name>
     <parent>
         <groupId>com.github.srec</groupId>
         <artifactId>srec</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version><!-- GLOBAL VERSION-->0.1-SNAPSHOT<!-- GLOBAL VERSION--></version>
     </parent>
     <build>
         <plugins>
@@ -33,12 +32,10 @@
         <dependency>
             <groupId>com.github.srec</groupId>
             <artifactId>srec-core</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.srec</groupId>
             <artifactId>srec-core</artifactId>
-            <version>0.1-SNAPSHOT</version>
             <type>test-jar</type>
         </dependency>
         <dependency>

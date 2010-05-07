@@ -178,11 +178,6 @@ public class JemmyDSL {
         return x;
     }
 
-    public static void assertText(String locator, String text) {
-        JTextComponentOperator component = find(locator, JTextComponentOperator.class);
-        assertEquals(component.getText(), text); // TODO remove TestNG assertion
-    }
-
     public static void click(String locator) {
         find(locator, AbstractButtonOperator.class).push();
     }
@@ -327,6 +322,10 @@ public class JemmyDSL {
 
         public String text() {
             return component.getText();
+        }
+
+        public void assertText(String text) {
+            component.waitText(text);
         }
 
         public JTextFieldOperator getComponent() {

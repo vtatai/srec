@@ -4,7 +4,7 @@
     <groupId>com.github.srec</groupId>
     <artifactId>srec</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version><!-- GLOBAL VERSION-->0.1-SNAPSHOT<!-- GLOBAL VERSION--></version>
     <name>srec</name>
     <url>http://github.com/</url>
     <modules>
@@ -208,6 +208,17 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.srec</groupId>
+                <artifactId>srec-core</artifactId>
+                <version><!-- GLOBAL VERSION-->0.1-SNAPSHOT<!-- GLOBAL VERSION--></version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.srec</groupId>
+                <artifactId>srec-core</artifactId>
+                <version><!-- GLOBAL VERSION-->0.1-SNAPSHOT<!-- GLOBAL VERSION--></version>
+                <type>test-jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
