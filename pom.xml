@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.srec</groupId>
     <artifactId>srec</artifactId>
     <packaging>pom</packaging>
-    <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
+    <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
     <name>srec</name>
     <description>srec is a Java Swing record / replay tool</description>
     <url>http://github.com/</url>
@@ -279,12 +278,12 @@
             <dependency>
                 <groupId>com.github.srec</groupId>
                 <artifactId>srec-core</artifactId>
-                <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
+                <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
             </dependency>
             <dependency>
                 <groupId>com.github.srec</groupId>
                 <artifactId>srec-core</artifactId>
-                <version><!-- GLOBAL VERSION-->0.1.0-SNAPSHOT<!-- GLOBAL VERSION--></version>
+                <version><!-- GLOBAL VERSION-->0.1.0<!-- GLOBAL VERSION--></version>
                 <type>test-jar</type>
             </dependency>
         </dependencies>
