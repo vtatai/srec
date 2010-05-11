@@ -88,9 +88,9 @@ public final class Utils {
     }
 
     /**
-     * Close all ignoredWindows.
+     * Close all windows.
      *
-     * @param ignoredWindows The ignoredWindows to ignore
+     * @param ignoredWindows The windows to ignore
      */
     public static void closeWindows(Window... ignoredWindows) {
         Window[] ws = Window.getWindows();

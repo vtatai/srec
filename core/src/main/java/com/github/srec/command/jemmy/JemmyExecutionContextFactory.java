@@ -22,6 +22,7 @@ public class JemmyExecutionContextFactory implements ExecutionContextFactory {
         ctx.addSymbol(new TypeCommand());
         ctx.addSymbol(new TypeSpecialCommand());
         ctx.addSymbol(new WindowActivateCommand());
+        ctx.addSymbol(new AssertEnabledCommand());
         return ctx;
     }
 }

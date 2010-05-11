@@ -53,7 +53,7 @@ public class RecordingTest {
                 .assertColumn(0, "select")
                 .assertColumn(1, "calculationCB")
                 .assertColumn(2, "Future Value");
-        table("eventsTbl").row(7).assertColumn(0, "close").assertColumn(1, "TestForm");
+        table("eventsTbl").row(9).assertColumn(0, "close").assertColumn(1, "TestForm");
 
         frame("srec").close();
     }

@@ -151,28 +151,30 @@
                           <text value="Radio buttons:"/>
                         </properties>
                       </component>
-                      <component id="a141c" class="javax.swing.JCheckBox" binding="checkBox1CheckBox" default-binding="true">
+                      <component id="a141c" class="javax.swing.JCheckBox" binding="cb1">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
+                          <name value="cb1"/>
                           <text value="CheckBox1"/>
                         </properties>
                       </component>
-                      <component id="2a65d" class="javax.swing.JCheckBox" binding="checkBox2CheckBox" default-binding="true">
+                      <component id="2a65d" class="javax.swing.JCheckBox" binding="cb2">
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
+                          <name value="cb2"/>
                           <text value="CheckBox2"/>
                         </properties>
                       </component>
-                      <component id="850e6" class="javax.swing.JCheckBox" binding="checkBox3CheckBox" default-binding="true">
+                      <component id="850e6" class="javax.swing.JCheckBox" binding="cb3">
                         <constraints>
                           <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <name value="checkBox3"/>
+                          <name value="cb3"/>
                           <text value="CheckBox3"/>
                         </properties>
                       </component>
@@ -236,7 +238,10 @@
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <enabled value="false"/>
+                          <name value="textField2"/>
+                        </properties>
                       </component>
                       <component id="46ddf" class="javax.swing.JLabel">
                         <constraints>

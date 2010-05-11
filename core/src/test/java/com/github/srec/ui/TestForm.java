@@ -22,9 +22,9 @@ public class TestForm {
     private JTree tree1;
     private JTabbedPane tabbedPane1;
     private JPanel tab1;
-    private JCheckBox checkBox1CheckBox;
-    private JCheckBox checkBox2CheckBox;
-    private JCheckBox checkBox3CheckBox;
+    private JCheckBox cb1;
+    private JCheckBox cb2;
+    private JCheckBox cb3;
     private JRadioButton radioButton1RadioButton;
     private JRadioButton radioButton2RadioButton;
     private JRadioButton radioButton3RadioButton;
@@ -49,6 +49,12 @@ public class TestForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openScript();
+            }
+        });
+        cb1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                textField2.setEnabled(true);
             }
         });
     }
@@ -149,16 +155,18 @@ public class TestForm {
         final JLabel label4 = new JLabel();
         label4.setText("Radio buttons:");
         tab1.add(label4, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        checkBox1CheckBox = new JCheckBox();
-        checkBox1CheckBox.setText("CheckBox1");
-        tab1.add(checkBox1CheckBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        checkBox2CheckBox = new JCheckBox();
-        checkBox2CheckBox.setText("CheckBox2");
-        tab1.add(checkBox2CheckBox, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        checkBox3CheckBox = new JCheckBox();
-        checkBox3CheckBox.setName("checkBox3");
-        checkBox3CheckBox.setText("CheckBox3");
-        tab1.add(checkBox3CheckBox, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cb1 = new JCheckBox();
+        cb1.setName("cb1");
+        cb1.setText("CheckBox1");
+        tab1.add(cb1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cb2 = new JCheckBox();
+        cb2.setName("cb2");
+        cb2.setText("CheckBox2");
+        tab1.add(cb2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cb3 = new JCheckBox();
+        cb3.setName("cb3");
+        cb3.setText("CheckBox3");
+        tab1.add(cb3, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         radioButton1RadioButton = new JRadioButton();
         radioButton1RadioButton.setName("radioButton1");
         radioButton1RadioButton.setText("RadioButton1");
@@ -182,6 +190,8 @@ public class TestForm {
         label6.setText("Value:");
         tab1.add(label6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         textField2 = new JTextField();
+        textField2.setEnabled(false);
+        textField2.setName("textField2");
         tab1.add(textField2, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, 1, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label7 = new JLabel();
         label7.setText("Value:");

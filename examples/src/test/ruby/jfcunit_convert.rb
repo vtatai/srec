@@ -1,42 +1,93 @@
-#!/usr/bin/ruby
-
 # This script can be used to convert JFCUnit scripts to srec scripts
+# REQUIRES RUBY 1.9
 # THIS IS STILL EXPERIMENTAL CODE
 # Author: Victor Tatai
 
-require 'rexml/document'
-require 'rexml/streamlistener'
-include REXML
+require_relative 'custom_tags.rb'
 
-class XmlListener
-  def xmldecl(version, encoding, standalone)
+require 'rubygems'
+require 'xml'
+require 'set'
+
+include XML
+
+class XmlReader
+  def initialize(dir_per_suite = true)
+    @dir_per_suite = dir_per_suite
   end
 
-  def tag_start(name, attributes)
+  def read(filename)
+    XML.default_line_numbers = true
+    parser = Reader.file(filename)
+    while parser.read do
+      node(parser)
+    end
+  end
+
+  private
+  def node(reader)
+    name = reader.name
+    return if name == "#text"
+    # puts "READ #{name}"
     case name
     when "key" 
-      if attributes['string']
-        puts "type \"id=#{attributes['refid']}\", \"#{attributes['string']}\""
-      elsif attributes['code']
-        puts "type_special \"id=#{attributes['refid']}\", \"#{translate_type_special(attributes['code'])}\""
+      if reader['string']
+        @file.puts "type \"id=#{reader['refid']}\", \"#{reader['string']}\""
+      elsif reader['code']
+        @file.puts "type_special \"id=#{reader['refid']}\", \"#{translate_type_special(reader['code'])}\""
       end
     when "find"
-      if attributes['name'] && attributes['finder'] == "NamedComponentFinder"
-        puts "find \"#{attributes['name']}\", \"#{attributes['id']}\", \"#{translate_find_class(attributes['class'])}\""
-      elsif attributes['finder'] == "FrameFinder"
-        puts "window_activate \"#{attributes['title']}\""
-      elsif attributes['finder'] == "DialogFinder"
-        puts "dialog_activate \"#{attributes['title']}\""
+      if reader['name'] && reader['finder'] == "NamedComponentFinder"
+        @file.puts "find \"#{reader['name']}\", \"#{reader['id']}\", \"#{translate_find_class(reader['class'])}\""
+      elsif reader['finder'] == "FrameFinder"
+        @file.puts "window_activate \"#{reader['title']}\""
+      elsif reader['finder'] == "DialogFinder"
+        @file.puts "dialog_activate \"#{reader['title']}\""
       end
     when "asserttextfieldcontains"
-      puts "assert \"id=#{attributes['id']}\", \"#{attributes['value']}\""
+      @file.puts "assert \"id=#{reader['id']}\", \"#{reader['value']}\""
     when "click"
-      if attributes['type'] == "JComboBoxMouseEventData" && attributes['index']
-        puts "select \"id=#{attributes['refid']}\", \"index=#{attributes['index']}\""
-      elsif attributes['type'] == "MouseEventData" && attributes['refid']
-        puts "click \"id=#{attributes['refid']}\""
+      if reader['type'] == "JComboBoxMouseEventData" && reader['index']
+        @file.puts "select \"id=#{reader['refid']}\", \"index=#{reader['index']}\""
+      elsif reader['type'] == "MouseEventData" && reader['refid']
+        @file.puts "click \"id=#{reader['refid']}\""
+      end
+    when "test"
+      if @suite_name
+        @file = File.new(@suite_name + '/' + reader['name'] + '.rb', "w+")
+      else
+        @file = File.new(reader['name'] + '.rb', "w+")
+      end
+    when "taghandlers"
+      raise "No custom tag defined for #{reader['tagname']}" if !($custom_tags.include? reader['tagname'])
+    when "suite"
+      if @dir_per_suite
+        @suite_name = reader['name']
+        FileUtils.mkdir_p @suite_name
+      end
+    when "assertenabled"
+      @file.puts "assert_enabled \"id=#{reader['refid']}\", #{reader['enabled']}"
+    when "#comment"
+      @file.puts "\# #{reader.value}"
+    else
+      if $custom_tags.include? name
+        tag = $custom_tags[name]
+        @file.puts "#{tag[0]} #{join_params(reader, tag)}"
+      else
+        raise "Line: #{reader.line_number}: Unrecognized tag '#{name}'"
       end
     end
+  end
+
+  def join_params(reader, tag)
+    # puts "Name: #{reader.name}"
+    value = ''
+    for i in 1..tag.size
+      next if tag[i].nil?
+      value << "\"" << reader[tag[i]] << "\","
+    end
+    return value[0, value.length - 1] if value[value.length - 1, value.length - 1] == ","
+    value
   end
 
   def translate_find_class(clName)
@@ -60,17 +111,12 @@ class XmlListener
     case text
     when "VK_TAB"
       "Tab"
+    when "VK_END"
+      "End"
     else
       raise "Not supported type_special character #{text}"
     end
   end
-
-  def text(text)
-  end
-
-  def tag_end(name)
-  end
 end
 
-source = File.new ARGV[0]
-Document.parse_stream source, XmlListener.new
+XmlReader.new.read ARGV[0]

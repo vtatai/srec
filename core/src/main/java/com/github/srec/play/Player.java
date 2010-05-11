@@ -9,10 +9,7 @@ import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 import static com.github.srec.Utils.closeWindows;
@@ -41,7 +38,31 @@ public class Player {
     }
 
     public Player play(File file) throws IOException {
-        return play(new FileInputStream(file), file);
+        if (file == null) return null;
+        if (file.isDirectory()) {
+            // Run all scripts inside a directory
+            File[] files = file.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File file, String name) {
+                    return name.endsWith(".rb");
+                }
+            });
+            for (File file1 : files) {
+                play(file1);
+            }
+            File[] subdirs = file.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return file.isDirectory();
+                }
+            });
+            for (File subdir : subdirs) {
+                play(subdir);
+            }
+            return this;
+        } else {
+            return play(new FileInputStream(file), file);
+        }
     }
 
     public Player play(InputStream is, File file) throws IOException {

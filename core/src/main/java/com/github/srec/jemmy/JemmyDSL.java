@@ -8,8 +8,8 @@ import org.netbeans.jemmy.operators.*;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -317,6 +317,11 @@ public class JemmyDSL {
                     throw new JemmyDSLException(e);
                 }
             }
+            return this;
+        }
+
+        public TextField type(int key) {
+            component.typeKey(key, ' ', 0);
             return this;
         }
 
