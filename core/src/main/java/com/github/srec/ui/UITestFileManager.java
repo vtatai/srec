@@ -46,7 +46,7 @@ public class UITestFileManager {
                 if (!m.getFileRead().equals(file)) {
                     return;
                 }
-                add(new DefaultMutableTreeNode(entry.getKey(), false));
+                add(new MethodNode(m));
             }
         }
 
@@ -57,6 +57,20 @@ public class UITestFileManager {
         @Override
         public String toString() {
             return ((File) getUserObject()).getName();
+        }
+    }
+
+    public static class MethodNode extends DefaultMutableTreeNode {
+        public MethodNode(MethodScriptCommand m) {
+            super(m,  false);
+        }
+
+        public MethodScriptCommand getMethod() {
+            return (MethodScriptCommand) super.getUserObject();
+        }
+        @Override
+        public String toString() {
+            return getMethod().getName();
         }
     }
 }

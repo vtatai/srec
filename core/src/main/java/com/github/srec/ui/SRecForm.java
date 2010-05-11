@@ -5,6 +5,7 @@ import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
 import com.github.srec.command.CommandSerializer;
+import com.github.srec.command.MethodScriptCommand;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.rec.Recorder;
 import com.github.srec.rec.RecorderCommandListener;
@@ -298,6 +299,17 @@ public class SRecForm {
         }
     }
 
+    /**
+     * Loads (ie shows) a method def commands in the UI.
+     *
+     * @param m The method
+     */
+    private void loadMethod(MethodScriptCommand m) {
+        List<Command> commands = m.getCommands();
+        recorder.emptyCommands();
+        recorder.addCommands(commands);
+    }
+
     private void saveScript() {
         if (recorder.getCommands().isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Nothing to save.", "Error", JOptionPane.WARNING_MESSAGE);
@@ -421,9 +433,15 @@ public class SRecForm {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
-                if (!(node instanceof UITestFileManager.FileNode)) return;
-                UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
-                loadScript(fileNode.getFile());
+                if (!(node instanceof UITestFileManager.FileNode || node instanceof UITestFileManager.MethodNode)) return;
+
+                if (node instanceof UITestFileManager.FileNode) {
+                    UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
+                    loadScript(fileNode.getFile());
+                } else {
+                    UITestFileManager.MethodNode methodNode = (UITestFileManager.MethodNode) node;
+                    loadMethod(methodNode.getMethod());
+                }
             }
         });
     }
