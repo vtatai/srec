@@ -1,5 +1,6 @@
 package com.github.srec.ui;
 
+import com.github.srec.SRecException;
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
@@ -62,7 +63,11 @@ public class SRecForm {
     private Action openAction = new AbstractAction("Open") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            load();
+            try {
+                load();
+            } catch (IOException e1) {
+                error("Error loading script", e1);
+            }
         }
     };
     private Action saveAction = new AbstractAction("Save") {
@@ -131,6 +136,14 @@ public class SRecForm {
         playButton.setMnemonic(KeyEvent.VK_P);
         recordButton.setMnemonic(KeyEvent.VK_E);
         launchButton.setMnemonic(KeyEvent.VK_L);
+
+        // Setup exception handler
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                error("Unexpected error", throwable);
+            }
+        });
     }
 
     public void play(final List<Command> events) {
@@ -213,15 +226,17 @@ public class SRecForm {
         }
     }
 
-    private void error(String message, Exception e) {
+    private void error(String message, Throwable throwable) {
         JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
+        throwable.printStackTrace();
     }
 
     /**
      * Loads a file or directory by presenting the user a file chooser.
+     *
+     * @throws java.io.IOException In case there is an exception loading the file
      */
-    private void load() {
+    private void load() throws IOException {
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -236,15 +251,16 @@ public class SRecForm {
      * Loads a directory or a script file, handling the UI tree view.
      *
      * @param file The file or directory
+     * @throws java.io.IOException In case there is an exception loading the file
      */
-    public void load(File file) {
+    public void load(File file) throws IOException {
         if (!file.exists()) {
             error("File does not exist", null);
             return;
         }
         if (file.isDirectory()) {
             List<UITestFileManager.FileNode> nodes = UITestFileManager.scanFiles(file);
-            root.setUserObject(file.getAbsolutePath());
+            root.setUserObject(file.getCanonicalPath());
             root.removeAllChildren();
             for (UITestFileManager.FileNode node : nodes) {
                 root.add(node);
@@ -274,10 +290,10 @@ public class SRecForm {
         }
         assert !file.isDirectory();
         try {
-            List<Command> commands = CommandSerializer.load(file);
+            List<Command> commands = CommandSerializer.load(file).getCommands();
             recorder.emptyCommands();
             recorder.addCommands(commands);
-        } catch (IOException e) {
+        } catch (SRecException e) {
             error("Error loading script", e);
         }
     }
@@ -359,7 +375,11 @@ public class SRecForm {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JMenuItem menuItem = (JMenuItem) e.getSource();
-                    load(new File(menuItem.getText()));
+                    try {
+                        load(new File(menuItem.getText()));
+                    } catch (IOException e1) {
+                        error("Error loading script", e1);
+                    }
                     addRecentFile(menuItem.getText());
                     updateReopenMenu();
                 }

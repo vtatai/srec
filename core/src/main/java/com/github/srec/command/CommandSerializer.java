@@ -3,10 +3,12 @@ package com.github.srec.command;
 import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.rec.EventReaderException;
-import org.antlr.runtime.RecognitionException;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import static com.github.srec.Utils.quote;
@@ -17,11 +19,16 @@ import static com.github.srec.Utils.quote;
  * @author Victor Tatai
  */
 public class CommandSerializer {
-    public static List<Command> load(File file) throws IOException {
-        ExecutionContext context = new JemmyExecutionContextFactory().create(file, file.getParentFile().getCanonicalPath());
+    public static ExecutionContext load(File file) {
+        ExecutionContext context;
+        try {
+            context = new JemmyExecutionContextFactory().create(file, file.getParentFile().getCanonicalPath());
+        } catch (IOException e) {
+            throw new CommandSerializationException(e);
+        }
         ScriptParser p = new ScriptParser();
         p.parse(context, file);
-        return context.getCommands();
+        return context;
     }
 
     public static void write(File file, List<Command> commands) throws IOException {

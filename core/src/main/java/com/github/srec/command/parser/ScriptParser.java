@@ -6,10 +6,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -20,11 +17,15 @@ import java.util.List;
 public class ScriptParser {
     private Visitor visitor;
 
-    public void parse(ExecutionContext context, File file) throws IOException {
-        parse(context, new FileInputStream(file));
+    public void parse(ExecutionContext context, File file) {
+        try {
+            parse(context, new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new ParseException(e);
+        }
     }
 
-    public void parse(ExecutionContext context, InputStream is) throws IOException {
+    public void parse(ExecutionContext context, InputStream is) {
         try {
             ANTLRInputStream input = new ANTLRInputStream(is);
 
@@ -39,6 +40,8 @@ public class ScriptParser {
             visitor = new Visitor(context);
             visitor.visit(t, null);
         } catch (RecognitionException e) {
+            throw new ParseException(e);
+        } catch (IOException e) {
             throw new ParseException(e);
         }
     }

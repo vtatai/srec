@@ -1,7 +1,8 @@
 package com.github.srec.command;
 
 import com.github.srec.command.exception.CommandExecutionException;
-import org.antlr.runtime.tree.CommonTree;
+
+import java.io.File;
 
 /**
  * Defines a method (not a method call).
@@ -10,14 +11,10 @@ import org.antlr.runtime.tree.CommonTree;
  */
 public abstract class MethodCommand extends BaseCommand implements CommandSymbol {
     protected String[] parameters;
+    private File fileRead;
 
     protected MethodCommand(String name, String... parameters) {
         super(name);
-        this.parameters = parameters;
-    }
-
-    protected MethodCommand(String name, CommonTree tree, String... parameters) {
-        super(name, tree);
         this.parameters = parameters;
     }
 
@@ -65,5 +62,9 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
 
     public void setParameters(String[] parameters) {
         this.parameters = parameters;
+    }
+
+    public File getFileRead() {
+        return fileRead;
     }
 }

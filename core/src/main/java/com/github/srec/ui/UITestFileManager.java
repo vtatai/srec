@@ -1,10 +1,16 @@
 package com.github.srec.ui;
 
+import com.github.srec.command.CommandSerializer;
+import com.github.srec.command.CommandSymbol;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.MethodScriptCommand;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Manages the file set.
@@ -29,9 +35,18 @@ public class UITestFileManager {
 
     public static class FileNode extends DefaultMutableTreeNode {
         public FileNode(File file) {
-            super(file);
+            super(file, true);
             if (!file.getName().endsWith(".rb")) {
                 throw new IllegalArgumentException("Can only be used with .rb files");
+            }
+            ExecutionContext ctx = CommandSerializer.load(file);
+            for (Map.Entry<String, CommandSymbol> entry : ctx.getSymbols().entrySet()) {
+                if (!(entry.getValue() instanceof MethodScriptCommand)) continue;
+                MethodScriptCommand m = (MethodScriptCommand) entry.getValue();
+                if (!m.getFileRead().equals(file)) {
+                    return;
+                }
+                add(new DefaultMutableTreeNode(entry.getKey(), false));
             }
         }
 
@@ -41,8 +56,7 @@ public class UITestFileManager {
 
         @Override
         public String toString() {
-            String name = ((File) getUserObject()).getName();
-            return name.substring(0, name.length() - 3);
+            return ((File) getUserObject()).getName();
         }
     }
 }

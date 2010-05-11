@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Represents a script execution context, containing commands to be executed and a very simple symbol table which
+ * Represents a script execution context (EC), containing commands to be executed and a very simple symbol table which
  * contains method definitions.
  * 
  * @author Victor Tatai
@@ -16,7 +16,7 @@ public class ExecutionContext {
     private List<Command> commands = new ArrayList<Command>();
     private Map<String, CommandSymbol> symbols = new HashMap<String, CommandSymbol>();
     /**
-     * The player executing this context.
+     * The player executing this EC.
      */
     private Player player;
     /**
@@ -82,5 +82,9 @@ public class ExecutionContext {
 
     public List<String> getLoadPath() {
         return loadPath;
+    }
+
+    public Map<String, CommandSymbol> getSymbols() {
+        return Collections.unmodifiableMap(symbols);
     }
 }

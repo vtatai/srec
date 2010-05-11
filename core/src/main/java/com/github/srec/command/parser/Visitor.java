@@ -33,6 +33,7 @@ public class Visitor {
         visit(t, parent, 0);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void visit(CommonTree t, CommonTree parent, int index) throws IOException, RecognitionException {
         if (t == null || t.getChildren() == null) return;
         for (int i = index; i < t.getChildCount(); i++) {
@@ -69,13 +70,23 @@ public class Visitor {
     }
 
     public void visitMETHOD_CALL(CommonTree t, CommonTree parent) throws IOException, RecognitionException {
-        CallCommand command = new CallCommand(getChildText(t, 0), t);
+        String name = getChildText(t, 0);
+        CallCommand command = new CallCommand(name, t);
+        CommandSymbol s = context.findSymbol(name);
+        if (s == null) {
+            error(t, "Could not resolve reference '" + name + "' to a method");
+            return;
+        } else if (!(s instanceof MethodCommand)) {
+            error(t, "Reference '" + name + "' does not refer to a method");
+            return;
+        }
         add(command);
         callStack.push(command);
         visit(t, parent, 1);
         callStack.pop();
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void visitMETHOD_CALL_OR_VARREF(CommonTree t, CommonTree parent) {
         String name = getChildText(t, 0);
         CommandSymbol s = context.findSymbol(name);
@@ -97,7 +108,8 @@ public class Visitor {
             error(t, "Nested methods are not allowed");
             return;
         }
-        MethodScriptCommand method = new MethodScriptCommand(getChildText(t, 0), extractMethodDefParameters((CommonTree) t.getChild(1)));
+        MethodScriptCommand method = new MethodScriptCommand(getChildText(t, 0), context.getFile(),
+                extractMethodDefParameters((CommonTree) t.getChild(1)));
         currentMethod = method;
         context = new NestedExecutionContext(context, context.getFile());
         visit(t, parent, 1);
@@ -106,6 +118,7 @@ public class Visitor {
         context.addSymbol(method);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitMETHOD_DEF_PARAMS(CommonTree t, CommonTree parent) {
         if (currentMethod == null) {
             throw new ParseException("Current method is null when parsing params - should never happen!");
@@ -128,10 +141,12 @@ public class Visitor {
         return params;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitREQUIRE(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
-        ExecutionContext newContext = new ExecutionContext(context.getPlayer(), context.getFile());
+        File file = locateRequiredFile(t.getChild(0).getText());
+        NestedExecutionContext newContext = new NestedExecutionContext(context, file);
         ScriptParser parser = new ScriptParser();
-        parser.parse(newContext, locateRequiredFile(t.getChild(0).getText()));
+        parser.parse(newContext, file);
         merge(context, newContext);
         errors.addAll(parser.getErrors());
     }
@@ -148,18 +163,22 @@ public class Visitor {
         context.addAllSymbols(newContext);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITNUMBER(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         add(new LiteralCommand((CommonTree) t.getChild(0), t.getChild(0).getText()));
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITSTRING(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         add(new LiteralCommand((CommonTree) t.getChild(0), t.getChild(0).getText()));
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITBOOLEAN(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         add(new LiteralCommand((CommonTree) t.getChild(0), t.getChild(0).getText()));
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITNIL(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         add(new LiteralCommand(null, t.getChild(0).getText()));
     }
@@ -185,6 +204,7 @@ public class Visitor {
         }
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public ExecutionContext getContext() {
         return context;
     }
