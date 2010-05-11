@@ -205,7 +205,7 @@ public class JemmyDSL {
             JComponentOperator operator = idMap.get(locatorMap.get("id"));
             if (!clazz.isAssignableFrom(operator.getClass())) {
                 throw new JemmyDSLException("Cannot convert component with " + locator + " from "
-                        + operator.getClass().getName() + "to " + clazz.getName());
+                        + operator.getClass().getName() + " to " + clazz.getName());
             }
             component = (X) operator;
         } else {

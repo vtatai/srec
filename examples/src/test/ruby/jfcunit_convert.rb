@@ -52,18 +52,18 @@ class XmlReader
       elsif reader['type'] == "MouseEventData" && reader['refid']
         @file.puts "click \"id=#{reader['refid']}\""
       end
-    when "test"
-      if @suite_name
-        @file = File.new(@suite_name + '/' + reader['name'] + '.rb', "w+")
-      else
-        @file = File.new(reader['name'] + '.rb', "w+")
-      end
     when "taghandlers"
       raise "No custom tag defined for #{reader['tagname']}" if !($custom_tags.include? reader['tagname'])
     when "suite"
       if @dir_per_suite
         @suite_name = reader['name']
         FileUtils.mkdir_p @suite_name
+      end
+    when "test"
+      if @suite_name
+        @file = File.new(@suite_name + '/' + reader['name'] + '.rb', "w+")
+      else
+        @file = File.new(reader['name'] + '.rb', "w+")
       end
     when "assertenabled"
       @file.puts "assert_enabled \"id=#{reader['refid']}\", #{reader['enabled']}"

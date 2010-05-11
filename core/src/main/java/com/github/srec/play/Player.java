@@ -8,6 +8,7 @@ import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.List;
@@ -21,6 +22,7 @@ import static com.github.srec.Utils.runMain;
  * @author Victor Tatai
  */
 public class Player {
+    private static final Logger log =  Logger.getLogger(Player.class);
     private PlayerError error;
     private boolean throwError;
     private long commandInterval = 50;
@@ -40,6 +42,7 @@ public class Player {
     public Player play(File file) throws IOException {
         if (file == null) return null;
         if (file.isDirectory()) {
+            log.info("Playing files inside dir: " + file.getCanonicalPath());
             // Run all scripts inside a directory
             File[] files = file.listFiles(new FilenameFilter() {
                 @Override
@@ -61,6 +64,7 @@ public class Player {
             }
             return this;
         } else {
+            log.info("Playing file: " + file.getCanonicalPath());
             return play(new FileInputStream(file), file);
         }
     }
@@ -77,6 +81,7 @@ public class Player {
 
     public void play(ExecutionContext context, List<Command> commands) {
         for (Command command : commands) {
+            log.debug("Running line: " + getLine(command) + ", command: " + command);
             try {
                 command.run(context);
             } catch (CommandExecutionException e) {
@@ -89,6 +94,11 @@ public class Player {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private String getLine(Command command) {
+        if (command.getTree() == null) return "<NO LINE>";
+        return "" + command.getTree().getLine();
     }
 
     private void handleError(Command command, CommandExecutionException e) {

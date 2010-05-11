@@ -59,4 +59,9 @@ public class CallCommand extends BaseCommand implements ValueCommand {
         ValueCommand command = getParameter(index);
         return command == null ? null : command.getName();
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
