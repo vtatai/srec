@@ -13,10 +13,7 @@ public class RecordingTest {
         SRecForm.main(new String[] { });
         init();
         frame("srec");
-        button("text=Launch").click();
-        dialog("Launch");
-        textField("mainClassTF").type("com.github.srec.ui.TestForm").type('\t');
-        button("text=Launch").click();
+        launch();
         frame("srec").activate();
         button("text=Record").click();
         frame("TestForm").activate();
@@ -37,6 +34,13 @@ public class RecordingTest {
         frame("TestForm").close();
     }
 
+    private void launch() {
+        button("text=Launch").click();
+        dialog("Launch");
+        textField("mainClassTF").type("com.github.srec.ui.TestForm").type('\t');
+        button("text=Launch").click();
+    }
+
     public void load() throws IOException {
         File scriptFile = new File("src/test/resources/test_form.rb");
         SRecForm.main(new String[] { });
@@ -54,6 +58,11 @@ public class RecordingTest {
                 .assertColumn(1, "calculationCB")
                 .assertColumn(2, "Future Value");
         table("eventsTbl").row(9).assertColumn(0, "close").assertColumn(1, "TestForm");
+
+        launch();
+
+        frame("srec").activate();
+        button("text=Play").click();
 
         frame("srec").close();
     }

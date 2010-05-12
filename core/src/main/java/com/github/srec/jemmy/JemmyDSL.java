@@ -9,7 +9,6 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -237,6 +236,10 @@ public class JemmyDSL {
         }
     }
 
+    public static Label label(String locator) {
+        return new Label(find(locator, JLabelOperator.class));
+    }
+
     private interface Component {
         ComponentOperator getComponent();
     }
@@ -402,6 +405,19 @@ public class JemmyDSL {
         public Row assertColumn(int col, String value) {
             String realValue = component.getValueAt(index, col).toString();
             assertEquals(realValue, value);
+            return this;
+        }
+    }
+
+    public static class Label {
+        private JLabelOperator component;
+
+        public Label(JLabelOperator component) {
+            this.component = component;
+        }
+
+        public Label text(String text) {
+            component.waitText(text);
             return this;
         }
     }

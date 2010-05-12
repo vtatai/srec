@@ -15,6 +15,6 @@ public class WindowActivateCommand extends JemmyEventCommand {
 
     @Override
     protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
-        frame(params[0]);
+        frame(params[0]).activate();
     }
 }

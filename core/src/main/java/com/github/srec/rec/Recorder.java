@@ -2,6 +2,7 @@ package com.github.srec.rec;
 
 import com.github.srec.command.CallEventCommand;
 import com.github.srec.command.Command;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
 import org.apache.commons.lang.StringUtils;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class Recorder implements EventRecorder {
     private static final Logger logger = Logger.getLogger(Recorder.class);
-    private List<Command> commands = new ArrayList<Command>();
+    private ExecutionContext executionContext;
     private List<ComponentRecorder> componentRecorders = new ArrayList<ComponentRecorder>();
     private List<RecorderCommandListener> listeners = new ArrayList<RecorderCommandListener>();
     /**
@@ -29,7 +30,8 @@ public class Recorder implements EventRecorder {
     private boolean recording;
     private CallEventCommand lastEvent;
 
-    public Recorder() {
+    public Recorder(ExecutionContext context) {
+        this.executionContext = context;
         componentRecorders.add(new ButtonClickRecorder(this));
         componentRecorders.add(new WindowActivationRecorder(this));
         componentRecorders.add(new TextFieldRecorder(this, new DefaultComponentVisibility()));
@@ -60,8 +62,8 @@ public class Recorder implements EventRecorder {
     }
 
     private CallEventCommand extractLastEvent() {
-        int lastIndex = commands.size() - 1;
-        return commands.isEmpty() || !(commands.get(lastIndex) instanceof CallEventCommand) ? null : (CallEventCommand) commands.get(lastIndex);
+        int lastIndex = getCommands().size() - 1;
+        return getCommands().isEmpty() || !(getCommands().get(lastIndex) instanceof CallEventCommand) ? null : (CallEventCommand) getCommands().get(lastIndex);
     }
 
     protected boolean isIgnored(Component component) {
@@ -96,19 +98,19 @@ public class Recorder implements EventRecorder {
 
     public void addEvent(CallEventCommand event) {
         logger.debug("Logging event: " + event);
-        commands.add(event);
+        executionContext.addCommand(event);
         fireEventAdded(event);
     }
 
     public void replaceLastEvent(CallEventCommand event) {
-        commands.set(commands.size() - 1, event);
+        getCommands().set(getCommands().size() - 1, event);
         logger.debug("Replacing the last event with: " + event);
-        fireEventUpdated(commands.size() - 1);
+        fireEventUpdated(getCommands().size() - 1);
     }
 
     private void fireEventUpdated(int index) {
         for (RecorderCommandListener listener : listeners) {
-            listener.eventsUpdated(index, commands.subList(index, index + 1));
+            listener.eventsUpdated(index, getCommands().subList(index, index + 1));
         }
     }
 
@@ -147,24 +149,24 @@ public class Recorder implements EventRecorder {
     }
 
     public List<Command> getCommands() {
-        return commands;
-    }
-
-    public void setCommands(List<Command> commands) {
-        this.commands = commands;
+        return executionContext.getCommands();
     }
 
     public void emptyCommands() {
-        commands.clear();
+        getCommands().clear();
         fireEventsRemoved();
     }
 
     public void addCommands(List<Command> commands) {
-        this.commands.addAll(commands);
+        this.executionContext.addCommand(commands.toArray(new Command[commands.size()]));
         fireEventsAdded(commands);
     }
 
     public CallEventCommand getLastEvent() {
         return lastEvent;
+    }
+
+    public ExecutionContext getExecutionContext() {
+        return executionContext;
     }
 }

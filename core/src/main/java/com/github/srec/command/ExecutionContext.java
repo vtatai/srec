@@ -48,8 +48,8 @@ public class ExecutionContext {
         return symbols.get(name);
     }
     
-    public void addCommand(Command command) {
-        commands.add(command);
+    public void addCommand(Command... commands) {
+        this.commands.addAll(Arrays.asList(commands));
     }
 
     public void addSymbol(CommandSymbol cmd) {

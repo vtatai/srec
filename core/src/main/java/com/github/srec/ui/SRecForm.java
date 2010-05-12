@@ -1,11 +1,8 @@
 package com.github.srec.ui;
 
 import com.github.srec.SRecException;
-import com.github.srec.UnsupportedFeatureException;
-import com.github.srec.command.CallEventCommand;
-import com.github.srec.command.Command;
-import com.github.srec.command.CommandSerializer;
-import com.github.srec.command.MethodScriptCommand;
+import com.github.srec.command.*;
+import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.rec.Recorder;
 import com.github.srec.rec.RecorderCommandListener;
@@ -48,10 +45,11 @@ public class SRecForm {
     private JButton saveButton;
     private JButton openButton;
     private JTree fileTree;
+    private JLabel statusBar;
     private DefaultMutableTreeNode root = new DefaultMutableTreeNode();
     private DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
-    private Recorder recorder = new Recorder();
+    private Recorder recorder;
 
     protected CommandsTableModel tableModel;
 
@@ -60,6 +58,8 @@ public class SRecForm {
     private List<String> recentFiles = new ArrayList<String>();
 
     protected JFrame frame = new JFrame("srec");
+
+    private Timer statusBarTimer;
 
     private Action openAction = new AbstractAction("Open") {
         @Override
@@ -103,6 +103,7 @@ public class SRecForm {
                 new LaunchDialog(frame).setVisible(true);
             }
         });
+        recorder = new Recorder(new JemmyExecutionContextFactory().create(null));
         recorder.init();
         JemmyDSL.init(frame);
         recorder.addListener(new RecorderCommandListener() {
@@ -154,11 +155,6 @@ public class SRecForm {
                 int currentIndex = eventsTbl.getSelectedRow();
                 if (currentIndex < 0) currentIndex = 0;
                 for (int i = currentIndex; i < events.size(); i++) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                     Command command = events.get(i);
                     eventsTbl.getSelectionModel().setSelectionInterval(i, i);
                     play(command);
@@ -168,15 +164,36 @@ public class SRecForm {
                         throw new RuntimeException(e);
                     }
                 }
+                status("Test played successfully!");
             }
         };
         t.start();
     }
 
+    private void status(final String message) {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    statusBar.setText(message);
+                }
+            });
+        } catch (InterruptedException e) {
+            error(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            error(e.getMessage(), e);
+        }
+        statusBarTimer = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                statusBar.setText("");
+            }
+        });
+        statusBarTimer.start();
+    }
+
     private void play(Command command) {
-//        if (command instanceof CallEventCommand) command.run(executionContext);
-        // TODO
-        throw new UnsupportedFeatureException("Command not supported: " + command);
+        command.run(recorder.getExecutionContext());
     }
 
     public void showFrame(String[] args) {
@@ -291,7 +308,8 @@ public class SRecForm {
         }
         assert !file.isDirectory();
         try {
-            List<Command> commands = CommandSerializer.load(file).getCommands();
+            ExecutionContext executionContext = CommandSerializer.load(file);
+            List<Command> commands = executionContext.getCommands();
             recorder.emptyCommands();
             recorder.addCommands(commands);
         } catch (SRecException e) {
@@ -433,7 +451,8 @@ public class SRecForm {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
-                if (!(node instanceof UITestFileManager.FileNode || node instanceof UITestFileManager.MethodNode)) return;
+                if (!(node instanceof UITestFileManager.FileNode || node instanceof UITestFileManager.MethodNode))
+                    return;
 
                 if (node instanceof UITestFileManager.FileNode) {
                     UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
@@ -456,7 +475,7 @@ public class SRecForm {
     private void $$$setupUI$$$() {
         createUIComponents();
         mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPanel.setPreferredSize(new Dimension(600, 600));
         final JToolBar toolBar1 = new JToolBar();
         mainPanel.add(toolBar1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
@@ -498,6 +517,13 @@ public class SRecForm {
         final JScrollPane scrollPane2 = new JScrollPane();
         splitPane1.setLeftComponent(scrollPane2);
         scrollPane2.setViewportView(fileTree);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 0), -1, -1));
+        mainPanel.add(panel3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 16), new Dimension(-1, 16), new Dimension(-1, 16), 0, false));
+        statusBar = new JLabel();
+        statusBar.setName("statusBar");
+        statusBar.setText("");
+        panel3.add(statusBar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 15), new Dimension(-1, 15), new Dimension(-1, 20), 0, false));
     }
 
     /**
