@@ -3,8 +3,8 @@ package com.github.srec.play;
 import com.github.srec.Utils;
 import com.github.srec.command.Command;
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextFactory;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
@@ -70,7 +70,7 @@ public class Player {
     }
 
     public Player play(InputStream is, File file) throws IOException {
-        ExecutionContext context = new JemmyExecutionContextFactory().create(file, file.getParentFile().getCanonicalPath());
+        ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
         ScriptParser parser = new ScriptParser();
         parser.parse(context, is);
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());

@@ -2,6 +2,7 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.Utils;
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextCommand;
 import com.github.srec.command.exception.IllegalParametersException;
 import org.netbeans.jemmy.JemmyException;
 
@@ -12,6 +13,7 @@ import static com.github.srec.jemmy.JemmyDSL.comboBox;
 /**
  * @author Victor Tatai
  */
+@ExecutionContextCommand
 public class SelectCommand extends JemmyEventCommand {
     public SelectCommand() {
         super("select", "componentLocator", "item");

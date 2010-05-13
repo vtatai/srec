@@ -2,7 +2,6 @@ package com.github.srec.ui;
 
 import com.github.srec.SRecException;
 import com.github.srec.command.*;
-import com.github.srec.command.jemmy.JemmyExecutionContextFactory;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.rec.Recorder;
 import com.github.srec.rec.RecorderCommandListener;
@@ -103,7 +102,7 @@ public class SRecForm {
                 new LaunchDialog(frame).setVisible(true);
             }
         });
-        recorder = new Recorder(new JemmyExecutionContextFactory().create(null));
+        recorder = new Recorder(ExecutionContextFactory.getInstance().create(null));
         recorder.init();
         JemmyDSL.init(frame);
         recorder.addListener(new RecorderCommandListener() {

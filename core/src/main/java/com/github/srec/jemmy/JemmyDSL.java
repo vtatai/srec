@@ -23,6 +23,7 @@ import static org.testng.Assert.assertEquals;
  */
 public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
+
     public enum ComponentType {
         text_field(JTextFieldOperator.class),
         combo_box(JComboBoxOperator.class),
@@ -40,8 +41,10 @@ public class JemmyDSL {
             return associatedClass;
         }
     }
+
     private static Container currentContainer;
     private static Properties props = new Properties();
+
     static {
         props.put("DialogWaiter.WaitDialogTimeout", "5000");
         props.put("FrameWaiter.WaitFrameTimeout", "5000");
@@ -54,7 +57,9 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaitComponentTimeout", "5000");
         props.put("ComponentOperator.WaiStateTimeout", "5000");
         props.put("JComboBoxOperator.WaitListTimeout", "5000");
+        props.put("ComponentOperator.WaitComponentEnabledTimeout", "5000");
     }
+
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
     private static Map<String, JComponentOperator> idMap = new HashMap<String, JComponentOperator>();
 
@@ -144,9 +149,9 @@ public class JemmyDSL {
      * Finds a component and stores it under the given id. The component can later be used on other commands using the
      * locator "id=ID_ASSIGNED".
      *
-     * @param locator The locator
+     * @param locator  The locator
      * @param findType The find type name
-     * @param id The id
+     * @param id       The id
      * @return The component found
      */
     public static JComponentOperator find(String locator, String id, String findType) {
@@ -167,8 +172,8 @@ public class JemmyDSL {
      * locator "id=ID_ASSIGNED".
      *
      * @param locator The locator
-     * @param id The id
-     * @param cl The type
+     * @param id      The id
+     * @param cl      The type
      * @return The component found
      */
     private static <X extends JComponentOperator> X find(String locator, String id, Class<X> cl) {
@@ -239,6 +244,39 @@ public class JemmyDSL {
     public static Label label(String locator) {
         return new Label(find(locator, JLabelOperator.class));
     }
+
+    public static void waitEnabled(String locator, boolean enabled) {
+        JComponentOperator op = find(locator, JComponentOperator.class);
+        try {
+            if (enabled) {
+                op.waitComponentEnabled();
+            } else {
+                waitComponentDisabled(op);
+            }
+        } catch (InterruptedException e) {
+            throw new JemmyDSLException(e);
+        }
+    }
+
+    private static void waitComponentDisabled(final JComponentOperator op) throws InterruptedException {
+        Waiter waiter = new Waiter(new Waitable() {
+            public Object actionProduced(Object obj) {
+                if (((java.awt.Component) obj).isEnabled()) {
+                    return null;
+                } else {
+                    return obj;
+                }
+            }
+
+            public String getDescription() {
+                return ("Component description: " + op.getSource().getClass().toString());
+            }
+        });
+        waiter.setOutput(op.getOutput());
+        waiter.setTimeoutsToCloneOf(op.getTimeouts(), "ComponentOperator.WaitComponentEnabledTimeout");
+        waiter.waitAction(op.getSource());
+    }
+
 
     private interface Component {
         ComponentOperator getComponent();

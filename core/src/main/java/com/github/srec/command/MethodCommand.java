@@ -2,8 +2,6 @@ package com.github.srec.command;
 
 import com.github.srec.command.exception.CommandExecutionException;
 
-import java.io.File;
-
 /**
  * Defines a method (not a method call).
  * 
@@ -11,7 +9,6 @@ import java.io.File;
  */
 public abstract class MethodCommand extends BaseCommand implements CommandSymbol {
     protected String[] parameters;
-    private File fileRead;
 
     protected MethodCommand(String name, String... parameters) {
         super(name);
@@ -62,9 +59,5 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
 
     public void setParameters(String[] parameters) {
         this.parameters = parameters;
-    }
-
-    public File getFileRead() {
-        return fileRead;
     }
 }

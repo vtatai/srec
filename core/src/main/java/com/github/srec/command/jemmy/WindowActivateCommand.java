@@ -1,6 +1,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextCommand;
 import org.netbeans.jemmy.JemmyException;
 
 import static com.github.srec.jemmy.JemmyDSL.frame;
@@ -8,6 +9,7 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 /**
  * @author Victor Tatai
  */
+@ExecutionContextCommand
 public class WindowActivateCommand extends JemmyEventCommand {
     public WindowActivateCommand() {
         super("window_activate", "componentLocator");
