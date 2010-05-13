@@ -12,20 +12,15 @@ import org.netbeans.jemmy.JemmyException;
 @ExecutionContextCommand
 public class PauseCommand extends JemmyEventCommand {
     private static final Logger logger = Logger.getLogger(PauseCommand.class);
-    private static final long DEFAULT_PAUSE_INTERVAL = 5000;
+    private static final String DEFAULT_PAUSE_INTERVAL = "5000";
 
     public PauseCommand() {
-        super("pause");
+        super("pause", new Parameter("interval", true, DEFAULT_PAUSE_INTERVAL));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
-        long pause;
-        if (params.length == 1) {
-            pause = Long.parseLong(params[0]);
-        } else {
-            pause = DEFAULT_PAUSE_INTERVAL;
-        }
+        long pause = Long.parseLong(get("interval", params));
         logger.debug("Pausing execution for " + pause + "ms");
         try {
             Thread.sleep(pause);

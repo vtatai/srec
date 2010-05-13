@@ -123,10 +123,10 @@ public class Visitor {
         if (currentMethod == null) {
             throw new ParseException("Current method is null when parsing params - should never happen!");
         }
-        String[] params = new String[t.getChildCount()];
+        MethodCommand.Parameter[] params = new MethodCommand.Parameter[t.getChildCount()];
         for (int i = 0; i < params.length; i++) {
-            params[i] = t.getChild(i).getText();
-            context.addSymbol(new VarCommand(params[i], (CommonTree) t.getChild(i), null));
+            params[i] = new MethodCommand.Parameter(t.getChild(i).getText());
+            context.addSymbol(new VarCommand(params[i].getName(), (CommonTree) t.getChild(i), null));
         }
         currentMethod.setParameters(params);
     }

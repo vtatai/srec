@@ -72,8 +72,8 @@ public class CommandSerializer {
 
     private static void print(MethodScriptCommand command, Writer writer) {
         StringBuilder strb = new StringBuilder("def ").append(command.getName()).append("(");
-        for (String arg : command.getParameters()) {
-            strb.append(arg).append(", ");
+        for (MethodCommand.Parameter arg : command.getParameters()) {
+            strb.append(arg.getName()).append(", ");
         }
         String s = strb.toString();
         if (s.endsWith(", ")) strb.delete(s.length() - 2, s.length());

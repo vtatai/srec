@@ -22,8 +22,8 @@ public class SelectCommand extends JemmyEventCommand {
     @Override
     protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
         Map<String, String> selectedItem = Utils.parseLocator(params[1]);
-        if (selectedItem.containsKey("name")) comboBox(params[0]).select(selectedItem.get("name"));
-        else if (selectedItem.containsKey("index")) comboBox(params[0]).select(Integer.parseInt(selectedItem.get("index")));
-        else throw new IllegalParametersException("Illegal parameters " + Utils.asString(parameters) + " for select command");
+        if (selectedItem.containsKey("name")) comboBox(get("componentLocator", params)).select(selectedItem.get("name"));
+        else if (selectedItem.containsKey("index")) comboBox(get("componentLocator", params)).select(Integer.parseInt(selectedItem.get("index")));
+        else throw new IllegalParametersException("Illegal parameters " + Utils.asString(params) + " for select command");
     }
 }

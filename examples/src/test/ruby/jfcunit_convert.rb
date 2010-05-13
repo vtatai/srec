@@ -74,7 +74,7 @@ class XmlReader
         tag = $custom_tags[name]
         @file.puts "#{tag[0]} #{join_params(reader, tag)}"
       else
-        raise "Line: #{reader.line_number}: Unrecognized tag '#{name}'"
+        raise "Line #{reader.line_number}: Unrecognized tag '#{name}'"
       end
     end
   end
@@ -82,9 +82,12 @@ class XmlReader
   def join_params(reader, tag)
     # puts "Name: #{reader.name}"
     value = ''
-    for i in 1..tag.size
-      next if tag[i].nil?
-      value << "\"" << reader[tag[i]] << "\","
+    for i in 1..tag.size - 1
+      if tag[i].nil?
+        value << "\"\","
+      else
+        value << "\"" << reader[tag[i]] << "\","
+      end
     end
     return value[0, value.length - 1] if value[value.length - 1, value.length - 1] == ","
     value

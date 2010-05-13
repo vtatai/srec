@@ -1,17 +1,14 @@
 package com.github.srec.command;
 
 import com.github.srec.SRecException;
-import com.google.common.base.Predicate;
 import org.apache.log4j.Logger;
-import org.reflections.Reflections;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
+import org.scannotation.AnnotationDB;
+import org.scannotation.ClasspathUrlFinder;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -30,8 +27,8 @@ public class ExecutionContextFactory {
     private ExecutionContextFactory() {
     }
 
-    private void init() throws IOException, InstantiationException, IllegalAccessException {
-        scanPackage("com.github.srec.command.jemmy.*");
+    private void init() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        scanPackage("com.github.srec.command.jemmy");
         InputStream is = ClassLoader.getSystemResourceAsStream("custom_commands.properties");
         if (is != null) {
             Properties props = new Properties();
@@ -42,23 +39,15 @@ public class ExecutionContextFactory {
         }
     }
 
-    private void scanPackage(String pattern) throws IllegalAccessException, InstantiationException {
-        Predicate<String> filter = new FilterBuilder().include(pattern);
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .filterInputsBy(filter)
-                .setScanners(
-                        new TypeAnnotationsScanner())
-                .setUrls(ClasspathHelper.getUrlsForCurrentClasspath()));
-        Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(ExecutionContextCommand.class);
-        
-        for (Class<?> aClass : annotated) {
-            if (!MethodCommand.class.isAssignableFrom(aClass)) {
-                log.error("Annotated type " + aClass + " is not a MethodCommand, ignoring");
-                continue;
-            }
-            MethodCommand instance = (MethodCommand) aClass.newInstance();
-            log.debug("Adding scanned method command: " + aClass.getCanonicalName());
-            builtinCommands.add(instance);
+    private void scanPackage(String packageName) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        AnnotationDB ann = new AnnotationDB();
+        ann.setScanClassAnnotations(true);
+        URL[] urls = ClasspathUrlFinder.findClassPaths();
+        ann.scanArchives(urls);
+        Set<String> classes = ann.getAnnotationIndex().get(ExecutionContextCommand.class.getCanonicalName());
+        for (String clName : classes) {
+            Class cl = Class.forName(clName);
+            builtinCommands.add((MethodCommand) cl.newInstance());
         }
     }
 
@@ -80,6 +69,8 @@ public class ExecutionContextFactory {
             } catch (InstantiationException e) {
                 throw new SRecException(e);
             } catch (IllegalAccessException e) {
+                throw new SRecException(e);
+            } catch (ClassNotFoundException e) {
                 throw new SRecException(e);
             }
         }

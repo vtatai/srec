@@ -12,16 +12,20 @@ import org.netbeans.jemmy.TimeoutExpiredException;
  */
 public abstract class JemmyEventCommand extends MethodCommand {
 
-    protected JemmyEventCommand(String name, String... params) {
-        super(name, params);
+    protected JemmyEventCommand(String name, String... parameters) {
+        super(name, parameters);
+    }
+
+    protected JemmyEventCommand(String name, Parameter... parameters) {
+        super(name, parameters);
     }
 
     @Override
-    public String callMethod(ExecutionContext context, String... params) {
+    public String internalCallMethod(ExecutionContext context, String... params) {
         try {
             runJemmy(context, params);
         } catch (JemmyException e) {
-            if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, parameters, e);
+            if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, params, e);
             throw new UnsupportedFeatureException(e.getMessage());
         }
         return null;

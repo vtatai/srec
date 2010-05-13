@@ -12,11 +12,11 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @ExecutionContextCommand
 public class AssertCommand extends JemmyEventCommand {
     public AssertCommand() {
-        super("assert", "componentLocator");
+        super("assert", "componentLocator", "text");
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
-        textField(params[0]).assertText(params[1]);
+        textField(get("componentLocator", params)).assertText(get("text", params));
     }
 }
