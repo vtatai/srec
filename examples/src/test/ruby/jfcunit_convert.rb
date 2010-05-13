@@ -83,7 +83,7 @@ class XmlReader
     # puts "Name: #{reader.name}"
     value = ''
     for i in 1..tag.size - 1
-      if tag[i].nil?
+      if tag[i].nil? || reader[tag[i]].nil?
         value << "\"\","
       else
         value << "\"" << reader[tag[i]] << "\","

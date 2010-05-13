@@ -58,6 +58,7 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaiStateTimeout", "5000");
         props.put("JComboBoxOperator.WaitListTimeout", "5000");
         props.put("ComponentOperator.WaitComponentEnabledTimeout", "5000");
+        props.put("ComponentOperator.WaitStateTimeout", "5000");
     }
 
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
@@ -183,7 +184,7 @@ public class JemmyDSL {
     }
 
     public static void click(String locator) {
-        find(locator, AbstractButtonOperator.class).push();
+        find(locator, JComponentOperator.class).clickMouse();
     }
 
     public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
@@ -344,6 +345,7 @@ public class JemmyDSL {
             if (text.contains("\t") || text.contains("\r") || text.contains("\n")) {
                 throw new IllegalParametersException("Text cannot contain \\t \\r \\n");
             }
+            component.setVerification(false);
             component.typeText(text);
             return this;
         }
@@ -377,6 +379,11 @@ public class JemmyDSL {
         public JTextFieldOperator getComponent() {
             return component;
         }
+
+        public TextField assertEmpty() {
+            component.waitText("");
+            return this;
+        }
     }
 
     public static class ComboBox implements Component {
@@ -391,11 +398,16 @@ public class JemmyDSL {
         }
 
         public void select(int index) {
+            component.clickMouse(); // hack because sometimes combobox does not seem to open
             component.selectItem(index);
         }
 
         public JComboBoxOperator getComponent() {
             return component;
+        }
+
+        public void assertSelected(String text) {
+            component.waitItemSelected(text);
         }
     }
 

@@ -2,21 +2,20 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.jemmy.JemmyDSL;
 import org.netbeans.jemmy.JemmyException;
-
-import static com.github.srec.jemmy.JemmyDSL.textField;
 
 /**
  * @author Victor Tatai
  */
 @ExecutionContextCommand
-public class AssertEmptyCommand extends JemmyEventCommand {
-    public AssertEmptyCommand() {
-        super("assert_empty", "componentLocator");
+public class AssertComboBoxCommand extends JemmyEventCommand {
+    public AssertComboBoxCommand() {
+        super("assert_combobox", "componentLocator", "text");
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, String... params) throws JemmyException {
-        textField(get("componentLocator", params)).assertEmpty();
+        JemmyDSL.comboBox(get("componentLocator", params)).assertSelected(get("text", params));
     }
 }
