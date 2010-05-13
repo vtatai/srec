@@ -1,3 +1,4 @@
+# Simple test
 window_activate "TestForm"
 select "calculationCB", "Future Value"
 type "initialValueTF", "100"

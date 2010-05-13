@@ -1,18 +1,14 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-05 14:01:43
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-13 17:06:38
 
 package com.github.srec.command.parser;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 public class srecLexer extends Lexer {
     public static final int SCRIPT=4;
     public static final int T__29=29;
     public static final int T__28=28;
-    public static final int T__27=27;
     public static final int LETTER=24;
     public static final int METHOD_DEF=9;
     public static final int NULL=22;
@@ -31,6 +27,7 @@ public class srecLexer extends Lexer {
     public static final int QNAME=16;
     public static final int BOOLEAN=21;
     public static final int WS=26;
+    public static final int T__34=34;
     public static final int NEWLINE=18;
     public static final int METHOD_BODY=11;
     public static final int ASSIGN=6;
@@ -38,6 +35,7 @@ public class srecLexer extends Lexer {
     public static final int LITNIL=15;
     public static final int METHOD_CALL_OR_VARREF=7;
     public static final int DIGIT=23;
+    public static final int COMMENT=27;
     public static final int STRING=17;
     public static final int LITSTRING=14;
 
@@ -54,36 +52,16 @@ public class srecLexer extends Lexer {
     }
     public String getGrammarFileName() { return "/home/victor/srec/core/src/main/antlr/srec.g"; }
 
-    // $ANTLR start "T__27"
-    public final void mT__27() throws RecognitionException {
+    // $ANTLR start "T__28"
+    public final void mT__28() throws RecognitionException {
         try {
-            int _type = T__27;
+            int _type = T__28;
             int _channel = DEFAULT_TOKEN_CHANNEL;
             // /home/victor/srec/core/src/main/antlr/srec.g:7:7: ( 'require' )
             // /home/victor/srec/core/src/main/antlr/srec.g:7:9: 'require'
             {
             match("require"); 
 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "T__27"
-
-    // $ANTLR start "T__28"
-    public final void mT__28() throws RecognitionException {
-        try {
-            int _type = T__28;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/victor/srec/core/src/main/antlr/srec.g:8:7: ( '(' )
-            // /home/victor/srec/core/src/main/antlr/srec.g:8:9: '('
-            {
-            match('('); 
 
             }
 
@@ -100,10 +78,10 @@ public class srecLexer extends Lexer {
         try {
             int _type = T__29;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/victor/srec/core/src/main/antlr/srec.g:9:7: ( ')' )
-            // /home/victor/srec/core/src/main/antlr/srec.g:9:9: ')'
+            // /home/victor/srec/core/src/main/antlr/srec.g:8:7: ( '(' )
+            // /home/victor/srec/core/src/main/antlr/srec.g:8:9: '('
             {
-            match(')'); 
+            match('('); 
 
             }
 
@@ -120,10 +98,10 @@ public class srecLexer extends Lexer {
         try {
             int _type = T__30;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/victor/srec/core/src/main/antlr/srec.g:10:7: ( ',' )
-            // /home/victor/srec/core/src/main/antlr/srec.g:10:9: ','
+            // /home/victor/srec/core/src/main/antlr/srec.g:9:7: ( ')' )
+            // /home/victor/srec/core/src/main/antlr/srec.g:9:9: ')'
             {
-            match(','); 
+            match(')'); 
 
             }
 
@@ -140,10 +118,10 @@ public class srecLexer extends Lexer {
         try {
             int _type = T__31;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/victor/srec/core/src/main/antlr/srec.g:11:7: ( '=' )
-            // /home/victor/srec/core/src/main/antlr/srec.g:11:9: '='
+            // /home/victor/srec/core/src/main/antlr/srec.g:10:7: ( ',' )
+            // /home/victor/srec/core/src/main/antlr/srec.g:10:9: ','
             {
-            match('='); 
+            match(','); 
 
             }
 
@@ -160,11 +138,10 @@ public class srecLexer extends Lexer {
         try {
             int _type = T__32;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/victor/srec/core/src/main/antlr/srec.g:12:7: ( 'def' )
-            // /home/victor/srec/core/src/main/antlr/srec.g:12:9: 'def'
+            // /home/victor/srec/core/src/main/antlr/srec.g:11:7: ( '=' )
+            // /home/victor/srec/core/src/main/antlr/srec.g:11:9: '='
             {
-            match("def"); 
-
+            match('='); 
 
             }
 
@@ -181,6 +158,27 @@ public class srecLexer extends Lexer {
         try {
             int _type = T__33;
             int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/victor/srec/core/src/main/antlr/srec.g:12:7: ( 'def' )
+            // /home/victor/srec/core/src/main/antlr/srec.g:12:9: 'def'
+            {
+            match("def"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "T__33"
+
+    // $ANTLR start "T__34"
+    public final void mT__34() throws RecognitionException {
+        try {
+            int _type = T__34;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
             // /home/victor/srec/core/src/main/antlr/srec.g:13:7: ( 'end' )
             // /home/victor/srec/core/src/main/antlr/srec.g:13:9: 'end'
             {
@@ -195,7 +193,7 @@ public class srecLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "T__33"
+    // $ANTLR end "T__34"
 
     // $ANTLR start "BOOLEAN"
     public final void mBOOLEAN() throws RecognitionException {
@@ -696,57 +694,110 @@ public class srecLexer extends Lexer {
     }
     // $ANTLR end "NEWLINE"
 
-    public void mTokens() throws RecognitionException {
-        // /home/victor/srec/core/src/main/antlr/srec.g:1:8: ( T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | BOOLEAN | NULL | ID | NUMBER | STRING | WS | NEWLINE )
-        int alt11=14;
-        alt11 = dfa11.predict(input);
-        switch (alt11) {
-            case 1 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:10: T__27
-                {
-                mT__27(); 
+    // $ANTLR start "COMMENT"
+    public final void mCOMMENT() throws RecognitionException {
+        try {
+            int _type = COMMENT;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/victor/srec/core/src/main/antlr/srec.g:155:2: ( '#' ( . )* NEWLINE )
+            // /home/victor/srec/core/src/main/antlr/srec.g:155:4: '#' ( . )* NEWLINE
+            {
+            match('#'); 
+            // /home/victor/srec/core/src/main/antlr/srec.g:155:8: ( . )*
+            loop11:
+            do {
+                int alt11=2;
+                int LA11_0 = input.LA(1);
 
+                if ( (LA11_0=='\r') ) {
+                    alt11=2;
                 }
-                break;
-            case 2 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:16: T__28
+                else if ( (LA11_0=='\n') ) {
+                    alt11=2;
+                }
+                else if ( ((LA11_0>='\u0000' && LA11_0<='\t')||(LA11_0>='\u000B' && LA11_0<='\f')||(LA11_0>='\u000E' && LA11_0<='\uFFFF')) ) {
+                    alt11=1;
+                }
+
+
+                switch (alt11) {
+            	case 1 :
+            	    // /home/victor/srec/core/src/main/antlr/srec.g:155:8: .
+            	    {
+            	    matchAny(); 
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop11;
+                }
+            } while (true);
+
+            skip();
+            mNEWLINE(); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "COMMENT"
+
+    public void mTokens() throws RecognitionException {
+        // /home/victor/srec/core/src/main/antlr/srec.g:1:8: ( T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | BOOLEAN | NULL | ID | NUMBER | STRING | WS | NEWLINE | COMMENT )
+        int alt12=15;
+        alt12 = dfa12.predict(input);
+        switch (alt12) {
+            case 1 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:10: T__28
                 {
                 mT__28(); 
 
                 }
                 break;
-            case 3 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:22: T__29
+            case 2 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:16: T__29
                 {
                 mT__29(); 
 
                 }
                 break;
-            case 4 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:28: T__30
+            case 3 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:22: T__30
                 {
                 mT__30(); 
 
                 }
                 break;
-            case 5 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:34: T__31
+            case 4 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:28: T__31
                 {
                 mT__31(); 
 
                 }
                 break;
-            case 6 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:40: T__32
+            case 5 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:34: T__32
                 {
                 mT__32(); 
 
                 }
                 break;
-            case 7 :
-                // /home/victor/srec/core/src/main/antlr/srec.g:1:46: T__33
+            case 6 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:40: T__33
                 {
                 mT__33(); 
+
+                }
+                break;
+            case 7 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:46: T__34
+                {
+                mT__34(); 
 
                 }
                 break;
@@ -799,108 +850,116 @@ public class srecLexer extends Lexer {
 
                 }
                 break;
+            case 15 :
+                // /home/victor/srec/core/src/main/antlr/srec.g:1:93: COMMENT
+                {
+                mCOMMENT(); 
+
+                }
+                break;
 
         }
 
     }
 
 
-    protected DFA11 dfa11 = new DFA11(this);
-    static final String DFA11_eotS =
-        "\1\uffff\1\13\4\uffff\5\13\5\uffff\7\13\1\35\1\36\2\13\1\41\1\13"+
-        "\2\uffff\1\43\1\13\1\uffff\1\13\1\uffff\1\43\1\13\1\47\1\uffff";
-    static final String DFA11_eofS =
-        "\50\uffff";
-    static final String DFA11_minS =
-        "\1\11\1\145\4\uffff\1\145\1\156\1\162\1\141\1\151\5\uffff\1\161"+
+    protected DFA12 dfa12 = new DFA12(this);
+    static final String DFA12_eotS =
+        "\1\uffff\1\13\4\uffff\5\13\6\uffff\7\13\1\36\1\37\2\13\1\42\1\13"+
+        "\2\uffff\1\44\1\13\1\uffff\1\13\1\uffff\1\44\1\13\1\50\1\uffff";
+    static final String DFA12_eofS =
+        "\51\uffff";
+    static final String DFA12_minS =
+        "\1\11\1\145\4\uffff\1\145\1\156\1\162\1\141\1\151\6\uffff\1\161"+
         "\1\146\1\144\1\165\2\154\1\165\2\60\1\145\1\163\1\60\1\151\2\uffff"+
         "\1\60\1\145\1\uffff\1\162\1\uffff\1\60\1\145\1\60\1\uffff";
-    static final String DFA11_maxS =
-        "\1\172\1\145\4\uffff\1\145\1\156\1\162\1\141\1\151\5\uffff\1\161"+
+    static final String DFA12_maxS =
+        "\1\172\1\145\4\uffff\1\145\1\156\1\162\1\141\1\151\6\uffff\1\161"+
         "\1\146\1\144\1\165\2\154\1\165\2\172\1\145\1\163\1\172\1\151\2\uffff"+
         "\1\172\1\145\1\uffff\1\162\1\uffff\1\172\1\145\1\172\1\uffff";
-    static final String DFA11_acceptS =
-        "\2\uffff\1\2\1\3\1\4\1\5\5\uffff\1\12\1\13\1\14\1\15\1\16\15\uffff"+
-        "\1\6\1\7\2\uffff\1\11\1\uffff\1\10\3\uffff\1\1";
-    static final String DFA11_specialS =
-        "\50\uffff}>";
-    static final String[] DFA11_transitionS = {
-            "\1\16\1\17\2\uffff\1\17\22\uffff\1\16\1\uffff\1\15\4\uffff\1"+
-            "\15\1\2\1\3\2\uffff\1\4\3\uffff\12\14\3\uffff\1\5\3\uffff\32"+
-            "\13\4\uffff\1\13\1\uffff\3\13\1\6\1\7\1\11\7\13\1\12\3\13\1"+
-            "\1\1\13\1\10\6\13",
-            "\1\20",
-            "",
-            "",
-            "",
-            "",
+    static final String DFA12_acceptS =
+        "\2\uffff\1\2\1\3\1\4\1\5\5\uffff\1\12\1\13\1\14\1\15\1\16\1\17\15"+
+        "\uffff\1\6\1\7\2\uffff\1\11\1\uffff\1\10\3\uffff\1\1";
+    static final String DFA12_specialS =
+        "\51\uffff}>";
+    static final String[] DFA12_transitionS = {
+            "\1\16\1\17\2\uffff\1\17\22\uffff\1\16\1\uffff\1\15\1\20\3\uffff"+
+            "\1\15\1\2\1\3\2\uffff\1\4\3\uffff\12\14\3\uffff\1\5\3\uffff"+
+            "\32\13\4\uffff\1\13\1\uffff\3\13\1\6\1\7\1\11\7\13\1\12\3\13"+
+            "\1\1\1\13\1\10\6\13",
             "\1\21",
+            "",
+            "",
+            "",
+            "",
             "\1\22",
             "\1\23",
             "\1\24",
             "\1\25",
-            "",
-            "",
-            "",
-            "",
-            "",
             "\1\26",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "\1\27",
             "\1\30",
             "\1\31",
             "\1\32",
             "\1\33",
             "\1\34",
+            "\1\35",
             "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
             "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\1\37",
             "\1\40",
+            "\1\41",
             "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\1\42",
+            "\1\43",
             "",
             "",
             "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
-            "\1\44",
-            "",
             "\1\45",
             "",
-            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
             "\1\46",
+            "",
+            "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
+            "\1\47",
             "\12\13\7\uffff\32\13\4\uffff\1\13\1\uffff\32\13",
             ""
     };
 
-    static final short[] DFA11_eot = DFA.unpackEncodedString(DFA11_eotS);
-    static final short[] DFA11_eof = DFA.unpackEncodedString(DFA11_eofS);
-    static final char[] DFA11_min = DFA.unpackEncodedStringToUnsignedChars(DFA11_minS);
-    static final char[] DFA11_max = DFA.unpackEncodedStringToUnsignedChars(DFA11_maxS);
-    static final short[] DFA11_accept = DFA.unpackEncodedString(DFA11_acceptS);
-    static final short[] DFA11_special = DFA.unpackEncodedString(DFA11_specialS);
-    static final short[][] DFA11_transition;
+    static final short[] DFA12_eot = DFA.unpackEncodedString(DFA12_eotS);
+    static final short[] DFA12_eof = DFA.unpackEncodedString(DFA12_eofS);
+    static final char[] DFA12_min = DFA.unpackEncodedStringToUnsignedChars(DFA12_minS);
+    static final char[] DFA12_max = DFA.unpackEncodedStringToUnsignedChars(DFA12_maxS);
+    static final short[] DFA12_accept = DFA.unpackEncodedString(DFA12_acceptS);
+    static final short[] DFA12_special = DFA.unpackEncodedString(DFA12_specialS);
+    static final short[][] DFA12_transition;
 
     static {
-        int numStates = DFA11_transitionS.length;
-        DFA11_transition = new short[numStates][];
+        int numStates = DFA12_transitionS.length;
+        DFA12_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA11_transition[i] = DFA.unpackEncodedString(DFA11_transitionS[i]);
+            DFA12_transition[i] = DFA.unpackEncodedString(DFA12_transitionS[i]);
         }
     }
 
-    class DFA11 extends DFA {
+    class DFA12 extends DFA {
 
-        public DFA11(BaseRecognizer recognizer) {
+        public DFA12(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 11;
-            this.eot = DFA11_eot;
-            this.eof = DFA11_eof;
-            this.min = DFA11_min;
-            this.max = DFA11_max;
-            this.accept = DFA11_accept;
-            this.special = DFA11_special;
-            this.transition = DFA11_transition;
+            this.decisionNumber = 12;
+            this.eot = DFA12_eot;
+            this.eof = DFA12_eof;
+            this.min = DFA12_min;
+            this.max = DFA12_max;
+            this.accept = DFA12_accept;
+            this.special = DFA12_special;
+            this.transition = DFA12_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__27 | T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | BOOLEAN | NULL | ID | NUMBER | STRING | WS | NEWLINE );";
+            return "1:1: Tokens : ( T__28 | T__29 | T__30 | T__31 | T__32 | T__33 | T__34 | BOOLEAN | NULL | ID | NUMBER | STRING | WS | NEWLINE | COMMENT );";
         }
     }
  

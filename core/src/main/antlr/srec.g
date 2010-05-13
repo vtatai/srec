@@ -150,4 +150,8 @@ WS
 NEWLINE
 	:	('\r'? '\n' ' '*)+ 
 	;
+
+COMMENT
+	: '#' .* {skip();} NEWLINE
+	;
 			

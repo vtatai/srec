@@ -1,17 +1,14 @@
 package com.github.srec.command;
 
 import com.github.srec.SRecException;
-import org.apache.log4j.Logger;
 import org.scannotation.AnnotationDB;
 import org.scannotation.ClasspathUrlFinder;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -20,7 +17,6 @@ import java.util.Set;
  * @author Victor Tatai
  */
 public class ExecutionContextFactory {
-    private static final Logger log = Logger.getLogger(ExecutionContextFactory.class);
     private static ExecutionContextFactory instance;
     public List<MethodCommand> builtinCommands = new ArrayList<MethodCommand>();
 
@@ -28,20 +24,11 @@ public class ExecutionContextFactory {
     }
 
     private void init() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        scanPackage("com.github.srec.command.jemmy");
-        InputStream is = ClassLoader.getSystemResourceAsStream("custom_commands.properties");
-        if (is != null) {
-            Properties props = new Properties();
-            props.load(is);
-            for (Object obj : props.keySet()) {
-                scanPackage(obj.toString());
-            }
-        }
-    }
-
-    private void scanPackage(String packageName) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         AnnotationDB ann = new AnnotationDB();
         ann.setScanClassAnnotations(true);
+        ann.setScanMethodAnnotations(false);
+        ann.setScanFieldAnnotations(false);
+        ann.setScanParameterAnnotations(false);
         URL[] urls = ClasspathUrlFinder.findClassPaths();
         ann.scanArchives(urls);
         Set<String> classes = ann.getAnnotationIndex().get(ExecutionContextCommand.class.getCanonicalName());

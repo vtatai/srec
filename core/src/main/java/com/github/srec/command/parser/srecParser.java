@@ -1,25 +1,18 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-05 14:01:43
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/victor/srec/core/src/main/antlr/srec.g 2010-05-13 17:06:38
 
 package com.github.srec.command.parser;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 import org.antlr.runtime.tree.*;
 
 public class srecParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "SCRIPT", "REQUIRE", "ASSIGN", "METHOD_CALL_OR_VARREF", "METHOD_CALL", "METHOD_DEF", "METHOD_DEF_PARAMS", "METHOD_BODY", "LITNUMBER", "LITBOOLEAN", "LITSTRING", "LITNIL", "QNAME", "STRING", "NEWLINE", "ID", "NUMBER", "BOOLEAN", "NULL", "DIGIT", "LETTER", "ALPHANUM", "WS", "'require'", "'('", "')'", "','", "'='", "'def'", "'end'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "SCRIPT", "REQUIRE", "ASSIGN", "METHOD_CALL_OR_VARREF", "METHOD_CALL", "METHOD_DEF", "METHOD_DEF_PARAMS", "METHOD_BODY", "LITNUMBER", "LITBOOLEAN", "LITSTRING", "LITNIL", "QNAME", "STRING", "NEWLINE", "ID", "NUMBER", "BOOLEAN", "NULL", "DIGIT", "LETTER", "ALPHANUM", "WS", "COMMENT", "'require'", "'('", "')'", "','", "'='", "'def'", "'end'"
     };
     public static final int SCRIPT=4;
     public static final int T__29=29;
     public static final int T__28=28;
-    public static final int T__27=27;
     public static final int LETTER=24;
     public static final int METHOD_DEF=9;
     public static final int NULL=22;
@@ -38,6 +31,7 @@ public class srecParser extends Parser {
     public static final int BOOLEAN=21;
     public static final int QNAME=16;
     public static final int T__33=33;
+    public static final int T__34=34;
     public static final int NEWLINE=18;
     public static final int METHOD_BODY=11;
     public static final int ASSIGN=6;
@@ -45,6 +39,7 @@ public class srecParser extends Parser {
     public static final int LITNIL=15;
     public static final int METHOD_CALL_OR_VARREF=7;
     public static final int DIGIT=23;
+    public static final int COMMENT=27;
     public static final int STRING=17;
     public static final int LITSTRING=14;
 
@@ -103,7 +98,7 @@ public class srecParser extends Parser {
                 int alt1=2;
                 int LA1_0 = input.LA(1);
 
-                if ( (LA1_0==27) ) {
+                if ( (LA1_0==28) ) {
                     alt1=1;
                 }
 
@@ -131,7 +126,7 @@ public class srecParser extends Parser {
             int alt2=2;
             int LA2_0 = input.LA(1);
 
-            if ( (LA2_0==ID||LA2_0==32) ) {
+            if ( (LA2_0==ID||LA2_0==33) ) {
                 alt2=1;
             }
             switch (alt2) {
@@ -153,7 +148,7 @@ public class srecParser extends Parser {
 
 
             // AST REWRITE
-            // elements: require, script_stmt_block
+            // elements: script_stmt_block, require
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -233,15 +228,15 @@ public class srecParser extends Parser {
         CommonTree STRING4_tree=null;
         CommonTree NEWLINE5_tree=null;
         RewriteRuleTokenStream stream_NEWLINE=new RewriteRuleTokenStream(adaptor,"token NEWLINE");
-        RewriteRuleTokenStream stream_27=new RewriteRuleTokenStream(adaptor,"token 27");
         RewriteRuleTokenStream stream_STRING=new RewriteRuleTokenStream(adaptor,"token STRING");
+        RewriteRuleTokenStream stream_28=new RewriteRuleTokenStream(adaptor,"token 28");
 
         try {
             // /home/victor/srec/core/src/main/antlr/srec.g:46:2: ( 'require' STRING NEWLINE -> ^( REQUIRE STRING ) )
             // /home/victor/srec/core/src/main/antlr/srec.g:46:4: 'require' STRING NEWLINE
             {
-            string_literal3=(Token)match(input,27,FOLLOW_27_in_require151); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_27.add(string_literal3);
+            string_literal3=(Token)match(input,28,FOLLOW_28_in_require151); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_28.add(string_literal3);
 
             STRING4=(Token)match(input,STRING,FOLLOW_STRING_in_require153); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_STRING.add(STRING4);
@@ -334,7 +329,7 @@ public class srecParser extends Parser {
                 int alt4=2;
                 int LA4_0 = input.LA(1);
 
-                if ( (LA4_0==ID||LA4_0==32) ) {
+                if ( (LA4_0==ID||LA4_0==33) ) {
                     alt4=1;
                 }
 
@@ -454,10 +449,10 @@ public class srecParser extends Parser {
             if ( (LA5_0==ID) ) {
                 int LA5_1 = input.LA(2);
 
-                if ( (LA5_1==EOF||(LA5_1>=STRING && LA5_1<=NULL)||LA5_1==28) ) {
+                if ( (LA5_1==EOF||(LA5_1>=STRING && LA5_1<=NULL)||LA5_1==29) ) {
                     alt5=1;
                 }
-                else if ( (LA5_1==31) ) {
+                else if ( (LA5_1==32) ) {
                     alt5=2;
                 }
                 else {
@@ -468,7 +463,7 @@ public class srecParser extends Parser {
                     throw nvae;
                 }
             }
-            else if ( (LA5_0==32) ) {
+            else if ( (LA5_0==33) ) {
                 alt5=3;
             }
             else {
@@ -586,8 +581,8 @@ public class srecParser extends Parser {
         CommonTree ID22_tree=null;
         CommonTree char_literal24_tree=null;
         RewriteRuleTokenStream stream_30=new RewriteRuleTokenStream(adaptor,"token 30");
+        RewriteRuleTokenStream stream_31=new RewriteRuleTokenStream(adaptor,"token 31");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
-        RewriteRuleTokenStream stream_28=new RewriteRuleTokenStream(adaptor,"token 28");
         RewriteRuleTokenStream stream_29=new RewriteRuleTokenStream(adaptor,"token 29");
         RewriteRuleSubtreeStream stream_method_call_param=new RewriteRuleSubtreeStream(adaptor,"rule method_call_param");
         try {
@@ -597,11 +592,11 @@ public class srecParser extends Parser {
 
             if ( (LA8_0==ID) ) {
                 switch ( input.LA(2) ) {
-                case 28:
+                case 29:
                     {
                     int LA8_2 = input.LA(3);
 
-                    if ( (LA8_2==29) ) {
+                    if ( (LA8_2==30) ) {
                         alt8=2;
                     }
                     else if ( (LA8_2==STRING||(LA8_2>=ID && LA8_2<=NULL)) ) {
@@ -627,8 +622,8 @@ public class srecParser extends Parser {
                     break;
                 case EOF:
                 case NEWLINE:
-                case 29:
                 case 30:
+                case 31:
                     {
                     alt8=1;
                     }
@@ -693,11 +688,11 @@ public class srecParser extends Parser {
                     ID13=(Token)match(input,ID,FOLLOW_ID_in_method_call_or_varref244); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID13);
 
-                    char_literal14=(Token)match(input,28,FOLLOW_28_in_method_call_or_varref246); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_28.add(char_literal14);
+                    char_literal14=(Token)match(input,29,FOLLOW_29_in_method_call_or_varref246); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_29.add(char_literal14);
 
-                    char_literal15=(Token)match(input,29,FOLLOW_29_in_method_call_or_varref248); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_29.add(char_literal15);
+                    char_literal15=(Token)match(input,30,FOLLOW_30_in_method_call_or_varref248); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_30.add(char_literal15);
 
 
 
@@ -736,8 +731,8 @@ public class srecParser extends Parser {
                     ID16=(Token)match(input,ID,FOLLOW_ID_in_method_call_or_varref263); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID16);
 
-                    char_literal17=(Token)match(input,28,FOLLOW_28_in_method_call_or_varref265); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_28.add(char_literal17);
+                    char_literal17=(Token)match(input,29,FOLLOW_29_in_method_call_or_varref265); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_29.add(char_literal17);
 
                     pushFollow(FOLLOW_method_call_param_in_method_call_or_varref267);
                     method_call_param18=method_call_param();
@@ -751,7 +746,7 @@ public class srecParser extends Parser {
                         int alt6=2;
                         int LA6_0 = input.LA(1);
 
-                        if ( (LA6_0==30) ) {
+                        if ( (LA6_0==31) ) {
                             alt6=1;
                         }
 
@@ -760,8 +755,8 @@ public class srecParser extends Parser {
                     	case 1 :
                     	    // /home/victor/srec/core/src/main/antlr/srec.g:64:30: ',' method_call_param
                     	    {
-                    	    char_literal19=(Token)match(input,30,FOLLOW_30_in_method_call_or_varref270); if (state.failed) return retval; 
-                    	    if ( state.backtracking==0 ) stream_30.add(char_literal19);
+                    	    char_literal19=(Token)match(input,31,FOLLOW_31_in_method_call_or_varref270); if (state.failed) return retval; 
+                    	    if ( state.backtracking==0 ) stream_31.add(char_literal19);
 
                     	    pushFollow(FOLLOW_method_call_param_in_method_call_or_varref272);
                     	    method_call_param20=method_call_param();
@@ -778,13 +773,13 @@ public class srecParser extends Parser {
                         }
                     } while (true);
 
-                    char_literal21=(Token)match(input,29,FOLLOW_29_in_method_call_or_varref276); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_29.add(char_literal21);
+                    char_literal21=(Token)match(input,30,FOLLOW_30_in_method_call_or_varref276); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_30.add(char_literal21);
 
 
 
                     // AST REWRITE
-                    // elements: method_call_param, ID
+                    // elements: ID, method_call_param
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -838,7 +833,7 @@ public class srecParser extends Parser {
                         int alt7=2;
                         int LA7_0 = input.LA(1);
 
-                        if ( (LA7_0==30) ) {
+                        if ( (LA7_0==31) ) {
                             alt7=1;
                         }
 
@@ -847,8 +842,8 @@ public class srecParser extends Parser {
                     	case 1 :
                     	    // /home/victor/srec/core/src/main/antlr/srec.g:66:26: ',' method_call_param
                     	    {
-                    	    char_literal24=(Token)match(input,30,FOLLOW_30_in_method_call_or_varref299); if (state.failed) return retval; 
-                    	    if ( state.backtracking==0 ) stream_30.add(char_literal24);
+                    	    char_literal24=(Token)match(input,31,FOLLOW_31_in_method_call_or_varref299); if (state.failed) return retval; 
+                    	    if ( state.backtracking==0 ) stream_31.add(char_literal24);
 
                     	    pushFollow(FOLLOW_method_call_param_in_method_call_or_varref301);
                     	    method_call_param25=method_call_param();
@@ -1036,7 +1031,7 @@ public class srecParser extends Parser {
 
         CommonTree ID28_tree=null;
         CommonTree char_literal29_tree=null;
-        RewriteRuleTokenStream stream_31=new RewriteRuleTokenStream(adaptor,"token 31");
+        RewriteRuleTokenStream stream_32=new RewriteRuleTokenStream(adaptor,"token 32");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
         RewriteRuleSubtreeStream stream_method_call_or_varref=new RewriteRuleSubtreeStream(adaptor,"rule method_call_or_varref");
         RewriteRuleSubtreeStream stream_literal=new RewriteRuleSubtreeStream(adaptor,"rule literal");
@@ -1047,8 +1042,8 @@ public class srecParser extends Parser {
             ID28=(Token)match(input,ID,FOLLOW_ID_in_assignment343); if (state.failed) return retval; 
             if ( state.backtracking==0 ) stream_ID.add(ID28);
 
-            char_literal29=(Token)match(input,31,FOLLOW_31_in_assignment345); if (state.failed) return retval; 
-            if ( state.backtracking==0 ) stream_31.add(char_literal29);
+            char_literal29=(Token)match(input,32,FOLLOW_32_in_assignment345); if (state.failed) return retval; 
+            if ( state.backtracking==0 ) stream_32.add(char_literal29);
 
             // /home/victor/srec/core/src/main/antlr/srec.g:75:11: ( literal | method_call_or_varref )
             int alt10=2;
@@ -1098,7 +1093,7 @@ public class srecParser extends Parser {
 
 
             // AST REWRITE
-            // elements: method_call_or_varref, literal, ID
+            // elements: literal, ID, method_call_or_varref
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1212,11 +1207,11 @@ public class srecParser extends Parser {
         CommonTree char_literal48_tree=null;
         CommonTree NEWLINE49_tree=null;
         CommonTree string_literal51_tree=null;
-        RewriteRuleTokenStream stream_32=new RewriteRuleTokenStream(adaptor,"token 32");
+        RewriteRuleTokenStream stream_30=new RewriteRuleTokenStream(adaptor,"token 30");
         RewriteRuleTokenStream stream_NEWLINE=new RewriteRuleTokenStream(adaptor,"token NEWLINE");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
         RewriteRuleTokenStream stream_33=new RewriteRuleTokenStream(adaptor,"token 33");
-        RewriteRuleTokenStream stream_28=new RewriteRuleTokenStream(adaptor,"token 28");
+        RewriteRuleTokenStream stream_34=new RewriteRuleTokenStream(adaptor,"token 34");
         RewriteRuleTokenStream stream_29=new RewriteRuleTokenStream(adaptor,"token 29");
         RewriteRuleSubtreeStream stream_method_def_params=new RewriteRuleSubtreeStream(adaptor,"rule method_def_params");
         RewriteRuleSubtreeStream stream_method_body=new RewriteRuleSubtreeStream(adaptor,"rule method_body");
@@ -1225,7 +1220,7 @@ public class srecParser extends Parser {
             int alt11=3;
             int LA11_0 = input.LA(1);
 
-            if ( (LA11_0==32) ) {
+            if ( (LA11_0==33) ) {
                 int LA11_1 = input.LA(2);
 
                 if ( (LA11_1==ID) ) {
@@ -1234,10 +1229,10 @@ public class srecParser extends Parser {
                     if ( (LA11_2==NEWLINE) ) {
                         alt11=1;
                     }
-                    else if ( (LA11_2==28) ) {
+                    else if ( (LA11_2==29) ) {
                         int LA11_4 = input.LA(4);
 
-                        if ( (LA11_4==29) ) {
+                        if ( (LA11_4==30) ) {
                             alt11=2;
                         }
                         else if ( (LA11_4==ID) ) {
@@ -1278,8 +1273,8 @@ public class srecParser extends Parser {
                 case 1 :
                     // /home/victor/srec/core/src/main/antlr/srec.g:80:4: 'def' ID NEWLINE method_body 'end'
                     {
-                    string_literal32=(Token)match(input,32,FOLLOW_32_in_method_def380); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_32.add(string_literal32);
+                    string_literal32=(Token)match(input,33,FOLLOW_33_in_method_def380); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_33.add(string_literal32);
 
                     ID33=(Token)match(input,ID,FOLLOW_ID_in_method_def382); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID33);
@@ -1293,8 +1288,8 @@ public class srecParser extends Parser {
                     state._fsp--;
                     if (state.failed) return retval;
                     if ( state.backtracking==0 ) stream_method_body.add(method_body35.getTree());
-                    string_literal36=(Token)match(input,33,FOLLOW_33_in_method_def388); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_33.add(string_literal36);
+                    string_literal36=(Token)match(input,34,FOLLOW_34_in_method_def388); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_34.add(string_literal36);
 
 
 
@@ -1338,17 +1333,17 @@ public class srecParser extends Parser {
                 case 2 :
                     // /home/victor/srec/core/src/main/antlr/srec.g:82:4: 'def' ID '(' ')' NEWLINE method_body 'end'
                     {
-                    string_literal37=(Token)match(input,32,FOLLOW_32_in_method_def409); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_32.add(string_literal37);
+                    string_literal37=(Token)match(input,33,FOLLOW_33_in_method_def409); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_33.add(string_literal37);
 
                     ID38=(Token)match(input,ID,FOLLOW_ID_in_method_def411); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID38);
 
-                    char_literal39=(Token)match(input,28,FOLLOW_28_in_method_def413); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_28.add(char_literal39);
+                    char_literal39=(Token)match(input,29,FOLLOW_29_in_method_def413); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_29.add(char_literal39);
 
-                    char_literal40=(Token)match(input,29,FOLLOW_29_in_method_def415); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_29.add(char_literal40);
+                    char_literal40=(Token)match(input,30,FOLLOW_30_in_method_def415); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_30.add(char_literal40);
 
                     NEWLINE41=(Token)match(input,NEWLINE,FOLLOW_NEWLINE_in_method_def417); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NEWLINE.add(NEWLINE41);
@@ -1359,8 +1354,8 @@ public class srecParser extends Parser {
                     state._fsp--;
                     if (state.failed) return retval;
                     if ( state.backtracking==0 ) stream_method_body.add(method_body42.getTree());
-                    string_literal43=(Token)match(input,33,FOLLOW_33_in_method_def421); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_33.add(string_literal43);
+                    string_literal43=(Token)match(input,34,FOLLOW_34_in_method_def421); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_34.add(string_literal43);
 
 
 
@@ -1404,14 +1399,14 @@ public class srecParser extends Parser {
                 case 3 :
                     // /home/victor/srec/core/src/main/antlr/srec.g:84:4: 'def' ID '(' method_def_params ')' NEWLINE method_body 'end'
                     {
-                    string_literal44=(Token)match(input,32,FOLLOW_32_in_method_def442); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_32.add(string_literal44);
+                    string_literal44=(Token)match(input,33,FOLLOW_33_in_method_def442); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_33.add(string_literal44);
 
                     ID45=(Token)match(input,ID,FOLLOW_ID_in_method_def444); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_ID.add(ID45);
 
-                    char_literal46=(Token)match(input,28,FOLLOW_28_in_method_def446); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_28.add(char_literal46);
+                    char_literal46=(Token)match(input,29,FOLLOW_29_in_method_def446); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_29.add(char_literal46);
 
                     pushFollow(FOLLOW_method_def_params_in_method_def448);
                     method_def_params47=method_def_params();
@@ -1419,8 +1414,8 @@ public class srecParser extends Parser {
                     state._fsp--;
                     if (state.failed) return retval;
                     if ( state.backtracking==0 ) stream_method_def_params.add(method_def_params47.getTree());
-                    char_literal48=(Token)match(input,29,FOLLOW_29_in_method_def450); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_29.add(char_literal48);
+                    char_literal48=(Token)match(input,30,FOLLOW_30_in_method_def450); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_30.add(char_literal48);
 
                     NEWLINE49=(Token)match(input,NEWLINE,FOLLOW_NEWLINE_in_method_def452); if (state.failed) return retval; 
                     if ( state.backtracking==0 ) stream_NEWLINE.add(NEWLINE49);
@@ -1431,13 +1426,13 @@ public class srecParser extends Parser {
                     state._fsp--;
                     if (state.failed) return retval;
                     if ( state.backtracking==0 ) stream_method_body.add(method_body50.getTree());
-                    string_literal51=(Token)match(input,33,FOLLOW_33_in_method_def456); if (state.failed) return retval; 
-                    if ( state.backtracking==0 ) stream_33.add(string_literal51);
+                    string_literal51=(Token)match(input,34,FOLLOW_34_in_method_def456); if (state.failed) return retval; 
+                    if ( state.backtracking==0 ) stream_34.add(string_literal51);
 
 
 
                     // AST REWRITE
-                    // elements: method_body, ID, method_def_params
+                    // elements: method_def_params, ID, method_body
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1514,7 +1509,7 @@ public class srecParser extends Parser {
             int alt12=2;
             int LA12_0 = input.LA(1);
 
-            if ( (LA12_0==ID||LA12_0==32) ) {
+            if ( (LA12_0==ID||LA12_0==33) ) {
                 alt12=1;
             }
             switch (alt12) {
@@ -1609,7 +1604,7 @@ public class srecParser extends Parser {
         CommonTree ID53_tree=null;
         CommonTree char_literal54_tree=null;
         CommonTree ID55_tree=null;
-        RewriteRuleTokenStream stream_30=new RewriteRuleTokenStream(adaptor,"token 30");
+        RewriteRuleTokenStream stream_31=new RewriteRuleTokenStream(adaptor,"token 31");
         RewriteRuleTokenStream stream_ID=new RewriteRuleTokenStream(adaptor,"token ID");
 
         try {
@@ -1625,7 +1620,7 @@ public class srecParser extends Parser {
                 int alt13=2;
                 int LA13_0 = input.LA(1);
 
-                if ( (LA13_0==30) ) {
+                if ( (LA13_0==31) ) {
                     alt13=1;
                 }
 
@@ -1634,8 +1629,8 @@ public class srecParser extends Parser {
             	case 1 :
             	    // /home/victor/srec/core/src/main/antlr/srec.g:94:8: ',' ID
             	    {
-            	    char_literal54=(Token)match(input,30,FOLLOW_30_in_method_def_params507); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_30.add(char_literal54);
+            	    char_literal54=(Token)match(input,31,FOLLOW_31_in_method_def_params507); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_31.add(char_literal54);
 
             	    ID55=(Token)match(input,ID,FOLLOW_ID_in_method_def_params509); if (state.failed) return retval; 
             	    if ( state.backtracking==0 ) stream_ID.add(ID55);
@@ -1934,61 +1929,61 @@ public class srecParser extends Parser {
 
  
 
-    public static final BitSet FOLLOW_require_in_script117 = new BitSet(new long[]{0x0000000108080002L});
+    public static final BitSet FOLLOW_require_in_script117 = new BitSet(new long[]{0x0000000210080002L});
     public static final BitSet FOLLOW_script_stmt_block_in_script120 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_27_in_require151 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_28_in_require151 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_STRING_in_require153 = new BitSet(new long[]{0x0000000000040000L});
     public static final BitSet FOLLOW_NEWLINE_in_require155 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_expression_in_script_stmt_block179 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_NEWLINE_in_script_stmt_block182 = new BitSet(new long[]{0x0000000100080002L});
-    public static final BitSet FOLLOW_EOF_in_script_stmt_block186 = new BitSet(new long[]{0x0000000100080002L});
+    public static final BitSet FOLLOW_NEWLINE_in_script_stmt_block182 = new BitSet(new long[]{0x0000000200080002L});
+    public static final BitSet FOLLOW_EOF_in_script_stmt_block186 = new BitSet(new long[]{0x0000000200080002L});
     public static final BitSet FOLLOW_method_call_or_varref_in_expression202 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_assignment_in_expression206 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_method_def_in_expression210 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ID_in_method_call_or_varref229 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_method_call_or_varref244 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_method_call_or_varref246 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_method_call_or_varref248 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_method_call_or_varref263 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_method_call_or_varref265 = new BitSet(new long[]{0x00000000007A0000L});
-    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref267 = new BitSet(new long[]{0x0000000060000000L});
-    public static final BitSet FOLLOW_30_in_method_call_or_varref270 = new BitSet(new long[]{0x00000000007A0000L});
-    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref272 = new BitSet(new long[]{0x0000000060000000L});
-    public static final BitSet FOLLOW_29_in_method_call_or_varref276 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_method_call_or_varref244 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_method_call_or_varref246 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_method_call_or_varref248 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_method_call_or_varref263 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_method_call_or_varref265 = new BitSet(new long[]{0x00000000007A0000L});
+    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref267 = new BitSet(new long[]{0x00000000C0000000L});
+    public static final BitSet FOLLOW_31_in_method_call_or_varref270 = new BitSet(new long[]{0x00000000007A0000L});
+    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref272 = new BitSet(new long[]{0x00000000C0000000L});
+    public static final BitSet FOLLOW_30_in_method_call_or_varref276 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_ID_in_method_call_or_varref294 = new BitSet(new long[]{0x00000000007A0000L});
-    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref296 = new BitSet(new long[]{0x0000000040000002L});
-    public static final BitSet FOLLOW_30_in_method_call_or_varref299 = new BitSet(new long[]{0x00000000007A0000L});
-    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref301 = new BitSet(new long[]{0x0000000040000002L});
+    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref296 = new BitSet(new long[]{0x0000000080000002L});
+    public static final BitSet FOLLOW_31_in_method_call_or_varref299 = new BitSet(new long[]{0x00000000007A0000L});
+    public static final BitSet FOLLOW_method_call_param_in_method_call_or_varref301 = new BitSet(new long[]{0x0000000080000002L});
     public static final BitSet FOLLOW_literal_in_method_call_param327 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_method_call_or_varref_in_method_call_param331 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_assignment343 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_31_in_assignment345 = new BitSet(new long[]{0x00000000007A0000L});
+    public static final BitSet FOLLOW_ID_in_assignment343 = new BitSet(new long[]{0x0000000100000000L});
+    public static final BitSet FOLLOW_32_in_assignment345 = new BitSet(new long[]{0x00000000007A0000L});
     public static final BitSet FOLLOW_literal_in_assignment348 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_method_call_or_varref_in_assignment352 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_method_def380 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_33_in_method_def380 = new BitSet(new long[]{0x0000000000080000L});
     public static final BitSet FOLLOW_ID_in_method_def382 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_NEWLINE_in_method_def384 = new BitSet(new long[]{0x0000000300080000L});
-    public static final BitSet FOLLOW_method_body_in_method_def386 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_33_in_method_def388 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_method_def409 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_method_def411 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_method_def413 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_method_def415 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_NEWLINE_in_method_def417 = new BitSet(new long[]{0x0000000300080000L});
-    public static final BitSet FOLLOW_method_body_in_method_def419 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_33_in_method_def421 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_method_def442 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_method_def444 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_28_in_method_def446 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_method_def_params_in_method_def448 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_method_def450 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_NEWLINE_in_method_def452 = new BitSet(new long[]{0x0000000300080000L});
-    public static final BitSet FOLLOW_method_body_in_method_def454 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_33_in_method_def456 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NEWLINE_in_method_def384 = new BitSet(new long[]{0x0000000600080000L});
+    public static final BitSet FOLLOW_method_body_in_method_def386 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_34_in_method_def388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_method_def409 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_method_def411 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_method_def413 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_method_def415 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_NEWLINE_in_method_def417 = new BitSet(new long[]{0x0000000600080000L});
+    public static final BitSet FOLLOW_method_body_in_method_def419 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_34_in_method_def421 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_method_def442 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_method_def444 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_method_def446 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_method_def_params_in_method_def448 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_method_def450 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_NEWLINE_in_method_def452 = new BitSet(new long[]{0x0000000600080000L});
+    public static final BitSet FOLLOW_method_body_in_method_def454 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_34_in_method_def456 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_script_stmt_block_in_method_body481 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_method_def_params504 = new BitSet(new long[]{0x0000000040000002L});
-    public static final BitSet FOLLOW_30_in_method_def_params507 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_ID_in_method_def_params509 = new BitSet(new long[]{0x0000000040000002L});
+    public static final BitSet FOLLOW_ID_in_method_def_params504 = new BitSet(new long[]{0x0000000080000002L});
+    public static final BitSet FOLLOW_31_in_method_def_params507 = new BitSet(new long[]{0x0000000000080000L});
+    public static final BitSet FOLLOW_ID_in_method_def_params509 = new BitSet(new long[]{0x0000000080000002L});
     public static final BitSet FOLLOW_NUMBER_in_literal535 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_BOOLEAN_in_literal554 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_STRING_in_literal572 = new BitSet(new long[]{0x0000000000000002L});
