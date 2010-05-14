@@ -46,10 +46,10 @@ public class JemmyDSL {
     private static Properties props = new Properties();
 
     static {
+        props.put("WindowWaiter.WaitWindowTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "5000");
         props.put("FrameWaiter.WaitFrameTimeout", "5000");
         props.put("Waiter.WaitingTime", "5000");
-        props.put("WindowWaiter.WaitWindowTimeout", "5000");
         props.put("JScrollBarOperator.WholeScrollTimeout", "5000");
         props.put("JSliderOperator.WholeScrollTimeout", "5000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "5000");
