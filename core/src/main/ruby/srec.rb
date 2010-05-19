@@ -25,7 +25,7 @@ module SRec
   end
 
   def type_special(locator, text)
-    JemmyDSL.text_field(locator).type_special(key)
+    JemmyDSL.text_field(locator).type_special(text)
   end
 
   def assert(locator, text)

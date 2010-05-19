@@ -1,10 +1,9 @@
 package com.github.srec.rec;
 
 import com.github.srec.command.CallEventCommand;
-import com.github.srec.command.Command;
-import com.github.srec.command.ExecutionContext;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
+import com.github.srec.ui.SRecForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -20,9 +19,9 @@ import java.util.List;
  */
 public class Recorder implements EventRecorder {
     private static final Logger logger = Logger.getLogger(Recorder.class);
-    private ExecutionContext executionContext;
     private List<ComponentRecorder> componentRecorders = new ArrayList<ComponentRecorder>();
-    private List<RecorderCommandListener> listeners = new ArrayList<RecorderCommandListener>();
+    private SRecForm srecForm;
+
     /**
      * The list of ignored containers, such as the recording frame itself.
      */
@@ -30,8 +29,8 @@ public class Recorder implements EventRecorder {
     private boolean recording;
     private CallEventCommand lastEvent;
 
-    public Recorder(ExecutionContext context) {
-        this.executionContext = context;
+    public Recorder(SRecForm form) {
+        srecForm = form;
         componentRecorders.add(new ButtonClickRecorder(this));
         componentRecorders.add(new WindowActivationRecorder(this));
         componentRecorders.add(new TextFieldRecorder(this, new DefaultComponentVisibility()));
@@ -58,12 +57,11 @@ public class Recorder implements EventRecorder {
             return;
         }
         event.record(this, lastEvent);
-        lastEvent = extractLastEvent();
+        lastEvent = event;
     }
 
-    private CallEventCommand extractLastEvent() {
-        int lastIndex = getCommands().size() - 1;
-        return getCommands().isEmpty() || !(getCommands().get(lastIndex) instanceof CallEventCommand) ? null : (CallEventCommand) getCommands().get(lastIndex);
+    public void addEvent(CallEventCommand event) {
+        srecForm.addTextNewLine(event.print());
     }
 
     protected boolean isIgnored(Component component) {
@@ -95,49 +93,13 @@ public class Recorder implements EventRecorder {
         return null;
     }
 
-
-    public void addEvent(CallEventCommand event) {
-        logger.debug("Logging event: " + event);
-        executionContext.addCommand(event);
-        fireEventAdded(event);
-    }
-
     public void replaceLastEvent(CallEventCommand event) {
-        getCommands().set(getCommands().size() - 1, event);
         logger.debug("Replacing the last event with: " + event);
-        fireEventUpdated(getCommands().size() - 1);
-    }
-
-    private void fireEventUpdated(int index) {
-        for (RecorderCommandListener listener : listeners) {
-            listener.eventsUpdated(index, getCommands().subList(index, index + 1));
-        }
-    }
-
-    private void fireEventAdded(CallEventCommand event) {
-        for (RecorderCommandListener listener : listeners) {
-            listener.eventAdded(event);
-        }
-    }
-
-    private void fireEventsRemoved() {
-        for (RecorderCommandListener listener : listeners) {
-            listener.eventsRemoved();
-        }
-    }
-
-    private void fireEventsAdded(List<Command> commands) {
-        for (RecorderCommandListener listener : listeners) {
-            listener.commandsAdded(commands);
-        }
+        srecForm.replaceLastEvent(event);
     }
 
     public void addIgnoredContainer(Container container) {
         ignoredContainers.add(container);
-    }
-
-    public void addListener(RecorderCommandListener listener) {
-        listeners.add(listener);
     }
 
     public boolean isRecording() {
@@ -148,25 +110,7 @@ public class Recorder implements EventRecorder {
         this.recording = recording;
     }
 
-    public List<Command> getCommands() {
-        return executionContext.getCommands();
-    }
-
-    public void emptyCommands() {
-        getCommands().clear();
-        fireEventsRemoved();
-    }
-
-    public void addCommands(List<Command> commands) {
-        this.executionContext.addCommand(commands.toArray(new Command[commands.size()]));
-        fireEventsAdded(commands);
-    }
-
     public CallEventCommand getLastEvent() {
         return lastEvent;
-    }
-
-    public ExecutionContext getExecutionContext() {
-        return executionContext;
     }
 }

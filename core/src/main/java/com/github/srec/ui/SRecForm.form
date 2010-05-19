@@ -88,18 +88,16 @@
             </properties>
             <border type="none"/>
             <children>
-              <scrollpane id="ee943">
+              <scrollpane id="ee943" binding="codeScrollPane" custom-create="true">
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="bdca2" class="javax.swing.JTable" binding="eventsTbl" custom-create="true">
+                  <component id="8c011" class="com.github.srec.ui.CodeTextArea" binding="codeArea" custom-create="true">
                     <constraints/>
-                    <properties>
-                      <name value="eventsTbl"/>
-                    </properties>
+                    <properties/>
                   </component>
                 </children>
               </scrollpane>

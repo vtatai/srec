@@ -40,7 +40,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
                 if (event.getID() != KeyEvent.KEY_TYPED) return;
                 if (((KeyEvent) event).getKeyChar() == '\t' && event.getSource() instanceof JTextField) {
                     JTextField tf = (JTextField) event.getSource();
-                    recorder.record(new CallEventCommand("type_special", tf, null, tf.getName(), "Tab"));
+                    recorder.record(new CallEventCommand("type_special", tf, tf.getName(), "Tab"));
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -80,7 +80,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
             if (!visibility.isShowingAndHasFocus(textField)) return;
             String locator = Utils.getLocator(textField);
             logger.debug("TextField event registered: '" + locator + "', value: '" + textField.getText() + "'");
-            recorder.record(new CallEventCommand("type", textField, null, true, locator, textField.getText()));
+            recorder.record(new CallEventCommand("type", textField, true, locator, textField.getText()));
         }
 
         public void removeUpdate(DocumentEvent e) {

@@ -1,6 +1,0 @@
-window_activate "TestForm"
-select "calculationCB", "Future Value"
-type "sinitialValueTF", "100"
-type_special "initialValueTF", "Tab"
-click "text=Ok"
-close "TestForm"

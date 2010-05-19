@@ -303,6 +303,11 @@
                 <artifactId>scannotation</artifactId>
                 <version>1.0.2</version>
             </dependency>
+            <dependency>
+                <groupId>org.fife</groupId>
+                <artifactId>rsyntaxtextarea</artifactId>
+                <version>1.4.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

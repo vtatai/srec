@@ -1,8 +1,5 @@
 package com.github.srec.command;
 
-import com.github.srec.command.exception.CommandExecutionException;
-import org.antlr.runtime.tree.CommonTree;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,53 +8,23 @@ import java.util.List;
  *
  * @author Victor Tatai
  */
-public class CallCommand extends BaseCommand implements ValueCommand {
-    protected List<ValueCommand> parameters = new ArrayList<ValueCommand>();
+public class CallCommand extends BaseCommand {
+    protected List<String> parameters = new ArrayList<String>();
 
-    public CallCommand(String name, CommonTree tree) {
-        super(name, tree);
+    public CallCommand(String name) {
+        super(name);
     }
 
-    @Override
-    public void run(ExecutionContext context) {
-        getValue(context);
+    public void addParameter(String param) {
+        parameters.add(param);
     }
 
-    @Override
-    public String getValue(ExecutionContext context) {
-        MethodCommand method = (MethodCommand) context.findSymbol(name);
-        if (method == null) throw new CommandExecutionException("Method " + name + " not found.");
-        return method.callMethod(context, convertParameters(context));
-    }
-
-    private String[] convertParameters(ExecutionContext context) {
-        String[] ret = new String[parameters.size()];
-        int i = 0;
-        for (ValueCommand parameter : parameters) {
-            ret[i++] = parameter.getValue(context);
-        }
-        return ret;
-    }
-
-    public void addParameter(ValueCommand v) {
-        parameters.add(v);
-    }
-
-    public List<ValueCommand> getParameters() {
+    public List<String> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<ValueCommand> parameters) {
+    public void setParameters(List<String> parameters) {
         this.parameters = parameters;
-    }
-
-    public ValueCommand getParameter(int index) {
-        return parameters == null || parameters.size() - 1 < index ? null : parameters.get(index);
-    }
-
-    public String getParameterString(int index) {
-        ValueCommand command = getParameter(index);
-        return command == null ? null : command.getName();
     }
 
     @Override

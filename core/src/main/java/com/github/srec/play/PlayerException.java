@@ -1,11 +1,23 @@
 package com.github.srec.play;
 
+import com.github.srec.SRecException;
+
 /**
- * Created by IntelliJ IDEA.
- * User: victor
- * Date: May 19, 2010
- * Time: 7:46:56 PM
- * To change this template use File | Settings | File Templates.
+ * @author Victor Tatai
  */
-public class PlayerException {
+public class PlayerException extends SRecException {
+    public PlayerException() {
+    }
+
+    public PlayerException(String message) {
+        super(message);
+    }
+
+    public PlayerException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public PlayerException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -42,7 +42,7 @@ public class ButtonClickRecorder extends AbstractComponentRecorder implements Ac
 
     public void actionPerformed(ActionEvent e) {
         AbstractButton button = (AbstractButton) e.getSource();
-        recorder.record(new CallEventCommand("click", button, null, extractComponentLocator(button)));
+        recorder.record(new CallEventCommand("click", button, extractComponentLocator(button)));
     }
 
     private String extractComponentLocator(AbstractButton button) {

@@ -1,25 +1,31 @@
 package com.github.srec.ui;
 
-import com.github.srec.SRecException;
-import com.github.srec.command.*;
-import com.github.srec.jemmy.JemmyDSL;
+import com.github.srec.command.CallEventCommand;
+import com.github.srec.play.Player;
 import com.github.srec.rec.Recorder;
-import com.github.srec.rec.RecorderCommandListener;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,19 +44,20 @@ public class SRecForm {
     private static final int RECENT_FILES_LIMIT = 5;
     private JButton recordButton;
     private JButton playButton;
-    private JTable eventsTbl;
     private JPanel mainPanel;
     private JButton launchButton;
     private JButton saveButton;
     private JButton openButton;
     private JTree fileTree;
     private JLabel statusBar;
+    private CodeTextArea codeArea;
+    private JScrollPane codeScrollPane;
     private DefaultMutableTreeNode root = new DefaultMutableTreeNode();
     private DefaultTreeModel treeModel = new DefaultTreeModel(root);
 
     private Recorder recorder;
 
-    protected CommandsTableModel tableModel;
+    private Player player = new Player();
 
     private JMenuItem reopenMenu;
 
@@ -60,20 +67,26 @@ public class SRecForm {
 
     private Timer statusBarTimer;
 
+    private File currentOpenFile;
+
+    private boolean currentOpenFileDirty;
+
     private Action openAction = new AbstractAction("Open") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                load();
-            } catch (IOException e1) {
-                error("Error loading script", e1);
-            }
+            load();
         }
     };
     private Action saveAction = new AbstractAction("Save") {
         @Override
         public void actionPerformed(ActionEvent e) {
             saveScript();
+        }
+    };
+    private Action closeAction = new AbstractAction("Close") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            closeScript();
         }
     };
     private Action recordAction = new AbstractAction("Record") {
@@ -91,7 +104,8 @@ public class SRecForm {
     private Action playAction = new AbstractAction("Play") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            play(recorder.getCommands());
+            codeArea.setCaretPosition(0);
+            play();
         }
     };
 
@@ -102,34 +116,14 @@ public class SRecForm {
                 new LaunchDialog(frame).setVisible(true);
             }
         });
-        recorder = new Recorder(ExecutionContextFactory.getInstance().create(null));
+        recorder = new Recorder(this);
         recorder.init();
-        JemmyDSL.init(frame);
-        recorder.addListener(new RecorderCommandListener() {
-            @Override
-            public void eventAdded(CallEventCommand event) {
-                tableModel.add(event);
-            }
-
-            @Override
-            public void eventsRemoved() {
-                tableModel.clear();
-            }
-
-            @Override
-            public void commandsAdded(List<Command> commands) {
-                tableModel.add(commands);
-            }
-
-            @Override
-            public void eventsUpdated(int index, List<Command> commands) {
-                tableModel.update(index, commands);
-            }
-        });
         recordButton.setAction(recordAction);
         saveButton.setAction(saveAction);
         openButton.setAction(openAction);
         playButton.setAction(playAction);
+
+        player.init();
 
         // Setup mnemonics
         saveButton.setMnemonic(KeyEvent.VK_S);
@@ -145,28 +139,64 @@ public class SRecForm {
                 error("Unexpected error", throwable);
             }
         });
+
+        // Setup application-wide keyboard shortcuts
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+                if (keyEvent.getID() != KeyEvent.KEY_PRESSED) return false;
+                if (!keyEvent.isControlDown()) return false;
+                if (keyEvent.getKeyCode() == KeyEvent.VK_S) {
+                    saveScript();
+                    return true;
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_O) {
+                    load();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-    public void play(final List<Command> events) {
+    /**
+     * Plays from the current caret position.
+     */
+    private void play() {
         Thread t = new Thread() {
             @Override
             public void run() {
-                int currentIndex = eventsTbl.getSelectedRow();
-                if (currentIndex < 0) currentIndex = 0;
-                for (int i = currentIndex; i < events.size(); i++) {
-                    Command command = events.get(i);
-                    eventsTbl.getSelectionModel().setSelectionInterval(i, i);
-                    play(command);
-                    try {
+                try {
+                    player.initPlay();
+                    boolean lastLine;
+                    do {
+                        lastLine = isLastLine();
+                        int lineNumber = codeArea.getCaretLineNumber() + 1;
+                        String line = getCurrentLine();
+                        player.play(line, lineNumber, null); // TODO
                         Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                    } while (!lastLine);
+                    logger.debug("Finished play");
+                } catch (BadLocationException e) {
+                    error(e.getMessage(), e);
+                } catch (InterruptedException e) {
+                    error(e.getMessage(), e);
                 }
-                status("Test played successfully!");
             }
         };
         t.start();
+    }
+
+    private String getCurrentLine() throws BadLocationException {
+        int start = codeArea.getLineStartOffsetOfCurrentLine();
+        int end = codeArea.getLineEndOffsetOfCurrentLine();
+        codeArea.select(start, end);
+        return codeArea.getText(start, end - start);
+    }
+
+    private boolean isLastLine() {
+        int end = codeArea.getLineEndOffsetOfCurrentLine();
+        int length = codeArea.getText().length();
+        return (end + 1 >= length);
     }
 
     private void status(final String message) {
@@ -191,8 +221,8 @@ public class SRecForm {
         statusBarTimer.start();
     }
 
-    private void play(Command command) {
-        command.run(recorder.getExecutionContext());
+    public void addTextNewLine(String text) {
+        codeArea.insert("\n" + text, codeArea.getCaretPosition());
     }
 
     public void showFrame(String[] args) {
@@ -245,22 +275,25 @@ public class SRecForm {
 
     private void error(String message, Throwable throwable) {
         JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
-        throwable.printStackTrace();
+        if (throwable != null) throwable.printStackTrace();
     }
 
     /**
      * Loads a file or directory by presenting the user a file chooser.
-     *
-     * @throws java.io.IOException In case there is an exception loading the file
      */
-    private void load() throws IOException {
-        final JFileChooser fc = new JFileChooser();
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int returnVal = fc.showOpenDialog(mainPanel);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            load(file);
+    private void load() {
+        try {
+            final JFileChooser fc = new JFileChooser();
+            fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
+            fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            int returnVal = fc.showOpenDialog(mainPanel);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                load(file);
+                addRecentFile(file.getCanonicalPath());
+            }
+        } catch (IOException e) {
+            error(e.getMessage(), e);
         }
     }
 
@@ -287,12 +320,6 @@ public class SRecForm {
             loadScript(file);
             if (file.getParentFile() != null) load(file.getParentFile());
         }
-        try {
-            addRecentFile(file.getCanonicalPath());
-            updateReopenMenu();
-        } catch (IOException e) {
-            error("Unexpected error obtaining file path", e);
-        }
     }
 
     /**
@@ -306,32 +333,55 @@ public class SRecForm {
             return;
         }
         assert !file.isDirectory();
+        String text = readFile(file);
+        codeArea.setText(text);
+        codeArea.requestFocus();
+        codeArea.setCaretPosition(0);
+        setCurrentOpenFile(file);
+    }
+
+    /**
+     * Reads an entire text file to a string.
+     *
+     * @param file The file
+     * @return The string read
+     */
+    private String readFile(File file) {
         try {
-            ExecutionContext executionContext = CommandSerializer.load(file);
-            List<Command> commands = executionContext.getCommands();
-            recorder.emptyCommands();
-            recorder.addCommands(commands);
-        } catch (SRecException e) {
-            error("Error loading script", e);
+            StringBuilder strb = new StringBuilder();
+            FileReader reader = new FileReader(file);
+            while (reader.ready()) {
+                strb.append((char) reader.read());
+            }
+            return strb.toString();
+        } catch (IOException e) {
+            error(e.getMessage(), e);
+            return null;
         }
     }
 
     /**
-     * Loads (ie shows) a method def commands in the UI.
+     * Replaces the last event written (current line) with the given event.
      *
-     * @param m The method
+     * @param event The event
      */
-    private void loadMethod(MethodScriptCommand m) {
-        List<Command> commands = m.getCommands();
-        recorder.emptyCommands();
-        recorder.addCommands(commands);
+    public void replaceLastEvent(CallEventCommand event) {
+        codeArea.replaceCurrentLine(event.print());
     }
 
     private void saveScript() {
-        if (recorder.getCommands().isEmpty()) {
+        if (StringUtils.isEmpty(codeArea.getText())) {
             JOptionPane.showMessageDialog(frame, "Nothing to save.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (currentOpenFile == null) {
+            saveNewScript();
+        } else if (currentOpenFileDirty) {
+            saveOpenScript();
+        }
+    }
+
+    private void saveNewScript() {
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
         fc.setApproveButtonText("Save");
@@ -340,13 +390,20 @@ public class SRecForm {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             saveScript(file);
+            setCurrentOpenFileClean();
         }
     }
 
+    private void saveOpenScript() {
+        saveScript(currentOpenFile);
+        setCurrentOpenFileClean();
+    }
+
     private void saveScript(File file) {
-        logger.debug("Opening: " + file.getName());
+        logger.debug("Saving: " + file.getName());
         try {
-            CommandSerializer.write(file, recorder.getCommands());
+            FileWriter writer = new FileWriter(file);
+            writer.write(codeArea.getText());
         } catch (IOException e) {
             error("Error saving script", e);
         }
@@ -368,6 +425,11 @@ public class SRecForm {
         final JMenuItem saveMenuItem = new JMenuItem("Save", KeyEvent.VK_S);
         saveMenuItem.setAction(saveAction);
         file.add(saveMenuItem);
+
+        final JMenuItem closeMenuItem = new JMenuItem("Close", KeyEvent.VK_C);
+        closeMenuItem.setAction(closeAction);
+        file.add(closeMenuItem);
+        closeAction.setEnabled(false);
 
         reopenMenu = new JMenu("Reopen");
         reopenMenu.setMnemonic(KeyEvent.VK_E);
@@ -410,7 +472,6 @@ public class SRecForm {
                         error("Error loading script", e1);
                     }
                     addRecentFile(menuItem.getText());
-                    updateReopenMenu();
                 }
             });
             reopenMenu.add(menuItem);
@@ -428,6 +489,54 @@ public class SRecForm {
             error("Error saving recent files list", e);
             e.printStackTrace();
         }
+        updateReopenMenu();
+    }
+
+    private void closeScript() {
+        if (currentOpenFile == null) return;
+        if (currentOpenFileDirty) {
+            int option = JOptionPane.showConfirmDialog(frame, "Save modified file " + currentOpenFile.getName() + "?",
+                    "Save modified file?", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                saveScript();
+            }
+        }
+        currentOpenFile = null;
+        currentOpenFileDirty = false;
+        codeArea.setText("");
+        updateTitle();
+    }
+
+    private void setCurrentOpenFile(File file) {
+        currentOpenFile = file;
+        closeAction.setEnabled(true);
+        setCurrentOpenFileClean();
+    }
+
+    private void updateTitle() {
+        StringBuilder strb = new StringBuilder();
+        if (currentOpenFileDirty) {
+            strb.append("* ");
+        }
+        strb.append("srec");
+        if (currentOpenFile != null) {
+            try {
+                strb.append(" ").append(currentOpenFile.getCanonicalPath());
+            } catch (IOException e) {
+                error(e.getMessage(), e);
+            }
+        }
+        frame.setTitle(strb.toString());
+    }
+
+    private void setCurrentOpenFileDirty() {
+        currentOpenFileDirty = true;
+        updateTitle();
+    }
+
+    private void setCurrentOpenFileClean() {
+        currentOpenFileDirty = false;
+        updateTitle();
     }
 
     public static void main(final String[] args) {
@@ -440,28 +549,45 @@ public class SRecForm {
     }
 
     private void createUIComponents() {
-        tableModel = new CommandsTableModel();
-        eventsTbl = new JTable(tableModel);
-        eventsTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
         fileTree = new JTree(treeModel);
         fileTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         fileTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
-                if (!(node instanceof UITestFileManager.FileNode || node instanceof UITestFileManager.MethodNode))
+                if (!(node instanceof UITestFileManager.FileNode))
                     return;
 
-                if (node instanceof UITestFileManager.FileNode) {
-                    UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
-                    loadScript(fileNode.getFile());
-                } else {
-                    UITestFileManager.MethodNode methodNode = (UITestFileManager.MethodNode) node;
-                    loadMethod(methodNode.getMethod());
+                UITestFileManager.FileNode fileNode = (UITestFileManager.FileNode) node;
+                loadScript(fileNode.getFile());
+                try {
+                    addRecentFile(fileNode.getFile().getCanonicalPath());
+                } catch (IOException e1) {
+                    error(e1.getMessage(), e1);
                 }
             }
         });
+
+        codeArea = new CodeTextArea();
+        codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_RUBY);
+        codeArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                setCurrentOpenFileDirty();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                setCurrentOpenFileDirty();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                setCurrentOpenFileDirty();
+            }
+        });
+
+        codeScrollPane = new RTextScrollPane();
     }
 
     /**
@@ -509,13 +635,11 @@ public class SRecForm {
         final JSplitPane splitPane1 = new JSplitPane();
         splitPane1.setDividerLocation(200);
         panel2.add(splitPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        splitPane1.setRightComponent(codeScrollPane);
+        codeScrollPane.setViewportView(codeArea);
         final JScrollPane scrollPane1 = new JScrollPane();
-        splitPane1.setRightComponent(scrollPane1);
-        eventsTbl.setName("eventsTbl");
-        scrollPane1.setViewportView(eventsTbl);
-        final JScrollPane scrollPane2 = new JScrollPane();
-        splitPane1.setLeftComponent(scrollPane2);
-        scrollPane2.setViewportView(fileTree);
+        splitPane1.setLeftComponent(scrollPane1);
+        scrollPane1.setViewportView(fileTree);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 0), -1, -1));
         mainPanel.add(panel3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 16), new Dimension(-1, 16), new Dimension(-1, 16), 0, false));

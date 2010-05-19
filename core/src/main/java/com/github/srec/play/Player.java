@@ -1,17 +1,13 @@
 package com.github.srec.play;
 
 import com.github.srec.Utils;
-import com.github.srec.command.Command;
-import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextFactory;
-import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseException;
-import com.github.srec.command.parser.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
 import org.apache.log4j.Logger;
+import org.jruby.embed.EvalFailedException;
+import org.jruby.embed.LocalVariableBehavior;
+import org.jruby.embed.ScriptingContainer;
 
 import java.io.*;
-import java.util.List;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
@@ -23,9 +19,9 @@ import static com.github.srec.Utils.runMain;
  */
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
-    private PlayerError error;
     private boolean throwError;
     private long commandInterval = 50;
+    private ScriptingContainer container;
 
     public Player init() {
         JemmyDSL.init();
@@ -69,47 +65,50 @@ public class Player {
         }
     }
 
+    /**
+     * Plays an input stream.
+     *
+     * @param is The input stream for the text
+     * @param file The file being played
+     * @return The Player
+     * @throws IOException In case there is an error reading from the input stream
+     */
     public Player play(InputStream is, File file) throws IOException {
-        ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
-        ScriptParser parser = new ScriptParser();
-        parser.parse(context, is);
-        if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
-        context.setPlayer(this);
-        play(context, context.getCommands());
+        initPlay();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        int lineNumber = 1;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            log.debug("Running line " + lineNumber + ", content: " + line);
+            play(line, lineNumber, file.getCanonicalPath());
+            lineNumber++;
+        }
         return this;
     }
 
-    public void play(ExecutionContext context, List<Command> commands) {
-        for (Command command : commands) {
-            log.debug("Running line: " + getLine(command) + ", command: " + command);
-            try {
-                command.run(context);
-            } catch (CommandExecutionException e) {
-                handleError(command, e);
-                break;
-            }
-            try {
-                Thread.sleep(commandInterval);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+    public Player initPlay() {
+        container = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
+        container.runScriptlet("require \"srec.rb\"");
+        container.runScriptlet("include SRec");
+        return this;
+    }
+
+    /**
+     * Play a line.
+     *
+     * @param line The line
+     * @param lineNumber The line number
+     * @param fileName The file name
+     * @return The Player
+     */
+    public Player play(String line, int lineNumber, String fileName) {
+        log.debug("Running file " + fileName + ", line " + lineNumber + ", content: " + line.trim());
+        try {
+            container.runScriptlet(line);
+        } catch (EvalFailedException e) {
+            throw new PlayerException(e);
         }
-    }
-
-    private String getLine(Command command) {
-        if (command.getTree() == null) return "<NO LINE>";
-        return "" + command.getTree().getLine();
-    }
-
-    private void handleError(Command command, CommandExecutionException e) {
-        error = new PlayerError(command.getTree().getLine(), command.getTree().getText(), e);
-        System.err.println("Error on line " + command.getTree().getLine() + ":");
-        System.err.println(command.getTree().toStringTree());
-        e.printStackTrace(System.err);
-    }
-
-    public PlayerError getError() {
-        return error;
+        return this;
     }
 
     public boolean isThrowError() {
@@ -133,9 +132,6 @@ public class Player {
 
         Player player = new Player().init();
         player.play(new File(args[1]));
-        if (player.getError() != null) {
-            System.err.println(player.getError());
-        }
 
         closeWindows();
     }

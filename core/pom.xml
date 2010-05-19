@@ -8,8 +8,26 @@
     <parent>
         <groupId>com.github.srec</groupId>
         <artifactId>srec</artifactId>
-        <version><!-- GLOBAL VERSION-->0.1.1-SNAPSHOT<!-- GLOBAL VERSION--></version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/ruby</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/ruby</directory>
+            </testResource>
+        </testResources>
+    </build>
     <dependencies>
         <dependency>
             <groupId>net.java.dev</groupId>
@@ -43,6 +61,18 @@
         <dependency>
             <groupId>net.sf.scannotation</groupId>
             <artifactId>scannotation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jruby.embed</groupId>
+            <artifactId>jruby-embed</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fife</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
         </dependency>
     </dependencies>
 </project>

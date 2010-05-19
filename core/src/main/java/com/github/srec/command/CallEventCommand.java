@@ -1,10 +1,9 @@
 package com.github.srec.command;
 
-import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.rec.Recorder;
-import org.antlr.runtime.tree.CommonTree;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * An actual event which was recorded.
@@ -20,20 +19,18 @@ public class CallEventCommand extends CallCommand {
      */
     private boolean collapseMultiple = true;
 
-    public CallEventCommand(String name, Component component, CommonTree tree, String... params) {
-        super(name, tree);
+    public CallEventCommand(String name, Component component, String... params) {
+        super(name);
         this.component = component;
         addParams(params);
     }
 
     private void addParams(String[] params) {
-        for (String param : params) {
-            parameters.add(new LiteralCommand(param));
-        }
+        parameters.addAll(Arrays.asList(params));
     }
 
-    public CallEventCommand(String name, Component component, CommonTree tree, boolean collapseMultiple, String... params) {
-        this(name, component, tree);
+    public CallEventCommand(String name, Component component, boolean collapseMultiple, String... params) {
+        this(name, component);
         this.collapseMultiple = collapseMultiple;
         addParams(params);
     }
@@ -52,9 +49,7 @@ public class CallEventCommand extends CallCommand {
 
     public String getComponentLocator() {
         if (parameters == null || parameters.size() == 0) return null;
-        if (!(parameters.get(0) instanceof LiteralCommand)) throw new CommandExecutionException(
-                "Component locator can only be determined during runtime");
-        return parameters.get(0).getValue(null);
+        return parameters.get(0);
     }
 
     public String getName() {
@@ -67,6 +62,16 @@ public class CallEventCommand extends CallCommand {
 
     public void setComponent(Component component) {
         this.component = component;
+    }
+
+    public String print() {
+        StringBuilder strb = new StringBuilder(name).append(" ");
+        for (String parameter : parameters) {
+            strb.append("\"").append(parameter + "\", ");
+        }
+        final String str = strb.toString();
+        if (str.endsWith(", ")) return str.substring(0, str.length() - 2);
+        return str;
     }
 
     @Override

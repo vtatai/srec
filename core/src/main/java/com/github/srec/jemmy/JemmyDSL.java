@@ -1,7 +1,7 @@
 package com.github.srec.jemmy;
 
+import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.Utils;
-import com.github.srec.command.exception.IllegalParametersException;
 import org.apache.log4j.Logger;
 import org.netbeans.jemmy.*;
 import org.netbeans.jemmy.operators.*;
@@ -9,6 +9,7 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -21,6 +22,7 @@ import static org.testng.Assert.assertEquals;
  *
  * @author Victor Tatai
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
 
@@ -130,8 +132,8 @@ public class JemmyDSL {
         return dialog;
     }
 
-    public static TextField textField(String name) {
-        return new TextField(name);
+    public static TextField textField(String locator) {
+        return new TextField(locator);
     }
 
     public static Button button(String locator) {
@@ -140,6 +142,10 @@ public class JemmyDSL {
 
     public static ComboBox comboBox(String locator) {
         return new ComboBox(locator);
+    }
+
+    public static CheckBox checkBox(String locator) {
+        return new CheckBox(locator);
     }
 
     public static Table table(String locator) {
@@ -155,8 +161,20 @@ public class JemmyDSL {
      * @param id       The id
      * @return The component found
      */
-    public static JComponentOperator find(String locator, String id, String findType) {
-        return find(locator, id, translateFindType(findType));
+    @SuppressWarnings({"unchecked"})
+    public static Component find(String locator, String id, String findType) {
+        JComponentOperator comp = find(locator, id, translateFindType(findType));
+        return convertFind(comp);
+    }
+
+    private static Component convertFind(JComponentOperator comp) {
+        if (comp instanceof JComboBoxOperator) return new ComboBox((JComboBoxOperator) comp);
+        if (comp instanceof JTextComponentOperator) return new TextField((JTextFieldOperator) comp);
+        if (comp instanceof JCheckBoxOperator) return new CheckBox((JCheckBoxOperator) comp);
+        if (comp instanceof JRadioButtonOperator) return new RadioButton((JRadioButtonOperator) comp);
+        if (comp instanceof JButtonOperator) return new Button((JButtonOperator) comp);
+        if (comp instanceof AbstractButtonOperator) return new GenericButton((AbstractButtonOperator) comp);
+        throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
     private static Class translateFindType(String findType) {
@@ -179,7 +197,7 @@ public class JemmyDSL {
      */
     private static <X extends JComponentOperator> X find(String locator, String id, Class<X> cl) {
         X x = find(locator, cl);
-        idMap.put(id, x);
+        if (id != null) idMap.put(id, x);
         return x;
     }
 
@@ -187,6 +205,7 @@ public class JemmyDSL {
         find(locator, JComponentOperator.class).clickMouse();
     }
 
+    @SuppressWarnings({"unchecked"})
     public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
         Map<String, String> locatorMap = Utils.parseLocator(locator);
         X component;
@@ -202,6 +221,9 @@ public class JemmyDSL {
             if (JTextComponentOperator.class.isAssignableFrom(clazz)) {
                 component = newInstance(clazz, container().getComponent(), new JTextComponentOperator.JTextComponentByTextFinder(locatorMap.get("text")));
             } else if (AbstractButtonOperator.class.isAssignableFrom(clazz)) {
+                component = newInstance(clazz, container().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
+            } else if (JComponentOperator.class.isAssignableFrom(clazz)) {
+                // Hack, we assume that what was really meant was AbstractButtonOperator
                 component = newInstance(clazz, container().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
             } else {
                 throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
@@ -259,7 +281,7 @@ public class JemmyDSL {
         }
     }
 
-    private static void waitComponentDisabled(final JComponentOperator op) throws InterruptedException {
+    private static void waitComponentDisabled(final ComponentOperator op) throws InterruptedException {
         Waiter waiter = new Waiter(new Waitable() {
             public Object actionProduced(Object obj) {
                 if (((java.awt.Component) obj).isEnabled()) {
@@ -279,15 +301,31 @@ public class JemmyDSL {
     }
 
 
-    private interface Component {
-        ComponentOperator getComponent();
+    public static abstract class Component {
+        public abstract ComponentOperator getComponent();
+
+        public void assertEnabled() {
+            try {
+                getComponent().waitComponentEnabled();
+            } catch (InterruptedException e) {
+                throw new JemmyDSLException(e);
+            }
+        }
+
+        public void assertDisabled() {
+            try {
+                waitComponentDisabled(getComponent());
+            } catch (InterruptedException e) {
+                throw new JemmyDSLException(e);
+            }
+        }
     }
 
-    private interface Container extends Component {
-        ContainerOperator getComponent();
+    public static abstract class Container extends Component {
+        public abstract ContainerOperator getComponent();
     }
 
-    public static class Frame implements Container {
+    public static class Frame extends Container {
         private JFrameOperator component;
 
         public Frame(String title) {
@@ -313,7 +351,7 @@ public class JemmyDSL {
         }
     }
 
-    public static class Dialog implements Container {
+    public static class Dialog extends Container {
         private JDialogOperator component;
 
         public Dialog(String title) {
@@ -334,11 +372,15 @@ public class JemmyDSL {
         }
     }
 
-    public static class TextField implements Component {
+    public static class TextField extends Component {
         private JTextFieldOperator component;
 
         public TextField(String locator) {
             component = find(locator, JTextFieldOperator.class);
+        }
+
+        public TextField(JTextFieldOperator component) {
+            this.component = component;
         }
 
         public TextField type(String text) {
@@ -368,6 +410,15 @@ public class JemmyDSL {
             return this;
         }
 
+        public TextField typeSpecial(String specialString) {
+            int key;
+            if (specialString.equals("Tab")) key = KeyEvent.VK_TAB;
+            else if (specialString.equals("End")) key = KeyEvent.VK_END;
+            else throw new UnsupportedFeatureException("Type special for " + specialString + " not supported");
+            type(key);
+            return this;
+        }
+
         public String text() {
             return component.getText();
         }
@@ -386,15 +437,22 @@ public class JemmyDSL {
         }
     }
 
-    public static class ComboBox implements Component {
+    public static class ComboBox extends Component {
         private JComboBoxOperator component;
 
         public ComboBox(String locator) {
             component = find(locator, JComboBoxOperator.class);
         }
 
+        public ComboBox(JComboBoxOperator comp) {
+            this.component = comp;
+        }
+
         public void select(String text) {
-            component.selectItem(text);
+            Map<String, String> selectedItem = Utils.parseLocator(text);
+            if (selectedItem.containsKey("name")) component.selectItem(selectedItem.get("name"));
+            else if (selectedItem.containsKey("index")) select(Integer.parseInt(selectedItem.get("index")));
+            else throw new IllegalParametersException("Illegal parameters " + text + " for select command");
         }
 
         public void select(int index) {
@@ -411,23 +469,75 @@ public class JemmyDSL {
         }
     }
 
-    public static class Button implements Component {
-        private JButtonOperator component;
+    public static class GenericButton extends Component {
+        protected AbstractButtonOperator component;
 
-        public Button(String locator) {
-            component = find(locator, JButtonOperator.class);
+        protected GenericButton() {}
+
+        public GenericButton(String locator) {
+            component = find(locator, AbstractButtonOperator.class);
+        }
+
+        public GenericButton(AbstractButtonOperator component) {
+            this.component = component;
         }
 
         public void click() {
             component.push();
         }
-
-        public JButtonOperator getComponent() {
+        
+        @Override
+        public AbstractButtonOperator getComponent() {
             return component;
         }
     }
 
-    public static class Table implements Component {
+    public static class Button extends GenericButton {
+        public Button(String locator) {
+            component = find(locator, JButtonOperator.class);
+        }
+
+        public Button(JButtonOperator component) {
+            super(component);
+        }
+
+        @Override
+        public JButtonOperator getComponent() {
+            return (JButtonOperator) component;
+        }
+    }
+
+    public static class CheckBox extends GenericButton {
+        public CheckBox(String locator) {
+            component = find(locator, JCheckBoxOperator.class);
+        }
+
+        public CheckBox(JCheckBoxOperator component) {
+            super(component);
+        }
+
+        @Override
+        public JCheckBoxOperator getComponent() {
+            return (JCheckBoxOperator) component;
+        }
+    }
+
+    public static class RadioButton extends GenericButton {
+        public RadioButton(String locator) {
+            component = find(locator, JRadioButtonOperator.class);
+        }
+
+        public RadioButton(JRadioButtonOperator component) {
+            super(component);
+        }
+
+        @Override
+        public JRadioButtonOperator getComponent() {
+            return (JRadioButtonOperator) component;
+        }
+    }
+
+    public static class Table extends Component {
         private JTableOperator component;
 
         public Table(String locator) {
