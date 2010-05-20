@@ -67,6 +67,10 @@ class XmlReader
       end
     when "assertenabled"
       @file.puts "assert_enabled \"id=#{reader['refid']}\", #{reader['enabled']}"
+    when "assertequals"
+      @file.puts "assert_equals \"#{reader['expectedobj']}\", \"id=#{reader['actualrefid']}\""
+    when "evaluate"
+      @file.puts "evaluate \"id=#{reader['refid']}\", #{reader['method']}, #{reader['id']}"
     when "#comment"
       @file.puts "\# #{reader.value}"
     else
@@ -105,6 +109,8 @@ class XmlReader
       "radio_button"
     when "javax.swing.JButton"
       "button"
+    when "javax.swing.JTable"
+      "table"
     else
       raise "Unsupported find class name #{clName}"
     end
@@ -116,6 +122,8 @@ class XmlReader
       "Tab"
     when "VK_END"
       "End"
+    when "VK_BACK_SPACE"
+      "Backspace"
     else
       raise "Not supported type_special character #{text}"
     end
