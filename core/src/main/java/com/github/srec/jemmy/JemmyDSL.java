@@ -203,6 +203,9 @@ public class JemmyDSL {
                 component = newInstance(clazz, container().getComponent(), new JTextComponentOperator.JTextComponentByTextFinder(locatorMap.get("text")));
             } else if (AbstractButtonOperator.class.isAssignableFrom(clazz)) {
                 component = newInstance(clazz, container().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
+            } else if (JComponentOperator.class.isAssignableFrom(clazz)) {
+                // Hack, we assume that what was really meant was AbstractButtonOperator
+                component = newInstance(clazz, container().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
             } else {
                 throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
             }
@@ -240,6 +243,11 @@ public class JemmyDSL {
             if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
             throw new JemmyDSLException(e);
         }
+    }
+
+    public static JComponent getSwingComponentById(String id) {
+        JComponentOperator op = idMap.get(id);
+        return (JComponent) op.getSource();
     }
 
     public static Label label(String locator) {

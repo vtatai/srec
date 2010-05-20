@@ -60,20 +60,26 @@ public class SRecForm {
 
     private Timer statusBarTimer;
 
+    private File currentOpenFile;
+
+    private boolean currentOpenFileDirty;
+
     private Action openAction = new AbstractAction("Open") {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                load();
-            } catch (IOException e1) {
-                error("Error loading script", e1);
-            }
+            load();
         }
     };
     private Action saveAction = new AbstractAction("Save") {
         @Override
         public void actionPerformed(ActionEvent e) {
             saveScript();
+        }
+    };
+    private Action closeAction = new AbstractAction("Close") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            closeScript();
         }
     };
     private Action recordAction = new AbstractAction("Record") {
@@ -142,7 +148,24 @@ public class SRecForm {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                error("Unexpected error", throwable);
+                error("Unexpected error: " + throwable.getMessage(), throwable);
+            }
+        });
+
+        // Setup application-wide keyboard shortcuts
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+                if (keyEvent.getID() != KeyEvent.KEY_PRESSED) return false;
+                if (!keyEvent.isControlDown()) return false;
+                if (keyEvent.getKeyCode() == KeyEvent.VK_S) {
+                    saveScript();
+                    return true;
+                } else if (keyEvent.getKeyCode() == KeyEvent.VK_O) {
+                    load();
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -250,17 +273,20 @@ public class SRecForm {
 
     /**
      * Loads a file or directory by presenting the user a file chooser.
-     *
-     * @throws java.io.IOException In case there is an exception loading the file
      */
-    private void load() throws IOException {
-        final JFileChooser fc = new JFileChooser();
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int returnVal = fc.showOpenDialog(mainPanel);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            load(file);
+    private void load() {
+        try {
+            final JFileChooser fc = new JFileChooser();
+            fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
+            fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            int returnVal = fc.showOpenDialog(mainPanel);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                load(file);
+                addRecentFile(file.getCanonicalPath());
+            }
+        } catch (IOException e) {
+            error(e.getMessage(), e);
         }
     }
 
@@ -287,12 +313,6 @@ public class SRecForm {
             loadScript(file);
             if (file.getParentFile() != null) load(file.getParentFile());
         }
-        try {
-            addRecentFile(file.getCanonicalPath());
-            updateReopenMenu();
-        } catch (IOException e) {
-            error("Unexpected error obtaining file path", e);
-        }
     }
 
     /**
@@ -314,6 +334,7 @@ public class SRecForm {
         } catch (SRecException e) {
             error("Error loading script", e);
         }
+        setCurrentOpenFile(file);
     }
 
     /**
@@ -332,6 +353,14 @@ public class SRecForm {
             JOptionPane.showMessageDialog(frame, "Nothing to save.", "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (currentOpenFile == null) {
+            saveNewScript();
+        } else if (currentOpenFileDirty) {
+            saveOpenScript();
+        }
+    }
+
+    private void saveNewScript() {
         final JFileChooser fc = new JFileChooser();
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Ruby files", "rb"));
         fc.setApproveButtonText("Save");
@@ -340,18 +369,23 @@ public class SRecForm {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             saveScript(file);
+            setCurrentOpenFileClean();
         }
     }
 
+    private void saveOpenScript() {
+        saveScript(currentOpenFile);
+        setCurrentOpenFileClean();
+    }
+
     private void saveScript(File file) {
-        logger.debug("Opening: " + file.getName());
+        logger.debug("Saving: " + file.getName());
         try {
             CommandSerializer.write(file, recorder.getCommands());
         } catch (IOException e) {
             error("Error saving script", e);
         }
     }
-
     private void shutdown() {
         recorder.shutdown();
     }
@@ -368,6 +402,11 @@ public class SRecForm {
         final JMenuItem saveMenuItem = new JMenuItem("Save", KeyEvent.VK_S);
         saveMenuItem.setAction(saveAction);
         file.add(saveMenuItem);
+
+        final JMenuItem closeMenuItem = new JMenuItem("Close", KeyEvent.VK_C);
+        closeMenuItem.setAction(closeAction);
+        file.add(closeMenuItem);
+        closeAction.setEnabled(false);
 
         reopenMenu = new JMenu("Reopen");
         reopenMenu.setMnemonic(KeyEvent.VK_E);
@@ -428,6 +467,53 @@ public class SRecForm {
             error("Error saving recent files list", e);
             e.printStackTrace();
         }
+    }
+
+    private void closeScript() {
+        if (currentOpenFile == null) return;
+        if (currentOpenFileDirty) {
+            int option = JOptionPane.showConfirmDialog(frame, "Save modified file " + currentOpenFile.getName() + "?",
+                    "Save modified file?", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                saveScript();
+            }
+        }
+        currentOpenFile = null;
+        currentOpenFileDirty = false;
+        tableModel.clear();
+        updateTitle();
+    }
+
+    private void setCurrentOpenFile(File file) {
+        currentOpenFile = file;
+        closeAction.setEnabled(true);
+        setCurrentOpenFileClean();
+    }
+
+    private void updateTitle() {
+        StringBuilder strb = new StringBuilder();
+        if (currentOpenFileDirty) {
+            strb.append("* ");
+        }
+        strb.append("srec");
+        if (currentOpenFile != null) {
+            try {
+                strb.append(" ").append(currentOpenFile.getCanonicalPath());
+            } catch (IOException e) {
+                error(e.getMessage(), e);
+            }
+        }
+        frame.setTitle(strb.toString());
+    }
+
+    private void setCurrentOpenFileDirty() {
+        currentOpenFileDirty = true;
+        updateTitle();
+    }
+
+    private void setCurrentOpenFileClean() {
+        currentOpenFileDirty = false;
+        updateTitle();
     }
 
     public static void main(final String[] args) {
