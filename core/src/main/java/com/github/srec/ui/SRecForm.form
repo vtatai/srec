@@ -97,7 +97,9 @@
                 <children>
                   <component id="8c011" class="com.github.srec.ui.CodeTextArea" binding="codeArea" custom-create="true">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <name value="codeArea"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

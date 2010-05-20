@@ -136,6 +136,10 @@ public class JemmyDSL {
         return new TextField(locator);
     }
 
+    public static TextArea textArea(String locator) {
+        return new TextArea(locator);
+    }
+
     public static Button button(String locator) {
         return new Button(locator);
     }
@@ -432,6 +436,40 @@ public class JemmyDSL {
         }
 
         public TextField assertEmpty() {
+            component.waitText("");
+            return this;
+        }
+    }
+
+    public static class TextArea extends Component {
+        private JTextAreaOperator component;
+
+        public TextArea(String locator) {
+            component = find(locator, JTextAreaOperator.class);
+        }
+
+        public TextArea(JTextAreaOperator component) {
+            this.component = component;
+        }
+
+        public TextArea type(String text) {
+            if (text.contains("\t") || text.contains("\r") || text.contains("\n")) {
+                throw new IllegalParametersException("Text cannot contain \\t \\r \\n");
+            }
+            component.setVerification(false);
+            component.typeText(text);
+            return this;
+        }
+
+        public String text() {
+            return component.getText();
+        }
+
+        public JTextAreaOperator getComponent() {
+            return component;
+        }
+
+        public TextArea assertEmpty() {
             component.waitText("");
             return this;
         }

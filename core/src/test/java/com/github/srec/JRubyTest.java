@@ -34,11 +34,11 @@ public class JRubyTest {
     }
 
     public void testFormScript() throws IOException {
-        testScript("src/test/resources/test_form.rb");
+        testScript("src/test/ruby/test_form.rb");
     }
 
     public void testFormLineByLine() throws IOException {
-        testLineByLine("src/test/resources/test_form.rb");
+        testLineByLine("src/test/ruby/test_form.rb");
     }
 
     public void testFormVarScript() throws IOException {

@@ -1,11 +1,13 @@
 package com.github.srec.ui;
 
+import com.github.srec.jemmy.JemmyDSL;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
 
 import static com.github.srec.jemmy.JemmyDSL.*;
+import static org.testng.Assert.assertTrue;
 
 @Test
 public class RecordingTest {
@@ -23,13 +25,11 @@ public class RecordingTest {
         frame("srec").activate();
         button("text=Stop");
 
-        table("eventsTbl").row(0).assertColumn(0, "window_activate").assertColumn(1, "TestForm");
-        table("eventsTbl").row(1)
-                .assertColumn(0, "type")
-                .assertColumn(1, "initialValueTF")
-                .assertColumn(2, "100");
-        table("eventsTbl").row(2).assertColumn(0, "click").assertColumn(1, "text=Ok");
-        table("eventsTbl").row(3).assertColumn(0, "select").assertColumn(1, "calculationCB");
+        String code = JemmyDSL.textArea("codeArea").text();
+        assertTrue(code.contains("window_activate \"TestForm\""));
+        assertTrue(code.contains("type \"initialValueTF\", \"100\""));
+        assertTrue(code.contains("click \"text=Ok\""));
+        assertTrue(code.contains("select \"calculationCB\""));
 
         frame("TestForm").close();
     }
@@ -42,7 +42,7 @@ public class RecordingTest {
     }
 
     public void load() throws IOException {
-        File scriptFile = new File("src/test/resources/test_form.rb");
+        File scriptFile = new File("src/test/ruby/test_form.rb");
         SRecForm.main(new String[] { });
         init();
         frame("srec");
@@ -52,18 +52,11 @@ public class RecordingTest {
         button("text=Open").click();
         frame("srec").activate();
 
-        table("eventsTbl").row(0).assertColumn(0, "window_activate").assertColumn(1, "TestForm");
-        table("eventsTbl").row(1)
-                .assertColumn(0, "select")
-                .assertColumn(1, "calculationCB")
-                .assertColumn(2, "Future Value");
-        table("eventsTbl").row(9).assertColumn(0, "close").assertColumn(1, "TestForm");
-
-        launch();
-
-        frame("srec").activate();
-        button("text=Play").click();
-
+        String code = JemmyDSL.textArea("codeArea").text();
+        assertTrue(code.contains("window_activate \"TestForm\""));
+        assertTrue(code.contains("select \"calculationCB\", \"Future Value\""));
+        assertTrue(code.contains("close \"TestForm\""));
+        
         frame("srec").close();
     }
 }

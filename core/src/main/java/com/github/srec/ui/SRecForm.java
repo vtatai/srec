@@ -636,6 +636,7 @@ public class SRecForm {
         splitPane1.setDividerLocation(200);
         panel2.add(splitPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         splitPane1.setRightComponent(codeScrollPane);
+        codeArea.setName("codeArea");
         codeScrollPane.setViewportView(codeArea);
         final JScrollPane scrollPane1 = new JScrollPane();
         splitPane1.setLeftComponent(scrollPane1);
