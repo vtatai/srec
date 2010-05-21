@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -12,6 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 public class SRecTestNGTest {
     @Parameters("script")
     public void test(String script) throws IOException, InvocationTargetException, InterruptedException {
-        new Player().init().play(IOUtils.toInputStream(script), null);
+        new Player().init().playFile(new File(script));
     }
 }

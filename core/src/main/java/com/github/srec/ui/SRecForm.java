@@ -136,7 +136,7 @@ public class SRecForm {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                error("Unexpected error", throwable);
+                error("Unexpected error: " + throwable.getMessage(), throwable);
             }
         });
 
@@ -166,19 +166,21 @@ public class SRecForm {
             @Override
             public void run() {
                 try {
-                    player.initPlay();
-                    boolean lastLine;
-                    do {
-                        lastLine = isLastLine();
-                        int lineNumber = codeArea.getCaretLineNumber() + 1;
-                        String line = getCurrentLine();
-                        player.play(line, lineNumber, null); // TODO
-                        Thread.sleep(1000);
-                    } while (!lastLine);
+                    player.playFile(currentOpenFile);
+//                    boolean lastLine;
+//                    do {
+//                        lastLine = isLastLine();
+//                        int lineNumber = codeArea.getCaretLineNumber() + 1;
+//                        String line = getCurrentLine();
+//                        player.playFile(currentOpenFile); //line, lineNumber, null); // TODO
+//                        Thread.sleep(1000);
+//                    } while (!lastLine);
                     logger.debug("Finished play");
-                } catch (BadLocationException e) {
-                    error(e.getMessage(), e);
+//                } catch (BadLocationException e) {
+//                    error(e.getMessage(), e);
                 } catch (InterruptedException e) {
+                    error(e.getMessage(), e);
+                } catch (IOException e) {
                     error(e.getMessage(), e);
                 }
             }

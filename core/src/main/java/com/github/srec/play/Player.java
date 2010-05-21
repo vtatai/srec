@@ -1,13 +1,15 @@
 package com.github.srec.play;
 
 import com.github.srec.Utils;
+import com.github.srec.debug.JRubyDebugger;
 import com.github.srec.jemmy.JemmyDSL;
 import org.apache.log4j.Logger;
-import org.jruby.embed.EvalFailedException;
-import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
@@ -61,52 +63,27 @@ public class Player {
             return this;
         } else {
             log.info("Playing file: " + file.getCanonicalPath());
-            return play(new FileInputStream(file), file);
+            try {
+                return playFile(file);
+            } catch (InterruptedException e) {
+                throw new PlayerException(e);
+            }
         }
     }
 
     /**
      * Plays an input stream.
      *
-     * @param is The input stream for the text
      * @param file The file being played
      * @return The Player
      * @throws IOException In case there is an error reading from the input stream
      */
-    public Player play(InputStream is, File file) throws IOException {
-        initPlay();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        int lineNumber = 1;
-        String line;
-        while ((line = reader.readLine()) != null) {
-            log.debug("Running line " + lineNumber + ", content: " + line);
-            play(line, lineNumber, file.getCanonicalPath());
-            lineNumber++;
-        }
-        return this;
-    }
-
-    public Player initPlay() {
-        container = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
-        container.runScriptlet("require \"srec.rb\"");
-        container.runScriptlet("include SRec");
-        return this;
-    }
-
-    /**
-     * Play a line.
-     *
-     * @param line The line
-     * @param lineNumber The line number
-     * @param fileName The file name
-     * @return The Player
-     */
-    public Player play(String line, int lineNumber, String fileName) {
-        log.debug("Running file " + fileName + ", line " + lineNumber + ", content: " + line.trim());
-        try {
-            container.runScriptlet(line);
-        } catch (EvalFailedException e) {
-            throw new PlayerException(e);
+    public Player playFile(File file) throws IOException, InterruptedException {
+        JRubyDebugger d = new JRubyDebugger();
+        d.start(file.getCanonicalPath());
+        while (d.isRunning()) {
+            d.step();
+            Thread.sleep(1000);
         }
         return this;
     }
