@@ -268,6 +268,11 @@ public class JemmyDSL {
         }
     }
 
+    public static JComponent getSwingComponentById(String id) {
+        JComponentOperator op = idMap.get(id);
+        return (JComponent) op.getSource();
+    }
+
     public static Label label(String locator) {
         return new Label(find(locator, JLabelOperator.class));
     }

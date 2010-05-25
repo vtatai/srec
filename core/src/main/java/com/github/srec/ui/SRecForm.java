@@ -335,7 +335,7 @@ public class SRecForm {
             return;
         }
         assert !file.isDirectory();
-        String text = readFile(file);
+        String text = readStringFile(file);
         codeArea.setText(text);
         codeArea.requestFocus();
         codeArea.setCaretPosition(0);
@@ -348,7 +348,7 @@ public class SRecForm {
      * @param file The file
      * @return The string read
      */
-    private String readFile(File file) {
+    private String readStringFile(File file) {
         try {
             StringBuilder strb = new StringBuilder();
             FileReader reader = new FileReader(file);
@@ -410,7 +410,6 @@ public class SRecForm {
             error("Error saving script", e);
         }
     }
-
     private void shutdown() {
         recorder.shutdown();
     }

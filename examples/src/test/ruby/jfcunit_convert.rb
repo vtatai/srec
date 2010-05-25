@@ -30,7 +30,7 @@ class XmlReader
     return if name == "#text"
     # puts "READ #{name}"
     case name
-    when "key" 
+    when "key"
       if reader['string']
         @file.puts "type \"id=#{reader['refid']}\", \"#{reader['string']}\""
       elsif reader['code']
@@ -68,9 +68,9 @@ class XmlReader
     when "assertenabled"
       @file.puts "assert_enabled \"id=#{reader['refid']}\", #{reader['enabled']}"
     when "assertequals"
-      @file.puts "assert_equals \"#{reader['expectedobj']}\", \"id=#{reader['actualrefid']}\""
+      @file.puts "assert_equals \"id=#{reader['actualrefid']}\", \"#{reader['expectedobj']}\""
     when "evaluate"
-      @file.puts "evaluate \"id=#{reader['refid']}\", #{reader['method']}, #{reader['id']}"
+      @file.puts "evaluate \"id=#{reader['refid']}\", \"#{reader['method']}\", \"#{reader['id']}\""
     when "#comment"
       @file.puts "\# #{reader.value}"
     else
