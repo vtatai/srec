@@ -1,15 +1,17 @@
 package com.github.srec.play;
 
 import com.github.srec.Utils;
-import com.github.srec.debug.JRubyDebugger;
+import com.github.srec.command.Command;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextFactory;
+import com.github.srec.command.exception.CommandExecutionException;
+import com.github.srec.command.parser.ParseException;
+import com.github.srec.command.parser.antlr.ScriptParser;
 import com.github.srec.jemmy.JemmyDSL;
 import org.apache.log4j.Logger;
-import org.jruby.embed.ScriptingContainer;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
+import java.util.List;
 
 import static com.github.srec.Utils.closeWindows;
 import static com.github.srec.Utils.runMain;
@@ -21,9 +23,9 @@ import static com.github.srec.Utils.runMain;
  */
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
+    private PlayerError error;
     private boolean throwError;
     private long commandInterval = 50;
-    private ScriptingContainer container;
 
     public Player init() {
         JemmyDSL.init();
@@ -63,29 +65,51 @@ public class Player {
             return this;
         } else {
             log.info("Playing file: " + file.getCanonicalPath());
+            return play(new FileInputStream(file), file);
+        }
+    }
+
+    public Player play(InputStream is, File file) throws IOException {
+        ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
+        ScriptParser parser = new ScriptParser();
+        parser.parse(context, is);
+        if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
+        context.setPlayer(this);
+        play(context, context.getCommands());
+        return this;
+    }
+
+    public void play(ExecutionContext context, List<Command> commands) {
+        for (Command command : commands) {
+            log.debug("Running line: " + getLine(command) + ", command: " + command);
             try {
-                return playFile(file);
+                command.run(context);
+            } catch (CommandExecutionException e) {
+                handleError(command, e);
+                break;
+            }
+            try {
+                Thread.sleep(commandInterval);
             } catch (InterruptedException e) {
-                throw new PlayerException(e);
+                throw new RuntimeException(e);
             }
         }
     }
 
-    /**
-     * Plays an input stream.
-     *
-     * @param file The file being played
-     * @return The Player
-     * @throws IOException In case there is an error reading from the input stream
-     */
-    public Player playFile(File file) throws IOException, InterruptedException {
-        JRubyDebugger d = new JRubyDebugger();
-        d.start(file.getCanonicalPath());
-        while (d.isRunning()) {
-            d.step();
-            Thread.sleep(1000);
-        }
-        return this;
+    private String getLine(Command command) {
+        if (command.getLocation() == null) return "<NO LINE>";
+        return "" + command.getLocation().getLineNumber();
+    }
+
+    private void handleError(Command command, CommandExecutionException e) {
+        error = new PlayerError(command.getLocation().getLineNumber(), command.getLocation().getLine(), e);
+        System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
+        System.err.println(command.getLocation().getLine());
+        e.printStackTrace(System.err);
+    }
+
+    public PlayerError getError() {
+        return error;
     }
 
     public boolean isThrowError() {
@@ -109,6 +133,9 @@ public class Player {
 
         Player player = new Player().init();
         player.play(new File(args[1]));
+        if (player.getError() != null) {
+            System.err.println(player.getError());
+        }
 
         closeWindows();
     }

@@ -1,6 +1,6 @@
 package com.github.srec.ui;
 
-import com.github.srec.command.CallEventCommand;
+import com.github.srec.command.MethodCallEventCommand;
 import com.github.srec.play.Player;
 import com.github.srec.rec.Recorder;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -17,7 +17,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -64,8 +63,6 @@ public class SRecForm {
     private List<String> recentFiles = new ArrayList<String>();
 
     protected JFrame frame = new JFrame("srec");
-
-    private Timer statusBarTimer;
 
     private File currentOpenFile;
 
@@ -166,39 +163,16 @@ public class SRecForm {
             @Override
             public void run() {
                 try {
-                    player.playFile(currentOpenFile);
-//                    boolean lastLine;
-//                    do {
-//                        lastLine = isLastLine();
-//                        int lineNumber = codeArea.getCaretLineNumber() + 1;
-//                        String line = getCurrentLine();
-//                        player.playFile(currentOpenFile); //line, lineNumber, null); // TODO
-//                        Thread.sleep(1000);
-//                    } while (!lastLine);
+                    status("Starting script...");
+                    player.play(currentOpenFile);
                     logger.debug("Finished play");
-//                } catch (BadLocationException e) {
-//                    error(e.getMessage(), e);
-                } catch (InterruptedException e) {
-                    error(e.getMessage(), e);
+                    status("Finished playing script");
                 } catch (IOException e) {
                     error(e.getMessage(), e);
                 }
             }
         };
         t.start();
-    }
-
-    private String getCurrentLine() throws BadLocationException {
-        int start = codeArea.getLineStartOffsetOfCurrentLine();
-        int end = codeArea.getLineEndOffsetOfCurrentLine();
-        codeArea.select(start, end);
-        return codeArea.getText(start, end - start);
-    }
-
-    private boolean isLastLine() {
-        int end = codeArea.getLineEndOffsetOfCurrentLine();
-        int length = codeArea.getText().length();
-        return (end + 1 >= length);
     }
 
     private void status(final String message) {
@@ -214,7 +188,7 @@ public class SRecForm {
         } catch (InvocationTargetException e) {
             error(e.getMessage(), e);
         }
-        statusBarTimer = new Timer(10000, new ActionListener() {
+        Timer statusBarTimer = new Timer(10000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 statusBar.setText("");
@@ -367,7 +341,7 @@ public class SRecForm {
      *
      * @param event The event
      */
-    public void replaceLastEvent(CallEventCommand event) {
+    public void replaceLastEvent(MethodCallEventCommand event) {
         codeArea.replaceCurrentLine(event.print());
     }
 

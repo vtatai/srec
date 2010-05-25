@@ -1,7 +1,7 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.Utils;
-import com.github.srec.command.CallEventCommand;
+import com.github.srec.command.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
 
 import javax.swing.text.JTextComponent;
@@ -20,6 +20,6 @@ public class CheckTextRecorder extends AbstractCheckRecorder {
 
     protected void check(Component source) {
         JTextComponent component = (JTextComponent) source;
-        recorder.record(new CallEventCommand("assert", component, Utils.getLocator(component), component.getText()));
+        recorder.record(new MethodCallEventCommand("assert", component, null, Utils.getLocator(component), component.getText()));
     }
 }

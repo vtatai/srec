@@ -1,5 +1,6 @@
 package com.github.srec;
 
+import com.github.srec.command.value.Value;
 import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
@@ -115,11 +116,11 @@ public final class Utils {
         return locator;
     }
 
-    public static String asString(String[] parameters) {
+    public static String asString(Value[] parameters) {
         if (parameters == null || parameters.length == 0) return "";
-        StringBuilder strb = new StringBuilder(parameters[0]);
+        StringBuilder strb = new StringBuilder(parameters[0].toString());
         for (int i = 1; i < parameters.length; i++) {
-            String parameter = parameters[i];
+            String parameter = parameters[i].toString();
             strb.append(", ").append(parameter);
         }
         return strb.toString();

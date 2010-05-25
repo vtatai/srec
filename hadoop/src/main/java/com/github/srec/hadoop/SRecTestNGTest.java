@@ -1,7 +1,6 @@
 package com.github.srec.hadoop;
 
 import com.github.srec.play.Player;
-import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -13,6 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 public class SRecTestNGTest {
     @Parameters("script")
     public void test(String script) throws IOException, InvocationTargetException, InterruptedException {
-        new Player().init().playFile(new File(script));
+        new Player().init().play(new File(script));
     }
 }

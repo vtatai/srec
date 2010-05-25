@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.command.CallEventCommand;
+import com.github.srec.command.MethodCallEventCommand;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
 import com.github.srec.ui.SRecForm;
@@ -27,7 +27,7 @@ public class Recorder implements EventRecorder {
      */
     private List<Container> ignoredContainers = new ArrayList<Container>();
     private boolean recording;
-    private CallEventCommand lastEvent;
+    private MethodCallEventCommand lastEvent;
 
     public Recorder(SRecForm form) {
         srecForm = form;
@@ -50,7 +50,7 @@ public class Recorder implements EventRecorder {
         }
     }
 
-    public void record(CallEventCommand event) {
+    public void record(MethodCallEventCommand event) {
         if (!recording || isIgnored(event.getComponent()) || isOnJavaConsole(event.getComponent())) return;
         if (StringUtils.isBlank(event.getComponentLocator())) {
             logger.warn("Component has no way of being located (no name or label): " + event.getComponent());
@@ -60,7 +60,7 @@ public class Recorder implements EventRecorder {
         lastEvent = event;
     }
 
-    public void addEvent(CallEventCommand event) {
+    public void addEvent(MethodCallEventCommand event) {
         srecForm.addTextNewLine(event.print());
     }
 
@@ -93,7 +93,7 @@ public class Recorder implements EventRecorder {
         return null;
     }
 
-    public void replaceLastEvent(CallEventCommand event) {
+    public void replaceLastEvent(MethodCallEventCommand event) {
         logger.debug("Replacing the last event with: " + event);
         srecForm.replaceLastEvent(event);
     }
@@ -110,7 +110,7 @@ public class Recorder implements EventRecorder {
         this.recording = recording;
     }
 
-    public CallEventCommand getLastEvent() {
+    public MethodCallEventCommand getLastEvent() {
         return lastEvent;
     }
 }
