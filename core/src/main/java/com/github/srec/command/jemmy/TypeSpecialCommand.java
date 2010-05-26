@@ -16,10 +16,12 @@ package com.github.srec.command.jemmy;
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
 import java.awt.event.KeyEvent;
+import java.util.Map;
 
 import static com.github.srec.jemmy.JemmyDSL.textField;
 
@@ -29,16 +31,16 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @ExecutionContextCommand
 public class TypeSpecialCommand extends JemmyEventCommand {
     public TypeSpecialCommand() {
-        super("type_special", "componentLocator", "text");
+        super("type_special", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         int key;
-        String keyString = coerceToString(params[1]);
+        String keyString = coerceToString(params.get("text"), ctx);
         if ("Tab".equals(keyString)) key = KeyEvent.VK_TAB;
         else if ("End".equals(keyString)) key = KeyEvent.VK_END;
-        else throw new UnsupportedFeatureException("Type special for " + params[1] + " not supported");
-        textField(coerceToString(params[0])).type(key);
+        else throw new UnsupportedFeatureException("Type special for " + params.get("text") + " not supported");
+        textField(coerceToString(params.get(LOCATOR), ctx)).type(key);
     }
 }

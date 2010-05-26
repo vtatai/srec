@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 
 /**
  * Low level event recorder.

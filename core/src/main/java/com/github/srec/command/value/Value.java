@@ -6,8 +6,8 @@ package com.github.srec.command.value;
  * @author Victor Tatai
  */
 public class Value <T> {
-    private Type type;
-    private T value;
+    protected Type type;
+    protected T value;
 
     public Value(Type type) {
         this.type = type;

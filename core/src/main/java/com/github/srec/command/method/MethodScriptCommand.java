@@ -11,22 +11,24 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.method;
 
 import com.github.srec.Utils;
+import com.github.srec.command.*;
 import com.github.srec.command.value.Value;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A method defined by a script.
  *
  * @author Victor Tatai
  */
-public class MethodScriptCommand extends MethodCommand {
+public class MethodScriptCommand extends MethodCommand implements BlockCommand {
     private static final Logger logger = Logger.getLogger(MethodScriptCommand.class);
     protected List<Command> commands = new ArrayList<Command>();
     private File fileRead;
@@ -37,9 +39,13 @@ public class MethodScriptCommand extends MethodCommand {
     }
 
     @Override
-    public Value internalCallMethod(ExecutionContext context, Value... params) {
+    public Value internalCallMethod(ExecutionContext context, Map<String, Value> params) {
         logger.debug("Call method " + name + "(" + Utils.asString(params) + ")");
-        context.getPlayer().play(new NestedExecutionContext(context, context.getFile()), commands);
+        final NestedExecutionContext nestedContext = new NestedExecutionContext(context, context.getFile());
+        for (Map.Entry<String, Value> entry : params.entrySet()) {
+            nestedContext.addSymbol(new VarCommand(entry.getKey(), location, entry.getValue()));
+        }
+        context.getPlayer().play(nestedContext, commands);
         return null;
     }
 
@@ -48,7 +54,7 @@ public class MethodScriptCommand extends MethodCommand {
      *
      * @param command The command to add
      */
-    public void add(Command command) {
+    public void addCommand(Command command) {
         commands.add(command);
     }
 

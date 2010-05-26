@@ -1,6 +1,7 @@
 package com.github.srec.command.parser.antlr;
 
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.TestSuite;
 import com.github.srec.command.parser.ParseError;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
@@ -20,15 +21,16 @@ import java.util.List;
 public class ScriptParser implements Parser {
     private Visitor visitor;
 
-    public void parse(ExecutionContext context, File file) {
+    public TestSuite parse(ExecutionContext context, File file) {
         try {
-            parse(context, new FileInputStream(file));
+            return parse(context, new FileInputStream(file), file);
         } catch (FileNotFoundException e) {
             throw new ParseException(e);
         }
     }
 
-    public void parse(ExecutionContext context, InputStream is) {
+    @Override
+    public TestSuite parse(ExecutionContext context, InputStream is, File file) {
         try {
             ANTLRInputStream input = new ANTLRInputStream(is);
 
@@ -47,6 +49,7 @@ public class ScriptParser implements Parser {
         } catch (IOException e) {
             throw new ParseException(e);
         }
+        return null;
     }
 
     public List<ParseError> getErrors() {

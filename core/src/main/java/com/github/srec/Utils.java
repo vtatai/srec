@@ -1,7 +1,8 @@
 package com.github.srec;
 
+import com.github.srec.command.LiteralCommand;
+import com.github.srec.command.ValueCommand;
 import com.github.srec.command.value.Value;
-import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,14 +28,6 @@ public final class Utils {
     public static String quote(String str) {
         if (str == null) return null;
         return "\"" + str + "\"";
-    }
-
-    public static String unquote(String str) {
-        if (StringUtils.isBlank(str)) return str;
-        final int first = str.indexOf('"');
-        final int last = str.lastIndexOf('"');
-        if (first == -1 || first == last) return str;
-        return str.substring(first + 1, last);
     }
 
     public static JLabel getLabelFor(Container container, Component component) {
@@ -116,14 +109,15 @@ public final class Utils {
         return locator;
     }
 
-    public static String asString(Value[] parameters) {
-        if (parameters == null || parameters.length == 0) return "";
-        StringBuilder strb = new StringBuilder(parameters[0].toString());
-        for (int i = 1; i < parameters.length; i++) {
-            String parameter = parameters[i].toString();
-            strb.append(", ").append(parameter);
+    public static String asString(Map<String, Value> parameters) {
+        if (parameters == null) return "";
+        StringBuilder strb = new StringBuilder();
+        for (Map.Entry<String, Value> entry : parameters.entrySet()) {
+            String parameter = entry.getValue().toString();
+            strb.append(parameter).append(", ");
         }
-        return strb.toString();
+        final String s = strb.toString();
+        return s.endsWith(", ") ? s.substring(0, s.length() - 2) : s;
     }
 
     /**
@@ -138,4 +132,21 @@ public final class Utils {
         }
         return strings;
     }
+
+    /**
+     * Utility method useful for creating a parameter map.
+     *
+     * @param params The params, should be in the form "param name", "param value"
+     * @return The parameters map
+     */
+    public static Map<String, ValueCommand> createParameterMap(String... params) {
+        assert params.length % 2 == 0;
+        Map<String, ValueCommand> ret = new HashMap<String, ValueCommand>();
+        for (int i = 0; i < params.length; i = i + 2) {
+            String param = params[i];
+            String value = params[i + 1];
+            ret.put(param, new LiteralCommand(value));
+        }
+        return ret;
+    }    
 }

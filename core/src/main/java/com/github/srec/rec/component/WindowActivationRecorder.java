@@ -1,12 +1,14 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.WindowEvent;
+
+import static com.github.srec.Utils.createParameterMap;
 
 /**
  * Understands recording window activation events.
@@ -34,7 +36,8 @@ public class WindowActivationRecorder implements ComponentRecorder, AWTEventList
             if (windowEvent.getID() == WindowEvent.WINDOW_ACTIVATED) {
                 if (windowEvent.getWindow() instanceof JFrame) {
                     JFrame frame = (JFrame) windowEvent.getWindow();
-                    recorder.record(new MethodCallEventCommand("window_activate", frame, null, frame.getTitle()));
+                    recorder.record(new MethodCallEventCommand("window_activate", frame, null,
+                            createParameterMap("locator", frame.getTitle())));
                 }
             }
         }

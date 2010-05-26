@@ -1,7 +1,7 @@
 package com.github.srec.rec.component;
 
 import com.github.srec.Utils;
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
 import org.apache.log4j.Logger;
 
@@ -14,6 +14,8 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.github.srec.Utils.createParameterMap;
 
 /**
  * Understands recording text entered in text fields.
@@ -40,7 +42,8 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
                 if (event.getID() != KeyEvent.KEY_TYPED) return;
                 if (((KeyEvent) event).getKeyChar() == '\t' && event.getSource() instanceof JTextField) {
                     JTextField tf = (JTextField) event.getSource();
-                    recorder.record(new MethodCallEventCommand("type_special", tf, null, tf.getName(), "Tab"));
+                    recorder.record(new MethodCallEventCommand("type_special", tf, null,
+                            createParameterMap("locator", tf.getName(), "text", "Tab")));
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
@@ -80,7 +83,7 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
             if (!visibility.isShowingAndHasFocus(textField)) return;
             String locator = Utils.getLocator(textField);
             logger.debug("TextField event registered: '" + locator + "', value: '" + textField.getText() + "'");
-            recorder.record(new MethodCallEventCommand("type", textField, null, true, locator, textField.getText()));
+            recorder.record(new MethodCallEventCommand("type", textField, null, createParameterMap("locator", locator, "text", textField.getText()), true));
         }
 
         public void removeUpdate(DocumentEvent e) {

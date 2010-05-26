@@ -2,8 +2,11 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
+
+import java.util.Map;
 
 import static com.github.srec.jemmy.JemmyDSL.textField;
 
@@ -13,11 +16,11 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @ExecutionContextCommand
 public class AssertCommand extends JemmyEventCommand {
     public AssertCommand() {
-        super("assert", "componentLocator", "text");
+        super("assert", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
-        textField(coerceToString(get("componentLocator", params))).assertText(coerceToString(get("text", params)));
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
+        textField(coerceToString(params.get(LOCATOR), ctx)).assertText(coerceToString(params.get("text"), ctx));
     }
 }

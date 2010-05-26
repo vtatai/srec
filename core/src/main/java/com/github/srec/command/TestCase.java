@@ -14,9 +14,26 @@
 package com.github.srec.command;
 
 /**
- * A command which should also be stored as a symbol for later reference in a script.
- * 
  * @author Victor Tatai
  */
-public interface CommandSymbol extends Command {
+public class TestCase {
+    private ExecutionContext executionContext;
+    private String name;
+
+    public TestCase(String name, ExecutionContext executionContext) {
+        this.name = name;
+        this.executionContext = executionContext;
+    }
+
+    public ExecutionContext getExecutionContext() {
+        return executionContext;
+    }
+
+    public void setExecutionContext(ExecutionContext executionContext) {
+        this.executionContext = executionContext;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

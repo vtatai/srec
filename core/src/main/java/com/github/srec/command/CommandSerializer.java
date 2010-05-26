@@ -1,5 +1,22 @@
+/*
+ * Copyright 2010 Victor Tatai
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
+ */
+
 package com.github.srec.command;
 
+import com.github.srec.command.method.MethodCallCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCommand;
+import com.github.srec.command.method.MethodScriptCommand;
 import com.github.srec.command.parser.antlr.ScriptParser;
 import com.github.srec.rec.EventReaderException;
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.srec.Utils.quote;
 
@@ -54,16 +72,16 @@ public class CommandSerializer {
     private static void print(MethodCallEventCommand event, Writer writer) {
         if (StringUtils.isBlank(event.getComponentLocator())) return;
         StringBuilder strb = new StringBuilder(event.getName()).append(" ").append(quote(event.getComponentLocator()));
-        for (ValueCommand arg : event.getParameters()) {
-            strb.append(", ").append(quote(arg.getName()));
+        for (Map.Entry<String, ValueCommand> entry : event.getParameters().entrySet()) {
+            strb.append(", ").append(entry.getKey()).append(": ").append(entry.getValue().toString());
         }
         writer.println(strb.toString());
     }
 
     private static void print(MethodCallCommand command, Writer writer) {
         StringBuilder strb = new StringBuilder(command.getName());
-        for (ValueCommand arg : command.getParameters()) {
-            strb.append(arg).append(", ");
+        for (Map.Entry<String, ValueCommand> entry : command.getParameters().entrySet()) {
+            strb.append(entry.getKey()).append(":").append(entry.getValue().toString()).append(", ");
         }
         String s = strb.toString();
         if (s.endsWith(", ")) s = s.substring(0, s.length() - 2);
@@ -72,8 +90,8 @@ public class CommandSerializer {
 
     private static void print(MethodScriptCommand command, Writer writer) {
         StringBuilder strb = new StringBuilder("def ").append(command.getName()).append("(");
-        for (MethodCommand.Parameter arg : command.getParameters()) {
-            strb.append(arg.getName()).append(", ");
+        for (String arg : command.getParameters().keySet()) {
+            strb.append(arg).append(", ");
         }
         String s = strb.toString();
         if (s.endsWith(", ")) strb.delete(s.length() - 2, s.length());

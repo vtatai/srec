@@ -1,6 +1,6 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
 import com.github.srec.rec.common.ComponentDecoder;
 
@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
+import static com.github.srec.Utils.createParameterMap;
 
 /**
  * Understands recording item listeners.
@@ -43,7 +45,8 @@ public class SelectDropDownRecorder extends AbstractComponentRecorder implements
             if (!visibility.isShowingAndHasFocus(combo)) return;
             ListCellRenderer renderer = combo.getRenderer();
             Component rendererComponent = renderer.getListCellRendererComponent(DUMMY_LIST, combo.getSelectedItem(), combo.getSelectedIndex(), false, false);
-            recorder.record(new MethodCallEventCommand("select", combo, null, combo.getName(), decoder.decode(rendererComponent)));
+            recorder.record(new MethodCallEventCommand("select", combo, null,
+                    createParameterMap("locator", combo.getName(), "item", decoder.decode(rendererComponent))));
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.github.srec.ui;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.play.Player;
 import com.github.srec.rec.Recorder;
 import com.intellij.uiDesigner.core.GridConstraints;

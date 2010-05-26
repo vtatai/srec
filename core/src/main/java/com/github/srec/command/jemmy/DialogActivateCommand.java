@@ -5,6 +5,8 @@ import com.github.srec.command.ExecutionContextCommand;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
+import java.util.Map;
+
 import static com.github.srec.jemmy.JemmyDSL.dialog;
 
 /**
@@ -13,11 +15,11 @@ import static com.github.srec.jemmy.JemmyDSL.dialog;
 @ExecutionContextCommand
 public class DialogActivateCommand extends JemmyEventCommand {
     public DialogActivateCommand() {
-        super("dialog_activate", "componentLocator");
+        super("dialog_activate", createParametersDefinition(LOCATOR));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
-        dialog(coerceToString(params[0]));
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
+        dialog(coerceToString(params.get(LOCATOR), ctx));
     }
 }

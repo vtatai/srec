@@ -1,6 +1,6 @@
 package com.github.srec.rec;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
 import com.github.srec.ui.SRecForm;

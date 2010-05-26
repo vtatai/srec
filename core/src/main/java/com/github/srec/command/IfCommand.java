@@ -15,38 +15,34 @@ package com.github.srec.command;
 
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.command.value.BooleanValue;
+import com.github.srec.command.value.NilValue;
 import com.github.srec.command.value.Value;
 
 /**
- * Represents a variable declaration.
+ * An if statement.
  *
  * @author Victor Tatai
  */
-public class VarCommand extends BaseCommand implements CommandSymbol, ValueCommand {
-    private Value value;
+public class IfCommand extends AbstractBlockCommand {
+    private ValueCommand condition;
 
-    public VarCommand(String name, Value value) {
+    public IfCommand(String name, ValueCommand condition) {
         super(name);
-        this.value = value;
+        this.condition = condition;
     }
 
-    public VarCommand(String name, ParseLocation location, Value value) {
+    public IfCommand(String name, ParseLocation location, ValueCommand condition) {
         super(name, location);
-        this.value = value;
+        this.condition = condition;
     }
 
     @Override
     public void run(ExecutionContext context) throws CommandExecutionException {
-        // Do nothing for now
-    }
-
-    @Override
-    public Value getValue(ExecutionContext context) {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return getName();
+        Value v = condition.getValue(context);
+        if (v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get())) return; 
+        for (Command command : commands) {
+            command.run(context);
+        }
     }
 }

@@ -52,10 +52,21 @@ public class ExecutionContext {
     }
 
     /**
+     * Copy constructor, does a shallow copy of the commands, symbols and load path.
+     *
+     * @param other The other execution context
+     */
+    public ExecutionContext(ExecutionContext other) {
+        commands.addAll(other.getCommands());
+        symbols.putAll(other.getSymbols());
+        loadPath.addAll(other.getLoadPath());
+    }
+    
+    /**
      * Method that should be used to effectively locate symbols.
      *
      * @param name The symbol name
-     * @return The symbol
+     * @return The symbol, null if not found
      */
     public CommandSymbol findSymbol(String name) {
         return symbols.get(name);

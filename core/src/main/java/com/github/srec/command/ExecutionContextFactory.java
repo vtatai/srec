@@ -1,6 +1,7 @@
 package com.github.srec.command;
 
 import com.github.srec.SRecException;
+import com.github.srec.command.method.MethodCommand;
 import org.scannotation.AnnotationDB;
 import org.scannotation.ClasspathUrlFinder;
 

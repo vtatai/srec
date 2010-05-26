@@ -2,6 +2,7 @@ package com.github.srec.command;
 
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.command.value.StringValue;
 import com.github.srec.command.value.Value;
 
 /**
@@ -17,6 +18,16 @@ public class LiteralCommand extends BaseCommand implements ValueCommand {
         this.value = value;
     }
 
+    /**
+     * Shortcut constructor for a string literal.
+     *
+     * @param value The value
+     */
+    public LiteralCommand(String value) {
+        super(value);
+        this.value = new StringValue(value);
+    }
+
     public LiteralCommand(ParseLocation location, Value value) {
         super(value.get().toString(), location);
         this.value = value;
@@ -29,5 +40,10 @@ public class LiteralCommand extends BaseCommand implements ValueCommand {
     @Override
     public Value getValue(ExecutionContext context) {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 }

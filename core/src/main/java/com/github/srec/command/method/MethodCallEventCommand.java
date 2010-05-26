@@ -1,5 +1,6 @@
-package com.github.srec.command;
+package com.github.srec.command.method;
 
+import com.github.srec.command.ValueCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.StringValue;
@@ -7,6 +8,7 @@ import com.github.srec.command.value.Value;
 import com.github.srec.rec.Recorder;
 
 import java.awt.*;
+import java.util.Map;
 
 /**
  * An actual event which was recorded.
@@ -22,22 +24,16 @@ public class MethodCallEventCommand extends MethodCallCommand {
      */
     private boolean collapseMultiple = true;
 
-    public MethodCallEventCommand(String name, Component component, ParseLocation location, String... params) {
+    public MethodCallEventCommand(String name, Component component, ParseLocation location, Map<String, ValueCommand> params) {
         super(name, location);
         this.component = component;
-        addParams(params);
+        parameters.putAll(params);
     }
 
-    private void addParams(String[] params) {
-        for (String param : params) {
-            parameters.add(new LiteralCommand(new StringValue(param)));
-        }
-    }
-
-    public MethodCallEventCommand(String name, Component component, ParseLocation location, boolean collapseMultiple, String... params) {
-        this(name, component, location);
+    public MethodCallEventCommand(String name, Component component, ParseLocation location,
+                                  Map<String, ValueCommand> params, boolean collapseMultiple) {
+        this(name, component, location, params);
         this.collapseMultiple = collapseMultiple;
-        addParams(params);
     }
 
     public void record(Recorder recorder, MethodCallEventCommand lastEvent) {
@@ -54,10 +50,7 @@ public class MethodCallEventCommand extends MethodCallCommand {
 
     public String getComponentLocator() {
         if (parameters == null || parameters.size() == 0) return null;
-        if (!(parameters.get(0) instanceof LiteralCommand)) {
-            throw new CommandExecutionException("Component locator can only be determined during runtime");
-        }
-        Value value =  parameters.get(0).getValue(null);
+        Value value =  parameters.get("locator").getValue(null);
         if (!(value instanceof StringValue)) {
             throw new CommandExecutionException("First parameter is not a string, cannot be component locator");
         }
@@ -78,7 +71,7 @@ public class MethodCallEventCommand extends MethodCallCommand {
 
     public String print() {
         StringBuilder strb = new StringBuilder(name).append(" ");
-        for (ValueCommand parameter : parameters) {
+        for (ValueCommand parameter : parameters.values()) {
             strb.append("\"").append(parameter.toString()).append("\", ");
         }
         final String str = strb.toString();

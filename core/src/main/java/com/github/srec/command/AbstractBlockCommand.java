@@ -13,10 +13,32 @@
 
 package com.github.srec.command;
 
+import com.github.srec.command.parser.ParseLocation;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * A command which should also be stored as a symbol for later reference in a script.
- * 
  * @author Victor Tatai
  */
-public interface CommandSymbol extends Command {
+public abstract class AbstractBlockCommand extends BaseCommand implements BlockCommand {
+    protected List<Command> commands = new ArrayList<Command>();
+
+    protected AbstractBlockCommand(String name) {
+        super(name);
+    }
+
+    protected AbstractBlockCommand(String name, ParseLocation location) {
+        super(name, location);
+    }
+
+    @Override
+    public void addCommand(Command c) {
+        commands.add(c);
+    }
+
+    @Override
+    public List<Command> getCommands() {
+        return commands;
+    }
 }

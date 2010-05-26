@@ -43,4 +43,9 @@ public class PlayerError {
     public String toString() {
         return "Script error on line " + line + ", message:\n" + originatingException.getMessage();
     }
+
+    public void printStackTrace() {
+        System.err.println(toString());
+        originatingException.printStackTrace();
+    }
 }

@@ -15,6 +15,9 @@ package com.github.srec.command.parser.antlr;
 
 import com.github.srec.command.*;
 import com.github.srec.command.exception.UnsupportedCommandException;
+import com.github.srec.command.method.MethodCallCommand;
+import com.github.srec.command.method.MethodCommand;
+import com.github.srec.command.method.MethodScriptCommand;
 import com.github.srec.command.parser.ParseError;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.value.BooleanValue;
@@ -139,16 +142,17 @@ public class Visitor {
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitMETHOD_DEF_PARAMS(CommonTree t, CommonTree parent) throws IOException {
-        if (currentMethod == null) {
-            throw new ParseException("Current method is null when parsing params - should never happen!");
-        }
-        MethodCommand.Parameter[] params = new MethodCommand.Parameter[t.getChildCount()];
-        for (int i = 0; i < params.length; i++) {
-            params[i] = new MethodCommand.Parameter(t.getChild(i).getText());
-            context.addSymbol(new VarCommand(params[i].getName(), new ParseLocationCTAdapter(context.getCanonicalPath(), 
-                    (CommonTree) t.getChild(i)), null));
-        }
-        currentMethod.setParameters(params);
+        throw new UnsupportedOperationException();
+//        if (currentMethod == null) {
+//            throw new ParseException("Current method is null when parsing params - should never happen!");
+//        }
+//        Map<String, MethodCommand.Parameter> params = new HashMap<String, MethodCommand.Parameter>(t.getChildCount());
+//        for (int i = 0; i < t.getChildCount(); i++) {
+//            params.put("", new MethodCommand.Parameter(t.getChild(i).getText()));
+//            context.addSymbol(new VarCommand(params[i].getName(), new ParseLocationCTAdapter(context.getCanonicalPath(),
+//                    (CommonTree) t.getChild(i)), null));
+//        }
+//        currentMethod.setParameters(params);
     }
 
     private String[] extractMethodDefParameters(CommonTree t) {
@@ -217,14 +221,15 @@ public class Visitor {
 
     private void add(Command command) {
         if (command instanceof ValueCommand && !callStack.isEmpty()) {
-            MethodCallCommand call = callStack.peek();
-            call.addParameter((ValueCommand) command);
-            return;
+            throw new UnsupportedOperationException();
+//            MethodCallCommand call = callStack.peek();
+//            call.addParameter((ValueCommand) command);
+//            return;
         }
         if (currentMethod == null) {
             context.addCommand(command);
         } else {
-            currentMethod.add(command);
+            currentMethod.addCommand(command);
         }
     }
 

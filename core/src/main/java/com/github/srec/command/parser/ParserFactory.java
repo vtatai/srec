@@ -11,12 +11,16 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.parser;
+
+import com.github.srec.command.parser.xml.XmlParser;
 
 /**
- * A command which should also be stored as a symbol for later reference in a script.
- * 
+ * A factory for parsers
  * @author Victor Tatai
  */
-public interface CommandSymbol extends Command {
+public class ParserFactory {
+    public static Parser create() {
+        return new XmlParser();
+    }
 }

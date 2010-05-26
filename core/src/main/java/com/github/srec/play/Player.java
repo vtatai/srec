@@ -1,12 +1,11 @@
 package com.github.srec.play;
 
 import com.github.srec.Utils;
-import com.github.srec.command.Command;
-import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextFactory;
+import com.github.srec.command.*;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
-import com.github.srec.command.parser.antlr.ScriptParser;
+import com.github.srec.command.parser.Parser;
+import com.github.srec.command.parser.ParserFactory;
 import com.github.srec.jemmy.JemmyDSL;
 import org.apache.log4j.Logger;
 
@@ -26,9 +25,11 @@ public class Player {
     private PlayerError error;
     private boolean throwError;
     private long commandInterval = 50;
+    private Parser parser;
 
     public Player init() {
         JemmyDSL.init();
+        parser = ParserFactory.create();
         return this;
     }
 
@@ -71,11 +72,16 @@ public class Player {
 
     public Player play(InputStream is, File file) throws IOException {
         ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
-        ScriptParser parser = new ScriptParser();
-        parser.parse(context, is);
+
+        TestSuite suite = parser.parse(context, is, file);
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
-        context.setPlayer(this);
-        play(context, context.getCommands());
+        log.debug("Launching test suite: " + suite.getName());
+        for (TestCase testCase : suite.getTestCases()) {
+            log.debug("Launching test case: " + testCase.getName());
+            ExecutionContext testCaseEC = testCase.getExecutionContext();
+            testCaseEC.setPlayer(this);
+            play(testCaseEC, testCaseEC.getCommands());
+        }
         return this;
     }
 
@@ -105,7 +111,6 @@ public class Player {
         error = new PlayerError(command.getLocation().getLineNumber(), command.getLocation().getLine(), e);
         System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
         System.err.println(command.getLocation().getLine());
-        e.printStackTrace(System.err);
     }
 
     public PlayerError getError() {

@@ -5,6 +5,8 @@ import com.github.srec.command.ExecutionContextCommand;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
+import java.util.Map;
+
 import static com.github.srec.jemmy.JemmyDSL.click;
 
 /**
@@ -13,11 +15,11 @@ import static com.github.srec.jemmy.JemmyDSL.click;
 @ExecutionContextCommand
 public class ClickCommand extends JemmyEventCommand {
     public ClickCommand() {
-        super("click", "componentLocator");
+        super("click", createParametersDefinition(LOCATOR));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
-        click(coerceToString(params[0]));
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
+        click(coerceToString(params.get(LOCATOR), ctx));
     }
 }

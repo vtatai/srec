@@ -1,6 +1,6 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.command.MethodCallEventCommand;
+import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
 
 import javax.swing.*;
@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.github.srec.Utils.createParameterMap;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
@@ -42,7 +43,8 @@ public class ButtonClickRecorder extends AbstractComponentRecorder implements Ac
 
     public void actionPerformed(ActionEvent e) {
         AbstractButton button = (AbstractButton) e.getSource();
-        recorder.record(new MethodCallEventCommand("click", button, null, extractComponentLocator(button)));
+        recorder.record(new MethodCallEventCommand("click", button, null,
+                createParameterMap("locator", extractComponentLocator(button))));
     }
 
     private String extractComponentLocator(AbstractButton button) {

@@ -13,6 +13,8 @@
 
 package com.github.srec.command.value;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -21,5 +23,11 @@ import java.util.Date;
 public class DateValue extends Value<Date> {
     public DateValue(Date value) {
         super(Type.DATE, value);
+    }
+
+    public DateValue(String valueString) throws ParseException {
+        super(Type.DATE);
+        SimpleDateFormat format = new SimpleDateFormat();
+        value = format.parse(valueString);
     }
 }

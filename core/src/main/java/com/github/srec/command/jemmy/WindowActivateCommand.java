@@ -5,6 +5,8 @@ import com.github.srec.command.ExecutionContextCommand;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
+import java.util.Map;
+
 import static com.github.srec.jemmy.JemmyDSL.frame;
 
 /**
@@ -13,11 +15,11 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @ExecutionContextCommand
 public class WindowActivateCommand extends JemmyEventCommand {
     public WindowActivateCommand() {
-        super("window_activate", "componentLocator");
+        super("window_activate", createParametersDefinition(LOCATOR));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
-        frame(coerceToString(params[0])).activate();
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
+        frame(coerceToString(params.get(LOCATOR), ctx)).activate();
     }
 }

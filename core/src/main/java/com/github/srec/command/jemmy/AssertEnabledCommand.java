@@ -2,9 +2,13 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.BooleanValue;
+import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
+
+import java.util.Map;
 
 import static com.github.srec.jemmy.JemmyDSL.waitEnabled;
 
@@ -14,12 +18,12 @@ import static com.github.srec.jemmy.JemmyDSL.waitEnabled;
 @ExecutionContextCommand
 public class AssertEnabledCommand extends JemmyEventCommand {
     public AssertEnabledCommand() {
-        super("assert_enabled", new Parameter("componentLocator"), new Parameter("enabled", true, BooleanValue.TRUE));
+        super("assert_enabled", new MethodParameter(LOCATOR, Type.STRING),
+                new MethodParameter("enabled", Type.BOOLEAN, true, BooleanValue.TRUE));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Value... params) throws JemmyException {
-        waitEnabled(coerceToString(get("componentLocator", params)),
-                coerceToBoolean(get("enabled", params)));
+    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
+        waitEnabled(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("enabled")));
     }
 }
