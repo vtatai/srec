@@ -12,18 +12,18 @@
   -->
 
 <suite name="if_suite">
+    <def name="type_initialValueTF" >
+        <parameter name="text" type="string"/>
+        <if expression="text == '100'">
+            <type locator="initialValueTF" text="$text"/>            
+        </if>
+    </def>
     <test_case name="if_test_case">
         <window_activate locator="TestForm"/>
         <if expression="true">
-            <type locator="initialValueTF" text="100"/>
-            <type_special locator="initialValueTF" text="Tab"/>            
+            <type_initialValueTF text="100"/>
         </if>
-        <select locator="calculationCB" item="Future Value"/>
         <assert locator="initialValueTF" text="100"/>
-        <select locator="calculationCB" index="0"/>
-        <click locator="text=Ok"/>
-        <click locator="cb1"/>
-        <assert_enabled locator="textField2" enabled="true"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>

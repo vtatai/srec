@@ -6,6 +6,7 @@ import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.*;
 import com.github.srec.command.value.StringValue;
 import groovy.lang.Binding;
+import groovy.lang.GString;
 import groovy.lang.GroovyShell;
 
 import javax.swing.*;
@@ -184,6 +185,28 @@ public final class Utils {
     }
 
     /**
+     * Converts a srec value to a Java object.
+     *
+     * @param value The value
+     * @return The Java object
+     */
+    public static Object convertToJava(Value value) {
+        switch (value.getType()) {
+            case STRING:
+                return ((StringValue) value).get();
+            case BOOLEAN:
+                return ((BooleanValue) value).get();
+            case NUMBER:
+                return ((NumberValue) value).get();
+            case DATE:
+                return ((DateValue) value).get();
+            case NIL:
+                return null;
+        }
+        throw new CommandExecutionException("Could not convert value " + value + " to an equivalent Java object");
+    }
+
+    /**
      * Evaluates an expression using Groovy. All VarCommands inside the context are used in order to evaluate the given
      * expression.
      *
@@ -196,11 +219,15 @@ public final class Utils {
         for (Map.Entry<String, CommandSymbol> entry : context.getSymbols().entrySet()) {
             final CommandSymbol symbol = entry.getValue();
             if (symbol instanceof VarCommand) {
-                binding.setVariable(entry.getKey(), ((VarCommand) symbol).getValue(context));
+                binding.setVariable(entry.getKey(), convertToJava(((VarCommand) symbol).getValue(context)));
             }
         }
         GroovyShell shell = new GroovyShell(binding);
-        return shell.evaluate(expression);
+        final Object o = shell.evaluate(expression);
+        if (o instanceof GString) {
+            return o.toString();
+        }
+        return o;
     }
 
     /**

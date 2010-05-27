@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Parses an XML file.<br><br>
@@ -47,7 +48,7 @@ public class XmlParser implements Parser {
      * scope are added here, methods in test_case scope are added to the test case EC.
      */
     private ExecutionContext contextPrototype;
-    private BlockCommand currentBlock;
+    private final Stack<BlockCommand> currentBlocks = new Stack<BlockCommand>();
     private List<ParseError> errors = new ArrayList<ParseError>();
     private boolean parseSymbolsOnly;
 
@@ -117,17 +118,17 @@ public class XmlParser implements Parser {
                 throw new ParseException("Cannot open required file " + resourceName);
             }
         } else if ("def".equals(name)) {
-            currentBlock = new MethodScriptCommand(getAttributeByName("name", element), parsingFile);
+            pushCurrentBlock(new MethodScriptCommand(getAttributeByName("name", element), parsingFile));
         } else if ("parameter".equals(name)) {
             Type type = parseType(getAttributeByName("type", element));
             if (type == null) throw new ParseException("'type' attribute missing for argument");
-            ((MethodScriptCommand) currentBlock).addParameter(new MethodParameter(getAttributeByName("name", element), type));
+            ((MethodScriptCommand) peekCurrentBlock()).addParameter(new MethodParameter(getAttributeByName("name", element), type));
         } else if ("if".equals(name)) {
-            currentBlock = new IfCommand(createParseLocation(element),
+            pushCurrentBlock(new IfCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
-                            createParseLocation(element.getAttributeByName(new QName("expression")))));
+                            createParseLocation(element.getAttributeByName(new QName("expression"))))));
         } else {
-            if (parseSymbolsOnly && currentBlock == null) return;
+            if (parseSymbolsOnly && currentBlocks == null) return;
             ExecutionContext executionContext = getCurrentExecutionContext();
             CommandSymbol symbol = executionContext.findSymbol(name);
             if (symbol == null || !(symbol instanceof MethodCommand)) {
@@ -143,8 +144,8 @@ public class XmlParser implements Parser {
                 if (methodParameter == null) throw new ParseException("Parameter " + attributeName + " not defined");
                 command.addParameter(attributeName, createLiteralCommand(attr.getValue(), methodParameter.getType()));
             }
-            if (currentBlock != null) {
-                currentBlock.addCommand(command);
+            if (!currentBlocks.isEmpty()) {
+                peekCurrentBlock().addCommand(command);
             } else {
                 executionContext.addCommand(command);
             }
@@ -196,12 +197,15 @@ public class XmlParser implements Parser {
             currentTestSuite.addTestCase(currentTestCase);
         } else if ("def".equals(name)) {
             ExecutionContext context = getCurrentExecutionContext();
-            context.addSymbol((MethodScriptCommand) currentBlock);
-            currentBlock = null;
+            context.addSymbol((MethodScriptCommand) popCurrentBlock());
         } else if ("if".equals(name)) {
-            ExecutionContext context = currentTestCase.getExecutionContext();
-            context.addCommand(currentBlock);
-            currentBlock = null;
+            IfCommand ifCommand = (IfCommand) currentBlocks.pop();
+            if (currentBlocks.isEmpty()) {
+                ExecutionContext context = getCurrentExecutionContext();
+                context.addCommand(ifCommand);
+            } else {
+                currentBlocks.peek().addCommand(ifCommand);
+            }
         }
     }
 
@@ -220,6 +224,18 @@ public class XmlParser implements Parser {
                         event.getLocation().getColumnNumber(), event.toString()),
                 message));
         log.warn("Parse error: " + message);
+    }
+
+    private void pushCurrentBlock(BlockCommand block) {
+        currentBlocks.push(block);
+    }
+
+    private BlockCommand peekCurrentBlock() {
+        return currentBlocks.peek();
+    }
+
+    private BlockCommand popCurrentBlock() {
+        return currentBlocks.pop();
     }
 
     @Override
