@@ -24,6 +24,7 @@ public class EndCommand extends BaseCommand {
     }
     
     @Override
-    public void run(ExecutionContext context) {
+    public CommandFlow run(ExecutionContext context) {
+        return CommandFlow.NEXT;
     }
 }

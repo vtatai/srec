@@ -1,15 +1,20 @@
 package com.github.srec.util;
 
 import com.github.srec.MainMethodRunningException;
-import com.github.srec.command.LiteralCommand;
-import com.github.srec.command.ValueCommand;
-import com.github.srec.command.value.Value;
+import com.github.srec.command.*;
+import com.github.srec.command.exception.CommandExecutionException;
+import com.github.srec.command.value.*;
+import com.github.srec.command.value.StringValue;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,5 +154,64 @@ public final class Utils {
             ret.put(param, new LiteralCommand(value));
         }
         return ret;
-    }    
+    }
+
+    /**
+     * Converts a Java object to a srec value.
+     *
+     * @param o The Java object
+     * @return The srec value
+     */
+    public static Value convertFromJava(Object o) {
+        if (o instanceof Long) {
+            return new NumberValue(new BigDecimal((Long) o));
+        } else if (o instanceof Integer) {
+            return new NumberValue(new BigDecimal((Integer) o));
+        } else if (o instanceof Double) {
+            return new NumberValue(new BigDecimal((Double) o));
+        } else if (o instanceof Float) {
+            return new NumberValue(new BigDecimal((Float) o));
+        } else if (o instanceof String) {
+            return new StringValue((String) o);
+        } else if (o instanceof Date) {
+            return new DateValue((Date) o);
+        } else if (o instanceof Boolean) {
+            return BooleanValue.getInstance((Boolean) o);
+        } else if (o == null) {
+            return NilValue.getInstance();
+        }
+        throw new CommandExecutionException("Could not convert Java object " + o + " to an equivalent srec value");
+    }
+
+    /**
+     * Evaluates an expression using Groovy. All VarCommands inside the context are used in order to evaluate the given
+     * expression.
+     *
+     * @param context The EC
+     * @param expression The expression to evaluate
+     * @return The value
+     */
+    public static Object groovyEvaluate(ExecutionContext context, String expression) {
+        Binding binding = new Binding();
+        for (Map.Entry<String, CommandSymbol> entry : context.getSymbols().entrySet()) {
+            final CommandSymbol symbol = entry.getValue();
+            if (symbol instanceof VarCommand) {
+                binding.setVariable(entry.getKey(), ((VarCommand) symbol).getValue(context));
+            }
+        }
+        GroovyShell shell = new GroovyShell(binding);
+        return shell.evaluate(expression);
+    }
+
+    /**
+     * Evaluates an expression using Groovy, converting the final value.
+     *
+     * @param context The EC
+     * @param expression The expression to evaluate
+     * @return The value converted
+     */
+    public static Value groovyEvaluateConvert(ExecutionContext context, String expression) {
+        Object obj = groovyEvaluate(context, expression);
+        return Utils.convertFromJava(obj);
+    }
 }

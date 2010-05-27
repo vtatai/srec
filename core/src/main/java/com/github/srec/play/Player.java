@@ -10,7 +10,6 @@ import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.List;
 
 import static com.github.srec.util.Utils.closeWindows;
 import static com.github.srec.util.Utils.runMain;
@@ -80,16 +79,20 @@ public class Player {
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
             testCaseEC.setPlayer(this);
-            play(testCaseEC, testCaseEC.getCommands());
+            play(testCaseEC);
         }
         return this;
     }
 
-    public void play(ExecutionContext context, List<Command> commands) {
-        for (Command command : commands) {
+    public Command.CommandFlow play(ExecutionContext context) {
+        for (Command command : context.getCommands()) {
             log.debug("Running line: " + getLine(command) + ", command: " + command);
             try {
-                command.run(context);
+                Command.CommandFlow flow = command.run(context);
+                if (flow == Command.CommandFlow.NEXT) {} 
+                else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
+                else throw new PlayerException("Flow management instruction " + flow + "  from command "
+                            + command.getName() + " not supported");
             } catch (CommandExecutionException e) {
                 handleError(command, e);
                 break;
@@ -100,6 +103,7 @@ public class Player {
                 throw new RuntimeException(e);
             }
         }
+        return Command.CommandFlow.NEXT;
     }
 
     private String getLine(Command command) {

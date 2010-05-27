@@ -25,6 +25,10 @@ public class BooleanValue extends Value<Boolean> {
     }
 
     public BooleanValue(String value) {
-        super(Type.BOOLEAN, new Boolean(value));
+        super(Type.BOOLEAN, Boolean.valueOf(value));
+    }
+
+    public static BooleanValue getInstance(Boolean b) {
+        return b ? TRUE : FALSE;
     }
 }

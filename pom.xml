@@ -317,6 +317,11 @@
                 <artifactId>commons-io</artifactId>
                 <version>1.4</version>
             </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>1.5.7</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

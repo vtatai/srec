@@ -31,6 +31,10 @@ public class PlayerTest {
         runTest("test_form_method_deep.xml");
     }
 
+    public void testIf() throws IOException {
+        runTest("if.xml");
+    }
+
     private void runTest(String script) {
         try {
             Player p = new Player()

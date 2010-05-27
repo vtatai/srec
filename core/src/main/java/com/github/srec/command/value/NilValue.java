@@ -17,7 +17,13 @@ package com.github.srec.command.value;
  * @author Victor Tatai
  */
 public class NilValue extends Value<Object> {
-    public NilValue() {
+    private static NilValue instance = new NilValue();
+
+    private NilValue() {
         super(Type.NIL, null);
+    }
+
+    public static NilValue getInstance() {
+        return instance;
     }
 }

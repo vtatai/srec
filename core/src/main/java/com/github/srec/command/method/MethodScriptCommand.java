@@ -44,7 +44,8 @@ public class MethodScriptCommand extends MethodCommand implements BlockCommand {
         for (Map.Entry<String, Value> entry : params.entrySet()) {
             nestedContext.addSymbol(new VarCommand(entry.getKey(), location, entry.getValue()));
         }
-        context.getPlayer().play(nestedContext, commands);
+        nestedContext.getCommands().addAll(commands);
+        context.getPlayer().play(nestedContext);
         return null;
     }
 

@@ -34,7 +34,8 @@ public class LiteralCommand extends BaseCommand implements ValueCommand {
     }
 
     @Override
-    public void run(ExecutionContext context) throws CommandExecutionException {
+    public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
+        return CommandFlow.NEXT;
     }
 
     @Override

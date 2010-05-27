@@ -17,22 +17,27 @@ import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.Value;
 
+import static com.github.srec.util.Utils.groovyEvaluateConvert;
+
 /**
- * Represents a variable declaration.
- *
  * @author Victor Tatai
  */
-public class VarCommand extends BaseCommand implements CommandSymbol, ValueCommand {
-    private Value value;
+public class ExpressionCommand extends BaseCommand implements ValueCommand {
+    private String expression;
 
-    public VarCommand(String name, Value value) {
-        super(name);
-        this.value = value;
+    public ExpressionCommand(String expression) {
+        super(expression);
+        this.expression = expression;
     }
 
-    public VarCommand(String name, ParseLocation location, Value value) {
-        super(name, location);
-        this.value = value;
+    public ExpressionCommand(String expression, ParseLocation location) {
+        super(expression, location);
+        this.expression = expression;
+    }
+
+    @Override
+    public Value getValue(ExecutionContext context) {
+        return groovyEvaluateConvert(context, expression);
     }
 
     @Override
@@ -41,12 +46,7 @@ public class VarCommand extends BaseCommand implements CommandSymbol, ValueComma
     }
 
     @Override
-    public Value getValue(ExecutionContext context) {
-        return value;
-    }
-
-    @Override
     public String toString() {
-        return getName();
+        return expression;
     }
 }

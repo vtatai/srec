@@ -18,6 +18,7 @@ import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.BooleanValue;
 import com.github.srec.command.value.NilValue;
 import com.github.srec.command.value.Value;
+import com.github.srec.play.PlayerException;
 
 /**
  * An if statement.
@@ -27,22 +28,33 @@ import com.github.srec.command.value.Value;
 public class IfCommand extends AbstractBlockCommand {
     private ValueCommand condition;
 
-    public IfCommand(String name, ValueCommand condition) {
-        super(name);
+    public IfCommand(ValueCommand condition) {
+        super("if");
         this.condition = condition;
     }
 
-    public IfCommand(String name, ParseLocation location, ValueCommand condition) {
-        super(name, location);
+    public IfCommand(ParseLocation location, ValueCommand condition) {
+        super("if", location);
         this.condition = condition;
     }
 
     @Override
-    public void run(ExecutionContext context) throws CommandExecutionException {
+    public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
         Value v = condition.getValue(context);
-        if (v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get())) return; 
+        if (v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get())) return CommandFlow.NEXT;
         for (Command command : commands) {
-            command.run(context);
+            CommandFlow flow = command.run(context);
+            if (flow == CommandFlow.NEXT) {}
+            else if (flow == Command.CommandFlow.BREAK
+                    || flow == Command.CommandFlow.EXIT
+                    || flow == Command.CommandFlow.RETURN) return flow;
+            else throw new PlayerException("Flow management from command not supported");
         }
+        return CommandFlow.NEXT;
+    }
+
+    @Override
+    public String toString() {
+        return "if " + condition;
     }
 }

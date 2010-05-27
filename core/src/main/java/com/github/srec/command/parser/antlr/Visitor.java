@@ -208,7 +208,7 @@ public class Visitor {
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITNIL(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
         add(new LiteralCommand(new ParseLocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
-                new NilValue()));
+                NilValue.getInstance()));
     }
 
     private void error(CommonTree t, String message) {

@@ -1,9 +1,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
-import com.github.srec.command.CommandSymbol;
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.VarCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.exception.IllegalParametersException;
 import com.github.srec.command.exception.TimeoutException;
@@ -11,14 +9,13 @@ import com.github.srec.command.method.MethodCommand;
 import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.*;
 import com.github.srec.command.value.StringValue;
+import com.github.srec.util.Utils;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.context.Context;
 import org.netbeans.jemmy.JemmyException;
 import org.netbeans.jemmy.TimeoutExpiredException;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -69,28 +66,32 @@ public abstract class JemmyEventCommand extends MethodCommand {
      * Coerces a value to String. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
      * is not of the expected type.
      *
+     * TODO move this out of here
+     *
      * @param value The value
      * @return The converted value
      */
-    protected String coerceToString(Value value, ExecutionContext context) {
+    protected static String coerceToString(Value value, ExecutionContext context) {
         if (!(value instanceof StringValue)) throw new CommandExecutionException("Value is not a string");
         String str = value.toString();
         if (str.indexOf("$") == -1) return str;
-        
-        // Interpret as a velocity template
-        Context velocityContext = new ContextAdapter(context);
-        Writer writer = new StringWriter();
-        try {
-            Velocity.evaluate(velocityContext, writer, "VELOCITY", str);
-        } catch (IOException e) {
-            throw new CommandExecutionException(e);
-        }
-        return writer.toString();
+
+        return (String) Utils.groovyEvaluate(context, "\"" + str + "\"");
+    }
+
+    public static void main(String[] args) {
+        Binding binding = new Binding();
+        binding.setVariable("xpto", "Hello");
+        GroovyShell shell = new GroovyShell(binding);
+        System.out.println(shell.evaluate("\"$xpto World\""));
     }
 
     /**
      * Coerces a value to BigDecimal. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
      * is not of the expected type.
+     *
+     *
+     * TODO move this out of here
      *
      * @param value The value
      * @return The converted value
@@ -103,6 +104,9 @@ public abstract class JemmyEventCommand extends MethodCommand {
     /**
      * Coerces a value to Boolean. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
      * is not of the expected type.
+     *
+     *
+     * TODO move this out of here
      *
      * @param value The value
      * @return The converted value
@@ -135,41 +139,5 @@ public abstract class JemmyEventCommand extends MethodCommand {
             ret[i] = new MethodParameter(name, type);
         }
         return ret;
-    }
-
-    private class ContextAdapter implements Context {
-        private ExecutionContext executionContext;
-
-        private ContextAdapter(ExecutionContext executionContext) {
-            this.executionContext = executionContext;
-        }
-
-        @Override
-        public Object put(String s, Object o) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Object get(String name) {
-            CommandSymbol s = executionContext.findSymbol(name);
-            if (s == null) throw new CommandExecutionException("Variable '" + name + "' not found");
-            if (!(s instanceof VarCommand)) throw new CommandExecutionException("Only variables allowed inside expressions");
-            return ((VarCommand) s).getValue(executionContext);
-        }
-
-        @Override
-        public boolean containsKey(Object o) {
-            return executionContext.findSymbol(o.toString()) != null;
-        }
-
-        @Override
-        public Object[] getKeys() {
-            return executionContext.getSymbols().keySet().toArray();
-        }
-
-        @Override
-        public Object remove(Object o) {
-            throw new UnsupportedOperationException();
-        }
     }
 }

@@ -88,8 +88,9 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
     protected abstract Value internalCallMethod(ExecutionContext context, Map<String, Value> params);
 
     @Override
-    public void run(ExecutionContext context) {
+    public CommandFlow run(ExecutionContext context) {
         // a def command by definition does not run
+        return CommandFlow.NEXT;
     }
 
     /**

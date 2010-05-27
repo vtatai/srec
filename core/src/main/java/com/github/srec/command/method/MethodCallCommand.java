@@ -23,8 +23,9 @@ public class MethodCallCommand extends BaseCommand implements ValueCommand {
     }
 
     @Override
-    public void run(ExecutionContext context) {
+    public CommandFlow run(ExecutionContext context) {
         getValue(context);
+        return CommandFlow.NEXT;
     }
 
     @Override

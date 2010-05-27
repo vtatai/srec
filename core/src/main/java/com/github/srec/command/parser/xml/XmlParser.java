@@ -122,6 +122,10 @@ public class XmlParser implements Parser {
             Type type = parseType(getAttributeByName("type", element));
             if (type == null) throw new ParseException("'type' attribute missing for argument");
             ((MethodScriptCommand) currentBlock).addParameter(new MethodParameter(getAttributeByName("name", element), type));
+        } else if ("if".equals(name)) {
+            currentBlock = new IfCommand(createParseLocation(element),
+                    new ExpressionCommand(getAttributeByName("expression", element),
+                            createParseLocation(element.getAttributeByName(new QName("expression")))));
         } else {
             if (parseSymbolsOnly && currentBlock == null) return;
             ExecutionContext executionContext = getCurrentExecutionContext();
@@ -174,7 +178,7 @@ public class XmlParser implements Parser {
                     throw new ParseException(e);
                 }
             case NIL:
-                return new LiteralCommand(new NilValue());
+                return new LiteralCommand(NilValue.getInstance());
             default:
                 throw new ParseException("Type not found " + type);
         }
@@ -193,6 +197,10 @@ public class XmlParser implements Parser {
         } else if ("def".equals(name)) {
             ExecutionContext context = getCurrentExecutionContext();
             context.addSymbol((MethodScriptCommand) currentBlock);
+            currentBlock = null;
+        } else if ("if".equals(name)) {
+            ExecutionContext context = currentTestCase.getExecutionContext();
+            context.addCommand(currentBlock);
             currentBlock = null;
         }
     }
