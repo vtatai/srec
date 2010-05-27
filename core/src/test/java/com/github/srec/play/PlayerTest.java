@@ -27,6 +27,10 @@ public class PlayerTest {
         runTest("test_form_method_call.xml");
     }
 
+    public void testMethodDeep() throws IOException {
+        runTest("test_form_method_deep.xml");
+    }
+
     private void runTest(String script) {
         try {
             Player p = new Player()
