@@ -14,8 +14,11 @@
 package com.github.srec.command.parser.xml;
 
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextFactory;
 import com.github.srec.command.TestCase;
 import com.github.srec.command.TestSuite;
+import com.github.srec.command.method.MethodScriptCommand;
+import com.github.srec.command.value.Type;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -27,13 +30,29 @@ import static org.testng.Assert.assertEquals;
  */
 @Test
 public class XmlParserTest {
-    public void test() {
+    public void testForm() {
         XmlParser p = new XmlParser();
         final File file = new File("src/test/resources/test_form.xml");
-        final ExecutionContext context = new ExecutionContext(file);
+        final ExecutionContext context = ExecutionContextFactory.getInstance().create(file);
         TestSuite suite = p.parse(context, file);
+        assertEquals(p.getErrors().size(), 0);
         assertEquals(suite.getTestCases().size(), 1);
         TestCase tc = suite.getTestCases().get(0);
         assertEquals(tc.getExecutionContext().getCommands().size(), 10);
+    }
+
+    public void testMethod() {
+        XmlParser p = new XmlParser();
+        final File file = new File("src/test/resources/test_form_method_call.xml");
+        final ExecutionContext context = ExecutionContextFactory.getInstance().create(file);
+        TestSuite suite = p.parse(context, file);
+        assertEquals(p.getErrors().size(), 0);
+        assertEquals(suite.getTestCases().size(), 1);
+        TestCase tc = suite.getTestCases().get(0);
+        assertEquals(tc.getExecutionContext().getCommands().size(), 10);
+        MethodScriptCommand method = (MethodScriptCommand) context.findSymbol("close_window");
+        assertEquals(method.getCommands().size(), 1);
+        assertEquals(method.getParameters().size(), 1);
+        assertEquals(method.getParameters().get("name").getType(), Type.STRING);
     }
 }

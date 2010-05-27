@@ -12,6 +12,7 @@
   -->
 
 <suite name="test_form_method_call">
+    <require name="test_form_method_def.xml"/>
     <def name="activate_test_form" >
         <window_activate locator="TestForm"/>
     </def>
@@ -29,6 +30,6 @@
         <click locator="text=Ok"/>
         <click locator="cb1"/>
         <assert_enabled locator="textField2" enabled="true"/>
-        <close locator="TestForm"/>
+        <close_window name="TestForm"/>
     </test_case>
 </suite>

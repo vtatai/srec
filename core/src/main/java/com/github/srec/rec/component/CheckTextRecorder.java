@@ -1,13 +1,13 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.Utils;
 import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
+import com.github.srec.util.Utils;
 
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 
-import static com.github.srec.Utils.createParameterMap;
+import static com.github.srec.util.Utils.createParameterMap;
 
 /**
  * Records check text events

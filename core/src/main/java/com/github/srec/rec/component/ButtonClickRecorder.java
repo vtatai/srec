@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static com.github.srec.Utils.createParameterMap;
+import static com.github.srec.util.Utils.createParameterMap;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**

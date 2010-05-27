@@ -1,7 +1,5 @@
 package com.github.srec.command.parser;
 
-import org.antlr.runtime.tree.CommonTree;
-
 /**
  * Represents an error while parsing.
  *
@@ -13,14 +11,12 @@ public class ParseError {
     }
 
     private Severity severity;
-    private CommonTree tree;
+    private ParseLocation location;
     private String message;
-    private String file;
 
-    public ParseError(Severity severity, String file, CommonTree tree, String message) {
+    public ParseError(Severity severity, ParseLocation location, String message) {
         this.severity = severity;
-        this.file = file;
-        this.tree = tree;
+        this.location = location;
         this.message = message;
     }
 
@@ -28,8 +24,8 @@ public class ParseError {
         return severity;
     }
 
-    public CommonTree getTree() {
-        return tree;
+    public ParseLocation getLocation() {
+        return location;
     }
 
     public String getMessage() {
@@ -38,6 +34,6 @@ public class ParseError {
 
     @Override
     public String toString() {
-        return severity + " on " + file + ", line " + tree.getLine() + ": " + message;
+        return severity + ": " + message + "\n" + location;
     }
 }

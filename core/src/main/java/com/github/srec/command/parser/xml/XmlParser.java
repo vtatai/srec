@@ -10,6 +10,9 @@ import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.value.*;
+import com.github.srec.util.Resource;
+import com.github.srec.util.ResourceFactory;
+import org.apache.log4j.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -22,17 +25,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Parses an XML file.
+ * Parses an XML file.<br><br>
  *
- * XML parsing is different from DSL parsing because it requires types for method parameters since these types cannot be
- * inferred simply from the contents of the argument passed (is 100 the string "100" or is it the number 100?). One
- * option would be to require single quotes inside the double quotes for string parameters, but that is ugly, verbose
- * and counter-intuitive. 
+ * XML parsing is different from DSL parsing because it requires types to be specified for method parameters since these
+ * cannot be inferred simply from the contents of the argument passed (is 100 the string "100" or is it the number 100?).
+ * One alternative would be to require single quotes inside the double quotes for string parameters, but that is ugly,
+ * verbose and counter-intuitive.
  *
  * @author Victor Tatai
  */
 public class XmlParser implements Parser {
-    private File parsingFile;
+    private static final Logger log = Logger.getLogger(XmlParser.class);
+    private String parsingFile;
     private Class<?>[] ignoredEvents = new Class<?>[] {Attribute.class, Characters.class, Comment.class, DTD.class,
             EndDocument.class, EntityDeclaration.class, EntityReference.class, Namespace.class, NotationDeclaration.class,
             ProcessingInstruction.class, StartDocument.class};
@@ -45,20 +49,23 @@ public class XmlParser implements Parser {
     private ExecutionContext contextPrototype;
     private BlockCommand currentBlock;
     private List<ParseError> errors = new ArrayList<ParseError>();
+    private boolean parseSymbolsOnly;
 
     @Override
     public TestSuite parse(ExecutionContext context, File file) {
         try {
-            return parse(context, new FileInputStream(file), file);
+            return parse(context, new FileInputStream(file), file.getCanonicalPath());
         } catch (FileNotFoundException e) {
+            throw new ParseException(e);
+        } catch (IOException e) {
             throw new ParseException(e);
         }
     }
 
     @Override
-    public TestSuite parse(ExecutionContext context, InputStream is, File file) {
+    public TestSuite parse(ExecutionContext context, InputStream is, String fileName) {
         try {
-            parsingFile = file;
+            parsingFile = fileName;
             contextPrototype = context;
             
             XMLInputFactory factory = XMLInputFactory.newFactory();
@@ -95,6 +102,20 @@ public class XmlParser implements Parser {
             currentTestSuite = new TestSuite(getAttributeByName("name", element));
         } else if ("test_case".equals(name)) {
             currentTestCase = new TestCase(getAttributeByName("name", element), new ExecutionContext(contextPrototype));
+        } else if ("require".equals(name)) {
+            final String resourceName = getAttributeByName("name", element);
+            Resource r = ResourceFactory.getGenericResource(resourceName);
+            if (r == null || r.getUrl() == null) {
+                error(element, "required file '" + resourceName + "' not found");
+                return;
+            }
+            try {
+                XmlParser defsParser = new XmlParser();
+                defsParser.setParseSymbolsOnly(true);
+                defsParser.parse(getCurrentExecutionContext(), r.getUrl().openStream(), resourceName);
+            } catch (IOException e) {
+                throw new ParseException("Cannot open required file " + resourceName);
+            }
         } else if ("def".equals(name)) {
             currentBlock = new MethodScriptCommand(getAttributeByName("name", element), parsingFile);
         } else if ("parameter".equals(name)) {
@@ -102,9 +123,13 @@ public class XmlParser implements Parser {
             if (type == null) throw new ParseException("'type' attribute missing for argument");
             ((MethodScriptCommand) currentBlock).addParameter(new MethodParameter(getAttributeByName("name", element), type));
         } else {
+            if (parseSymbolsOnly && currentBlock == null) return;
             ExecutionContext executionContext = getCurrentExecutionContext();
             CommandSymbol symbol = executionContext.findSymbol(name);
-            if (symbol == null || !(symbol instanceof MethodCommand)) throw new ParseException("Method with name '" + name + "' not found");
+            if (symbol == null || !(symbol instanceof MethodCommand)) {
+                error(element, "Method with name '" + name + "' not found");
+                return;
+            }
             final MethodCallCommand command = new MethodCallCommand(name, createParseLocation(element));
             Iterator it = element.getAttributes();
             while (it.hasNext()) {
@@ -178,15 +203,27 @@ public class XmlParser implements Parser {
     }
 
     private String getParsingFileCanonicalPath() {
-        try {
-            return parsingFile != null ? parsingFile.getCanonicalPath() : null;
-        } catch (IOException e) {
-            throw new ParseException(e);
-        }
+        return parsingFile != null ? parsingFile : null;
+    }
+
+    private void error(XMLEvent event, String message) {
+        errors.add(new ParseError(ParseError.Severity.ERROR,
+                new ParseLocation(parsingFile, event.getLocation().getLineNumber(),
+                        event.getLocation().getColumnNumber(), event.toString()),
+                message));
+        log.warn("Parse error: " + message);
     }
 
     @Override
     public List<ParseError> getErrors() {
         return errors;
+    }
+
+    public boolean isParseSymbolsOnly() {
+        return parseSymbolsOnly;
+    }
+
+    public void setParseSymbolsOnly(boolean parseSymbolsOnly) {
+        this.parseSymbolsOnly = parseSymbolsOnly;
     }
 }

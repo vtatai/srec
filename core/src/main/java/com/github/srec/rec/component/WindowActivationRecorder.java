@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.WindowEvent;
 
-import static com.github.srec.Utils.createParameterMap;
+import static com.github.srec.util.Utils.createParameterMap;
 
 /**
  * Understands recording window activation events.

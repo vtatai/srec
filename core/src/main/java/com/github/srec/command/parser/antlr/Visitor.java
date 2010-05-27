@@ -130,7 +130,7 @@ public class Visitor {
             error(t, "Nested methods are not allowed");
             return;
         }
-        MethodScriptCommand method = new MethodScriptCommand(getChildText(t, 0), context.getFile(),
+        MethodScriptCommand method = new MethodScriptCommand(getChildText(t, 0), context.getFile().getCanonicalPath(),
                 extractMethodDefParameters((CommonTree) t.getChild(1)));
         currentMethod = method;
         context = new NestedExecutionContext(context, context.getFile());
@@ -213,7 +213,8 @@ public class Visitor {
 
     private void error(CommonTree t, String message) {
         try {
-            errors.add(new ParseError(ParseError.Severity.ERROR, context.getFile().getCanonicalPath(), t, message));
+            errors.add(new ParseError(ParseError.Severity.ERROR,
+                    new ParseLocationCTAdapter(context.getFile().getCanonicalPath(), t), message));
         } catch (IOException e) {
             throw new ParseException(e);
         }

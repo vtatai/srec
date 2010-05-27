@@ -10,7 +10,7 @@ include_class "org.netbeans.jemmy.operators.JRadioButtonOperator"
 include_class "org.netbeans.jemmy.operators.JCheckBoxOperator"
 include_class "org.netbeans.jemmy.operators.JDialogOperator"
 include_class "org.netbeans.jemmy.util.NameComponentChooser"
-include_class "com.github.srec.Utils"
+include_class "com.github.srec.util.Utils"
 
 include Test::Unit::Assertions
 

@@ -1,8 +1,8 @@
 package com.github.srec.rec.component;
 
-import com.github.srec.Utils;
 import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.EventRecorder;
+import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.srec.Utils.createParameterMap;
+import static com.github.srec.util.Utils.createParameterMap;
 
 /**
  * Understands recording text entered in text fields.

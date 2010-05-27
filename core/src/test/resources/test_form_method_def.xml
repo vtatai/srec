@@ -13,7 +13,7 @@
 
 <suite name="test_form">
     <def name="close_window" >
-        <arg name="name" type="string"/>
+        <parameter name="name" type="string"/>
         <close locator="${name}"/>
     </def>
 </suite>

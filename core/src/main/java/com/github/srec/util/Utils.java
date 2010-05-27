@@ -1,5 +1,6 @@
-package com.github.srec;
+package com.github.srec.util;
 
+import com.github.srec.MainMethodRunningException;
 import com.github.srec.command.LiteralCommand;
 import com.github.srec.command.ValueCommand;
 import com.github.srec.command.value.Value;

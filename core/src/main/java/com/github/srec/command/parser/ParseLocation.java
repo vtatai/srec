@@ -43,4 +43,12 @@ public class ParseLocation {
     public String getLine() {
         return line;
     }
+
+    @Override
+    public String toString() {
+        return "file '" + fileName + '\'' +
+                ", line " + lineNumber +
+                ", column " + column +
+                ", text '" + line + '\'';
+    }
 }

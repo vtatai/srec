@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import static com.github.srec.Utils.createParameterMap;
+import static com.github.srec.util.Utils.createParameterMap;
 
 /**
  * Understands recording item listeners.

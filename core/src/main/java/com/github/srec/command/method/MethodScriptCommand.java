@@ -13,12 +13,11 @@
 
 package com.github.srec.command.method;
 
-import com.github.srec.Utils;
 import com.github.srec.command.*;
 import com.github.srec.command.value.Value;
+import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,9 @@ import java.util.Map;
 public class MethodScriptCommand extends MethodCommand implements BlockCommand {
     private static final Logger logger = Logger.getLogger(MethodScriptCommand.class);
     protected List<Command> commands = new ArrayList<Command>();
-    private File fileRead;
+    private String fileRead;
 
-    public MethodScriptCommand(String name, File fileRead, String... parameters) {
+    public MethodScriptCommand(String name, String fileRead, String... parameters) {
         super(name, parameters);
         this.fileRead = fileRead;
     }
@@ -63,11 +62,11 @@ public class MethodScriptCommand extends MethodCommand implements BlockCommand {
     }
 
 
-    public File getFileRead() {
+    public String getFileRead() {
         return fileRead;
     }
 
-    public void setFileRead(File fileRead) {
+    public void setFileRead(String fileRead) {
         this.fileRead = fileRead;
     }
 }

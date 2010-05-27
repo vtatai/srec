@@ -1,7 +1,7 @@
 package com.github.srec.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
-import com.github.srec.Utils;
+import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 import org.netbeans.jemmy.*;
 import org.netbeans.jemmy.operators.*;

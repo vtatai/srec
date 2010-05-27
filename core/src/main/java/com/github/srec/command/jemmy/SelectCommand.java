@@ -1,6 +1,5 @@
 package com.github.srec.command.jemmy;
 
-import com.github.srec.Utils;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
 import com.github.srec.command.exception.IllegalParametersException;
@@ -8,6 +7,7 @@ import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.StringValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
+import com.github.srec.util.Utils;
 import org.netbeans.jemmy.JemmyException;
 
 import java.util.Map;

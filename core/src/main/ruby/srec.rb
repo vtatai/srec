@@ -1,5 +1,5 @@
 include_class "com.github.srec.jemmy.JemmyDSL"
-include_class "com.github.srec.Utils"
+include_class "com.github.srec.util.Utils"
 include_class "java.awt.event.KeyEvent"
 
 #  Module which contains JRuby wrappers to the JemmyDSL   

@@ -1,19 +1,19 @@
 package com.github.srec.play;
 
-import com.github.srec.Utils;
 import com.github.srec.command.*;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.parser.ParserFactory;
 import com.github.srec.jemmy.JemmyDSL;
+import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.List;
 
-import static com.github.srec.Utils.closeWindows;
-import static com.github.srec.Utils.runMain;
+import static com.github.srec.util.Utils.closeWindows;
+import static com.github.srec.util.Utils.runMain;
 
 /**
  * Class which plays srec scripts / commands.
@@ -73,7 +73,7 @@ public class Player {
     public Player play(InputStream is, File file) throws IOException {
         ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
 
-        TestSuite suite = parser.parse(context, is, file);
+        TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
         for (TestCase testCase : suite.getTestCases()) {

@@ -30,7 +30,7 @@ public interface Parser {
      * @param file The file being parsed
      * @return The test suite read
      */
-    TestSuite parse(ExecutionContext context, InputStream is, File file);
+    TestSuite parse(ExecutionContext context, InputStream is, String file);
 
     /**
      * Gets the errors.

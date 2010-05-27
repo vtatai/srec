@@ -10,7 +10,10 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -23,14 +26,14 @@ public class ScriptParser implements Parser {
 
     public TestSuite parse(ExecutionContext context, File file) {
         try {
-            return parse(context, new FileInputStream(file), file);
-        } catch (FileNotFoundException e) {
+            return parse(context, new FileInputStream(file), file.getCanonicalPath());
+        } catch (IOException e) {
             throw new ParseException(e);
         }
     }
 
     @Override
-    public TestSuite parse(ExecutionContext context, InputStream is, File file) {
+    public TestSuite parse(ExecutionContext context, InputStream is, String file) {
         try {
             ANTLRInputStream input = new ANTLRInputStream(is);
 

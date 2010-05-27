@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.srec.Utils.quote;
+import static com.github.srec.util.Utils.quote;
 
 /**
  * Class used to write and read events from a file. It follows the Ruby DSL script format.
