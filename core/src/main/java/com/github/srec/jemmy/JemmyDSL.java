@@ -48,19 +48,18 @@ public class JemmyDSL {
     private static Properties props = new Properties();
 
     static {
-        props.put("WindowWaiter.WaitWindowTimeout", "10000");
+        props.put("ComponentOperator.WaitComponentEnabledTimeout", "5000");
+        props.put("ComponentOperator.WaitComponentTimeout", "5000");
+        props.put("ComponentOperator.WaitStateTimeout", "5000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "10000");
-        props.put("Waiter.WaitingTime", "10000");
+        props.put("JComboBoxOperator.WaitListTimeout", "10000");
         props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
         props.put("JSliderOperator.WholeScrollTimeout", "10000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
         props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
-        props.put("ComponentOperator.WaitComponentTimeout", "10000");
-        props.put("ComponentOperator.WaiStateTimeout", "10000");
-        props.put("JComboBoxOperator.WaitListTimeout", "10000");
-        props.put("ComponentOperator.WaitComponentEnabledTimeout", "10000");
-        props.put("ComponentOperator.WaitStateTimeout", "10000");
+        props.put("Waiter.WaitingTime", "10000");
+        props.put("WindowWaiter.WaitWindowTimeout", "10000");
     }
 
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
@@ -386,10 +385,12 @@ public class JemmyDSL {
 
         public TextField(String locator) {
             component = find(locator, JTextFieldOperator.class);
+            component.setComparator(new Operator.DefaultStringComparator(true, true));
         }
 
         public TextField(JTextFieldOperator component) {
             this.component = component;
+            component.setComparator(new Operator.DefaultStringComparator(true, true));
         }
 
         public TextField type(String text) {

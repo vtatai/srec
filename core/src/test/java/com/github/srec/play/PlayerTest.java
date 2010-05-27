@@ -5,7 +5,8 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 @Test
 public class PlayerTest {
@@ -19,8 +20,10 @@ public class PlayerTest {
         Player p = new Player()
                 .init()
                 .startAndPlay(new File(TEST_SCRIPT_DIR + "test_form_error.xml"), "com.github.srec.ui.TestForm", new String[0]);
-        assertNotNull(p.getError());
-        assertEquals(p.getError().getLine(), 18);
+        p.printErrors();
+        assertEquals(p.getErrors().size(), 2);
+        assertEquals(p.getErrors().get(0).getLine(), 18);
+        assertEquals(p.getErrors().get(1).getLine(), 26);
     }
 
     public void testMethod() throws IOException {
@@ -35,13 +38,17 @@ public class PlayerTest {
         runTest("if.xml");
     }
 
+    public void testWhile() throws IOException {
+        runTest("while.xml");
+    }
+
     private void runTest(String script) {
         try {
             Player p = new Player()
                     .init()
                     .startAndPlay(new File(TEST_SCRIPT_DIR + script), "com.github.srec.ui.TestForm", new String[0]);
-            if (p.getError() != null) p.getError().printStackTrace();
-            assertNull(p.getError());
+            p.printErrors();
+            assertEquals(p.getErrors().size(), 0);
         } catch (Throwable t) {
             t.printStackTrace();
             fail();

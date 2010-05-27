@@ -10,6 +10,8 @@ import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.srec.util.Utils.closeWindows;
 import static com.github.srec.util.Utils.runMain;
@@ -21,8 +23,7 @@ import static com.github.srec.util.Utils.runMain;
  */
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
-    private PlayerError error;
-    private boolean throwError;
+    private List<PlayerError> errors = new ArrayList<PlayerError>();
     private long commandInterval = 50;
     private Parser parser;
 
@@ -112,21 +113,14 @@ public class Player {
     }
 
     private void handleError(Command command, CommandExecutionException e) {
-        error = new PlayerError(command.getLocation().getLineNumber(), command.getLocation().getLine(), e);
+        PlayerError error = new PlayerError(command.getLocation().getLineNumber(), command.getLocation().getLine(), e);
         System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
         System.err.println(command.getLocation().getLine());
+        errors.add(error);
     }
 
-    public PlayerError getError() {
-        return error;
-    }
-
-    public boolean isThrowError() {
-        return throwError;
-    }
-
-    public void setThrowError(boolean throwError) {
-        this.throwError = throwError;
+    public List<PlayerError> getErrors() {
+        return errors;
     }
 
     public long getCommandInterval() {
@@ -137,15 +131,21 @@ public class Player {
         this.commandInterval = commandInterval;
     }
 
+    /**
+     * Prints all errors in stderr.
+     */
+    public void printErrors() {
+        for (PlayerError playerError : getErrors()) {
+            System.err.println(playerError);
+        }
+    }
+
     public static void main(final String[] args) throws IOException {
         runMain(args[0], null);
 
         Player player = new Player().init();
         player.play(new File(args[1]));
-        if (player.getError() != null) {
-            System.err.println(player.getError());
-        }
-
+        player.printErrors();
         closeWindows();
     }
 

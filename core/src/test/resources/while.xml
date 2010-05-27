@@ -11,19 +11,20 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_form_error">
-    <test_case name="1">
+<suite name="while_suite">
+    <def name="type_initialValueTF" >
+        <parameter name="text" type="string"/>
+        <parameter name="times" type="number"/>
+        <set var="k" expression="0"/>
+        <while expression="k &lt; times">
+            <type locator="initialValueTF" text="$text"/>
+            <inc var="k"/>
+        </while>
+    </def>
+    <test_case name="while_test_case">
         <window_activate locator="TestForm"/>
-        <select locator="calculationCB" item="Future Value"/>
-        <type locator="sinitialValueTF" text="100"/>
-        <assert locator="initialValueTF" text="100"/>
-        <close locator="TestForm"/>
-    </test_case>
-    <test_case name="2">
-        <window_activate locator="TestForm"/>
-        <select locator="calculationCB" item="Future Value"/>
-        <type locator="initialValueTF" text="100"/>
-        <assert locator="initialValueTF" text="10"/>
+        <type_initialValueTF text="9" times="5"/>
+        <assert locator="initialValueTF" text="99999"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>

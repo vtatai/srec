@@ -123,12 +123,27 @@ public class XmlParser implements Parser {
             Type type = parseType(getAttributeByName("type", element));
             if (type == null) throw new ParseException("'type' attribute missing for argument");
             ((MethodScriptCommand) peekCurrentBlock()).addParameter(new MethodParameter(getAttributeByName("name", element), type));
+        } else if ("set".equals(name)) {
+            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
+            final SetCommand command = new SetCommand(createParseLocation(element),
+                    new ExpressionCommand(getAttributeByName("expression", element),
+                            createParseLocation(element.getAttributeByName(new QName("expression")))),
+                    getAttributeByName("var", element));
+            addCommand(command);
+        } else if ("inc".equals(name)) {
+            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
+            addCommand(new IncCommand(createParseLocation(element),
+                    getAttributeByName("var", element)));
         } else if ("if".equals(name)) {
             pushCurrentBlock(new IfCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))));
+        } else if ("while".equals(name)) {
+            pushCurrentBlock(new WhileCommand(createParseLocation(element),
+                    new ExpressionCommand(getAttributeByName("expression", element),
+                            createParseLocation(element.getAttributeByName(new QName("expression"))))));
         } else {
-            if (parseSymbolsOnly && currentBlocks == null) return;
+            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
             ExecutionContext executionContext = getCurrentExecutionContext();
             CommandSymbol symbol = executionContext.findSymbol(name);
             if (symbol == null || !(symbol instanceof MethodCommand)) {
@@ -144,11 +159,7 @@ public class XmlParser implements Parser {
                 if (methodParameter == null) throw new ParseException("Parameter " + attributeName + " not defined");
                 command.addParameter(attributeName, createLiteralCommand(attr.getValue(), methodParameter.getType()));
             }
-            if (!currentBlocks.isEmpty()) {
-                peekCurrentBlock().addCommand(command);
-            } else {
-                executionContext.addCommand(command);
-            }
+            addCommand(command);
         }
     }
 
@@ -199,13 +210,9 @@ public class XmlParser implements Parser {
             ExecutionContext context = getCurrentExecutionContext();
             context.addSymbol((MethodScriptCommand) popCurrentBlock());
         } else if ("if".equals(name)) {
-            IfCommand ifCommand = (IfCommand) currentBlocks.pop();
-            if (currentBlocks.isEmpty()) {
-                ExecutionContext context = getCurrentExecutionContext();
-                context.addCommand(ifCommand);
-            } else {
-                currentBlocks.peek().addCommand(ifCommand);
-            }
+            addCommand(currentBlocks.pop());
+        } else if ("while".equals(name)) {
+            addCommand(currentBlocks.pop());
         }
     }
 
@@ -224,6 +231,15 @@ public class XmlParser implements Parser {
                         event.getLocation().getColumnNumber(), event.toString()),
                 message));
         log.warn("Parse error: " + message);
+    }
+
+    private void addCommand(Command command) {
+        if (currentBlocks.isEmpty()) {
+            ExecutionContext context = getCurrentExecutionContext();
+            context.addCommand(command);
+        } else {
+            currentBlocks.peek().addCommand(command);
+        }
     }
 
     private void pushCurrentBlock(BlockCommand block) {
