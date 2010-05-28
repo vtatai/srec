@@ -40,19 +40,25 @@ public class WhileCommand extends AbstractBlockCommand {
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        Value v = condition.getValue(context);
-        while (!(v instanceof NilValue) && (v instanceof BooleanValue && ((BooleanValue) v).get())) {
+        boolean breakingFlow = false;
+        while (!breakingFlow && checkCondition(context)) {
             for (Command command : commands) {
                 CommandFlow flow = command.run(context);
-                if (flow == CommandFlow.NEXT) {}
-                else if (flow == CommandFlow.BREAK) break;
-                else if (flow == CommandFlow.EXIT
-                        || flow == CommandFlow.RETURN) return flow;
-                else throw new PlayerException("Flow management from command not supported");
+                if (flow == CommandFlow.NEXT) {
+                } else if (flow == CommandFlow.BREAK) {
+                    breakingFlow = true;
+                    break;
+                } else if (flow == CommandFlow.EXIT || flow == CommandFlow.RETURN) {
+                    return flow;
+                } else throw new PlayerException("Flow management from command not supported");
             }
-            v = condition.getValue(context);
         }
         return CommandFlow.NEXT;
+    }
+
+    private boolean checkCondition(ExecutionContext context) {
+        Value v = condition.getValue(context);
+        return !(v instanceof NilValue) && (v instanceof BooleanValue && ((BooleanValue) v).get());
     }
 
     @Override

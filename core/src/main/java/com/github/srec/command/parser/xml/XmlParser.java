@@ -144,6 +144,8 @@ public class XmlParser implements Parser {
             pushCurrentBlock(new WhileCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))));
+        } else if ("break".equals(name)) {
+            addCommand(new BreakCommand(createParseLocation(element)));
         } else {
             if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
             ExecutionContext executionContext = getCurrentExecutionContext();

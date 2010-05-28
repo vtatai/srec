@@ -20,6 +20,11 @@
             <type locator="initialValueTF" text="$text"/>
             <inc var="k"/>
         </while>
+        <set var="k" expression="0"/>
+        <while expression="k &lt; times">
+            <break/>
+            <type locator="initialValueTF" text="$text"/>
+        </while>
     </def>
     <test_case name="while_test_case">
         <window_activate locator="TestForm"/>
