@@ -116,13 +116,15 @@
                   </grid>
                 </children>
               </grid>
-              <tabbedpane id="60c29" binding="tabbedPane1" default-binding="true">
+              <tabbedpane id="60c29" binding="tabbedPane">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="200" height="200"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <name value="tabbedPane"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <grid id="d3f9e" binding="tab1" layout-manager="GridLayoutManager" row-count="6" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -394,9 +396,11 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="174b8" class="javax.swing.JTable" binding="table1" default-binding="true">
+                          <component id="174b8" class="javax.swing.JTable" binding="table" custom-create="true">
                             <constraints/>
-                            <properties/>
+                            <properties>
+                              <name value="table"/>
+                            </properties>
                           </component>
                         </children>
                       </scrollpane>

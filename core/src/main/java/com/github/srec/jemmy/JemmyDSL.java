@@ -8,14 +8,13 @@ import org.netbeans.jemmy.operators.*;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.List;
-
-import static org.testng.Assert.assertEquals;
 
 /**
  * A DSL wrapper for Jemmy operators.
@@ -274,6 +273,10 @@ public class JemmyDSL {
 
     public static Label label(String locator) {
         return new Label(find(locator, JLabelOperator.class));
+    }
+
+    public static TabbedPane tabbedPane(String locator) {
+        return new TabbedPane(locator);
     }
 
     public static void waitEnabled(String locator, boolean enabled) {
@@ -592,6 +595,10 @@ public class JemmyDSL {
             return new Row(component, index);
         }
 
+        public TableHeader header() {
+            return new TableHeader(component.getTableHeader());
+        }
+
         public JTableOperator getComponent() {
             return component;
         }
@@ -607,8 +614,30 @@ public class JemmyDSL {
         }
 
         public Row assertColumn(int col, String value) {
-            String realValue = component.getValueAt(index, col).toString();
-            assertEquals(realValue, value);
+            component.waitCell(value, index, col);
+            return this;
+        }
+    }
+
+    public static class TableHeader {
+        private JTableHeaderOperator component;
+
+        public TableHeader(JTableHeader swingComponent) {
+            component = new JTableHeaderOperator(swingComponent);
+        }
+
+        public TableHeader assertTitle(final int col, final String title) {
+            component.waitState(new ComponentChooser() {
+                @Override
+                public boolean checkComponent(java.awt.Component comp) {
+                    return ((JTableHeader) comp).getColumnModel().getColumn(col).getHeaderValue().equals(title);
+                }
+
+                @Override
+                public String getDescription() {
+                    return null;
+                }
+            });
             return this;
         }
     }
@@ -623,6 +652,23 @@ public class JemmyDSL {
         public Label text(String text) {
             component.waitText(text);
             return this;
+        }
+    }
+
+    public static class TabbedPane extends Component {
+        private JTabbedPaneOperator component;
+
+        public TabbedPane(String locator) {
+            component = find(locator, JTabbedPaneOperator.class);
+        }
+
+        public TabbedPane select(String title) {
+            component.selectPage(title);
+            return this;
+        }
+
+        public JTabbedPaneOperator getComponent() {
+            return component;
         }
     }
 }

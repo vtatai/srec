@@ -22,6 +22,11 @@
         <click locator="text=Ok"/>
         <click locator="cb1"/>
         <assert_enabled locator="textField2" enabled="true"/>
+        <tab locator="tabbedPane" text="Table"/>
+        <assert_header table="table" column="0" text="First Name"/>
+        <assert_header table="table" column="1" text="Last Name"/>
+        <assert_header table="table" column="2" text="Sport"/>
+        <assert_cell table="table" row="0" column="0" text="Mary"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>
