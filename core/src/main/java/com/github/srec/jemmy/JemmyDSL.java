@@ -257,13 +257,23 @@ public class JemmyDSL {
 
     private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz, Class<Y> componentClass, JComponent component) {
         try {
-            Constructor<X> c = clazz.getConstructor(componentClass);
+            Constructor<X> c = findConstructor(clazz, componentClass);
             return c.newInstance(component);
         } catch (Exception e) {
             // Check to see if the nested exception was caused by a regular Jemmy exception
             if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
             throw new JemmyDSLException(e);
         }
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private static <X, Y> Constructor<X> findConstructor(Class<X> clazz, Class<Y> componentClass) {
+        Constructor<X>[] cs = (Constructor<X>[]) clazz.getConstructors();
+        for (Constructor<X> c : cs) {
+            final Class<?>[] types = c.getParameterTypes();
+            if (types.length == 1 && types[0].isAssignableFrom(componentClass)) return c;
+        }
+        throw new JemmyDSLException("Could not find suitable constructor in class " + clazz.getCanonicalName());
     }
 
     public static JComponent getSwingComponentById(String id) {
