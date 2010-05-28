@@ -220,11 +220,13 @@
                           <text value="Slider:"/>
                         </properties>
                       </component>
-                      <component id="91178" class="javax.swing.JSlider" binding="slider1" default-binding="true">
+                      <component id="91178" class="javax.swing.JSlider" binding="slider">
                         <constraints>
                           <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="slider"/>
+                        </properties>
                       </component>
                       <component id="173cb" class="javax.swing.JLabel">
                         <constraints>
@@ -297,13 +299,15 @@
                           <text value="Text field:"/>
                         </properties>
                       </component>
-                      <component id="8b786" class="javax.swing.JPasswordField" binding="passwordField1" default-binding="true">
+                      <component id="8b786" class="javax.swing.JPasswordField" binding="passwordField">
                         <constraints>
                           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="passwordField"/>
+                        </properties>
                       </component>
                       <component id="a8c0d" class="javax.swing.JLabel">
                         <constraints>
@@ -313,13 +317,15 @@
                           <text value="Password field:"/>
                         </properties>
                       </component>
-                      <component id="53c8e" class="javax.swing.JFormattedTextField" binding="formattedTextField1" default-binding="true">
+                      <component id="53c8e" class="javax.swing.JFormattedTextField" binding="formattedTextField">
                         <constraints>
                           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="formattedTextField"/>
+                        </properties>
                       </component>
                       <component id="85c2d" class="javax.swing.JLabel">
                         <constraints>
@@ -329,13 +335,15 @@
                           <text value="Formatted field:"/>
                         </properties>
                       </component>
-                      <component id="e0059" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+                      <component id="e0059" class="javax.swing.JTextArea" binding="textArea">
                         <constraints>
                           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="50"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="textArea"/>
+                        </properties>
                       </component>
                       <component id="b50bf" class="javax.swing.JLabel">
                         <constraints>
@@ -345,21 +353,25 @@
                           <text value="Text area:"/>
                         </properties>
                       </component>
-                      <component id="fc997" class="javax.swing.JTextPane" binding="textPane1" default-binding="true">
+                      <component id="fc997" class="javax.swing.JTextPane" binding="textPane">
                         <constraints>
                           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="50"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="textPane"/>
+                        </properties>
                       </component>
-                      <component id="5da05" class="javax.swing.JEditorPane" binding="editorPane1" default-binding="true">
+                      <component id="5da05" class="javax.swing.JEditorPane" binding="editorPane">
                         <constraints>
                           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="50"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <name value="editorPane"/>
+                        </properties>
                       </component>
                       <component id="8259a" class="javax.swing.JLabel">
                         <constraints>

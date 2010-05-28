@@ -279,6 +279,10 @@ public class JemmyDSL {
         return new TabbedPane(locator);
     }
 
+    public static Slider slider(String locator) {
+        return new Slider(locator);
+    }
+
     public static void waitEnabled(String locator, boolean enabled) {
         JComponentOperator op = find(locator, JComponentOperator.class);
         try {
@@ -384,10 +388,10 @@ public class JemmyDSL {
     }
 
     public static class TextField extends Component {
-        private JTextFieldOperator component;
+        private JTextComponentOperator component;
 
         public TextField(String locator) {
-            component = find(locator, JTextFieldOperator.class);
+            component = find(locator, JTextComponentOperator.class);
             component.setComparator(new Operator.DefaultStringComparator(true, true));
         }
 
@@ -440,7 +444,7 @@ public class JemmyDSL {
             component.waitText(text);
         }
 
-        public JTextFieldOperator getComponent() {
+        public JTextComponentOperator getComponent() {
             return component;
         }
 
@@ -617,6 +621,26 @@ public class JemmyDSL {
             component.waitCell(value, index, col);
             return this;
         }
+
+        public Row select() {
+            component.setRowSelectionInterval(index, index);
+            return this;
+        }
+
+        public Row assertSelected(final boolean selected) {
+            component.waitState(new ComponentChooser() {
+                @Override
+                public boolean checkComponent(java.awt.Component comp) {
+                    return ((JTable) comp).isRowSelected(index) == selected;
+                }
+
+                @Override
+                public String getDescription() {
+                    return null;
+                }
+            });
+            return this;
+        }
     }
 
     public static class TableHeader {
@@ -668,6 +692,39 @@ public class JemmyDSL {
         }
 
         public JTabbedPaneOperator getComponent() {
+            return component;
+        }
+    }
+
+    public static class Slider extends Component {
+        private JSliderOperator component;
+
+        public Slider(String locator) {
+            component = find(locator, JSliderOperator.class);
+        }
+
+        public Slider value(int i) {
+            component.setValue(i);
+            return this;
+        }
+
+        public Slider assertValue(final int i) {
+            component.waitState(new ComponentChooser() {
+                @Override
+                public boolean checkComponent(java.awt.Component comp) {
+                    return ((JSlider) comp).getValue() == i;
+                }
+
+                @Override
+                public String getDescription() {
+                    return null;
+                }
+            });
+            return this;
+        }
+
+        @Override
+        public ComponentOperator getComponent() {
             return component;
         }
     }
