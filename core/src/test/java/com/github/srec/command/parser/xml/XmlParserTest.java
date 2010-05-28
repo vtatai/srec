@@ -33,7 +33,7 @@ public class XmlParserTest {
     public void testForm() {
         XmlParser p = new XmlParser();
         final File file = new File("src/test/resources/test_form.xml");
-        final ExecutionContext context = ExecutionContextFactory.getInstance().create(file);
+        final ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file);
         TestSuite suite = p.parse(context, file);
         assertEquals(p.getErrors().size(), 0);
         assertEquals(suite.getTestCases().size(), 1);
@@ -44,7 +44,7 @@ public class XmlParserTest {
     public void testMethod() {
         XmlParser p = new XmlParser();
         final File file = new File("src/test/resources/test_form_method_call.xml");
-        final ExecutionContext context = ExecutionContextFactory.getInstance().create(file);
+        final ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file);
         TestSuite suite = p.parse(context, file);
         assertEquals(p.getErrors().size(), 0);
         assertEquals(suite.getTestCases().size(), 1);

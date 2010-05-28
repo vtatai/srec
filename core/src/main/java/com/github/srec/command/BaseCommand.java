@@ -1,6 +1,6 @@
 package com.github.srec.command;
 
-import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.Location;
 
 /**
  * Base class for commands.
@@ -9,13 +9,13 @@ import com.github.srec.command.parser.ParseLocation;
  */
 public abstract class BaseCommand implements Command {
     protected String name;
-    protected ParseLocation location;
+    protected Location location;
 
     protected BaseCommand(String name) {
         this.name = name;
     }
 
-    protected BaseCommand(String name, ParseLocation location) {
+    protected BaseCommand(String name, Location location) {
         this(name);
         this.location = location;
     }
@@ -26,7 +26,7 @@ public abstract class BaseCommand implements Command {
     }
 
     @Override
-    public ParseLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 }

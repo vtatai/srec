@@ -13,8 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.Value;
 
 /**
@@ -30,7 +30,7 @@ public class VarCommand extends BaseCommand implements CommandSymbol, ValueComma
         this.value = value;
     }
 
-    public VarCommand(String name, ParseLocation location, Value value) {
+    public VarCommand(String name, Location location, Value value) {
         super(name, location);
         this.value = value;
     }

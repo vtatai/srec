@@ -13,8 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.Value;
 
 import static com.github.srec.util.Utils.groovyEvaluateConvert;
@@ -30,7 +30,7 @@ public class ExpressionCommand extends BaseCommand implements ValueCommand {
         this.expression = expression;
     }
 
-    public ExpressionCommand(String expression, ParseLocation location) {
+    public ExpressionCommand(String expression, Location location) {
         super(expression, location);
         this.expression = expression;
     }

@@ -71,8 +71,7 @@ public class Player {
     }
 
     public Player play(InputStream is, File file) throws IOException {
-        ExecutionContext context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
-
+        ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
         TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
@@ -80,6 +79,7 @@ public class Player {
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
             testCaseEC.setPlayer(this);
+            testCaseEC.setTestCase(testCase);
             play(testCaseEC);
         }
         return this;
@@ -95,7 +95,7 @@ public class Player {
                 else throw new PlayerException("Flow management instruction " + flow + "  from command "
                             + command.getName() + " not supported");
             } catch (CommandExecutionException e) {
-                handleError(command, e);
+                handleError(context.getTestSuite(), context.getTestCase(), command, e);
                 break;
             }
             try {
@@ -112,8 +112,9 @@ public class Player {
         return "" + command.getLocation().getLineNumber();
     }
 
-    private void handleError(Command command, CommandExecutionException e) {
-        PlayerError error = new PlayerError(command.getLocation().getLineNumber(), command.getLocation().getLine(), e);
+    private void handleError(TestSuite testSuite, TestCase testCase, Command command, CommandExecutionException e) {
+        PlayerError error = new PlayerError(testSuite == null ? "" : testSuite.getName(),
+                testCase == null ? "" : testCase.getName(), command.getLocation(), e);
         System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
         System.err.println(command.getLocation().getLine());
         errors.add(error);

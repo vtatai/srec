@@ -1,7 +1,7 @@
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 
 /**
  * Represents a generic command recorded.
@@ -29,7 +29,7 @@ public interface Command {
      *
      * @return The tree, null if this command was not parsed
      */
-    ParseLocation getLocation();
+    Location getLocation();
 
     public static enum CommandFlow {
         NEXT,

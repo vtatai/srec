@@ -1,8 +1,8 @@
 package com.github.srec.command.method;
 
+import com.github.srec.Location;
 import com.github.srec.command.ValueCommand;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.StringValue;
 import com.github.srec.command.value.Value;
 import com.github.srec.rec.Recorder;
@@ -24,13 +24,13 @@ public class MethodCallEventCommand extends MethodCallCommand {
      */
     private boolean collapseMultiple = true;
 
-    public MethodCallEventCommand(String name, Component component, ParseLocation location, Map<String, ValueCommand> params) {
+    public MethodCallEventCommand(String name, Component component, Location location, Map<String, ValueCommand> params) {
         super(name, location);
         this.component = component;
         parameters.putAll(params);
     }
 
-    public MethodCallEventCommand(String name, Component component, ParseLocation location,
+    public MethodCallEventCommand(String name, Component component, Location location,
                                   Map<String, ValueCommand> params, boolean collapseMultiple) {
         this(name, component, location, params);
         this.collapseMultiple = collapseMultiple;

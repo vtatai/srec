@@ -22,8 +22,8 @@ public class PlayerTest {
                 .startAndPlay(new File(TEST_SCRIPT_DIR + "test_form_error.xml"), "com.github.srec.ui.TestForm", new String[0]);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
-        assertEquals(p.getErrors().get(0).getLine(), 18);
-        assertEquals(p.getErrors().get(1).getLine(), 26);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 18);
+        assertEquals(p.getErrors().get(1).getLineNumber(), 26);
     }
 
     public void testMethod() throws IOException {

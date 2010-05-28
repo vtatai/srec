@@ -13,7 +13,7 @@
 
 package com.github.srec.command;
 
-import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public abstract class AbstractBlockCommand extends BaseCommand implements BlockC
         super(name);
     }
 
-    protected AbstractBlockCommand(String name, ParseLocation location) {
+    protected AbstractBlockCommand(String name, Location location) {
         super(name, location);
     }
 

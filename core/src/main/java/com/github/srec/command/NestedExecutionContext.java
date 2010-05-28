@@ -11,7 +11,8 @@ public class NestedExecutionContext extends ExecutionContext {
     private ExecutionContext parent;
 
     public NestedExecutionContext(ExecutionContext parent, File file) {
-        super(parent.getPlayer(), file, parent.getLoadPath().toArray(new String[parent.getLoadPath().size()]));
+        super(parent.getTestSuite(), parent.getTestCase(), parent.getPlayer(), file,
+                parent.getLoadPath().toArray(new String[parent.getLoadPath().size()]));
         this.parent = parent;
     }
 

@@ -13,8 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.BooleanValue;
 import com.github.srec.command.value.NilValue;
 import com.github.srec.command.value.Value;
@@ -33,7 +33,7 @@ public class IfCommand extends AbstractBlockCommand {
         this.condition = condition;
     }
 
-    public IfCommand(ParseLocation location, ValueCommand condition) {
+    public IfCommand(Location location, ValueCommand condition) {
         super("if", location);
         this.condition = condition;
     }

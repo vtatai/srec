@@ -1,5 +1,7 @@
 package com.github.srec.command.parser;
 
+import com.github.srec.Location;
+
 /**
  * Represents an error while parsing.
  *
@@ -11,10 +13,10 @@ public class ParseError {
     }
 
     private Severity severity;
-    private ParseLocation location;
+    private Location location;
     private String message;
 
-    public ParseError(Severity severity, ParseLocation location, String message) {
+    public ParseError(Severity severity, Location location, String message) {
         this.severity = severity;
         this.location = location;
         this.message = message;
@@ -24,7 +26,7 @@ public class ParseError {
         return severity;
     }
 
-    public ParseLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 

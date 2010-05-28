@@ -10,18 +10,20 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
  * the specific language governing permissions and limitations under the License.
  */
-package com.github.srec.command.parser;
+package com.github.srec;
 
 /**
+ * Represents a location within a test file.
+ * 
  * @author Victor Tatai
  */
-public class ParseLocation {
+public class Location {
     private String fileName;
     private int lineNumber;
     private int column;
     private String line;
 
-    public ParseLocation(String fileName, int lineNumber, int column, String line) {
+    public Location(String fileName, int lineNumber, int column, String line) {
         this.fileName = fileName;
         this.lineNumber = lineNumber;
         this.column = column;

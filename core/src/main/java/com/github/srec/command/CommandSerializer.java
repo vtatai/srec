@@ -39,7 +39,7 @@ public class CommandSerializer {
     public static ExecutionContext load(File file) {
         ExecutionContext context;
         try {
-            context = ExecutionContextFactory.getInstance().create(file, file.getParentFile().getCanonicalPath());
+            context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
         } catch (IOException e) {
             throw new CommandSerializationException(e);
         }

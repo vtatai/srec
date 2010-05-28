@@ -13,13 +13,13 @@
 
 package com.github.srec.command;
 
-import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.Location;
 
 /**
  * @author Victor Tatai
  */
 public class EndCommand extends BaseCommand {
-    public EndCommand(ParseLocation location) {
+    public EndCommand(Location location) {
         super("end", location);
     }
     

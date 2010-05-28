@@ -13,8 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.Value;
 
 /**
@@ -26,7 +26,7 @@ public class SetCommand extends BaseCommand {
     private ExpressionCommand expression;
     private String varName;
 
-    public SetCommand(ParseLocation location, ExpressionCommand expression, String varName) {
+    public SetCommand(Location location, ExpressionCommand expression, String varName) {
         super("set", location);
         this.expression = expression;
         this.varName = varName;

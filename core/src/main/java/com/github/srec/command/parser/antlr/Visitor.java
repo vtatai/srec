@@ -93,7 +93,7 @@ public class Visitor {
 
     public void visitMETHOD_CALL(CommonTree t, CommonTree parent) throws IOException, RecognitionException {
         String name = getChildText(t, 0);
-        MethodCallCommand command = new MethodCallCommand(name, new ParseLocationCTAdapter(context.getFile().getCanonicalPath(), t));
+        MethodCallCommand command = new MethodCallCommand(name, new LocationCTAdapter(context.getFile().getCanonicalPath(), t));
         CommandSymbol s = context.findSymbol(name);
         if (s == null) {
             error(t, "Could not resolve reference '" + name + "' to a method");
@@ -113,7 +113,7 @@ public class Visitor {
         String name = getChildText(t, 0);
         CommandSymbol s = context.findSymbol(name);
         if (s instanceof MethodCommand) {
-            add(new MethodCallCommand(name, new ParseLocationCTAdapter(context.getFile().getCanonicalPath(), t)));
+            add(new MethodCallCommand(name, new LocationCTAdapter(context.getFile().getCanonicalPath(), t)));
         } else if (s instanceof VarCommand) {
             add(s);
         } else {
@@ -149,7 +149,7 @@ public class Visitor {
 //        Map<String, MethodCommand.Parameter> params = new HashMap<String, MethodCommand.Parameter>(t.getChildCount());
 //        for (int i = 0; i < t.getChildCount(); i++) {
 //            params.put("", new MethodCommand.Parameter(t.getChild(i).getText()));
-//            context.addSymbol(new VarCommand(params[i].getName(), new ParseLocationCTAdapter(context.getCanonicalPath(),
+//            context.addSymbol(new VarCommand(params[i].getName(), new LocationCTAdapter(context.getCanonicalPath(),
 //                    (CommonTree) t.getChild(i)), null));
 //        }
 //        currentMethod.setParameters(params);
@@ -189,32 +189,32 @@ public class Visitor {
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITNUMBER(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
-        add(new LiteralCommand(new ParseLocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
+        add(new LiteralCommand(new LocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
                 new NumberValue(t.getChild(0).getText())));
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITSTRING(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
-        add(new LiteralCommand(new ParseLocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
+        add(new LiteralCommand(new LocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
                 new StringValue(t.getChild(0).getText())));
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITBOOLEAN(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
-        add(new LiteralCommand(new ParseLocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
+        add(new LiteralCommand(new LocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
                 new BooleanValue(t.getChild(0).getText())));
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void visitLITNIL(CommonTree t, CommonTree parent) throws RecognitionException, IOException {
-        add(new LiteralCommand(new ParseLocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
+        add(new LiteralCommand(new LocationCTAdapter(context.getCanonicalPath(), (CommonTree) t.getChild(0)),
                 NilValue.getInstance()));
     }
 
     private void error(CommonTree t, String message) {
         try {
             errors.add(new ParseError(ParseError.Severity.ERROR,
-                    new ParseLocationCTAdapter(context.getFile().getCanonicalPath(), t), message));
+                    new LocationCTAdapter(context.getFile().getCanonicalPath(), t), message));
         } catch (IOException e) {
             throw new ParseException(e);
         }

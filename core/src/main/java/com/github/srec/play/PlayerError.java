@@ -1,5 +1,6 @@
 package com.github.srec.play;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
 
 /**
@@ -8,44 +9,47 @@ import com.github.srec.command.exception.CommandExecutionException;
 * @author Victor Tatai
 */
 public class PlayerError {
-    /**
-     * The line number.
-     */
-    private int line;
-    /**
-     * The line of text where the error occurred.
-     */
-    private String text;
+    private Location location;
     /**
      * The original exception.
      */
     private CommandExecutionException originatingException;
+    private String testSuite;
+    private String testCase;
 
-    public PlayerError(int line, String text, CommandExecutionException originatingException) {
-        this.line = line;
-        this.text = text;
+    public PlayerError(String testSuite, String testCase, Location location, CommandExecutionException originatingException) {
+        this.testSuite = testSuite;
+        this.testCase = testCase;
+        this.location = location;
         this.originatingException = originatingException;
     }
 
-    public int getLine() {
-        return line;
+    public int getLineNumber() {
+        return location.getLineNumber();
     }
 
-    public String getText() {
-        return text;
+    public String getLine() {
+        return location.getLine();
     }
 
     public CommandExecutionException getOriginatingException() {
         return originatingException;
     }
 
-    @Override
-    public String toString() {
-        return "Script error on line " + line + ", message:\n" + originatingException.getMessage();
+    public Location getLocation() {
+        return location;
     }
 
-    public void printStackTrace() {
-        System.err.println(toString());
-        originatingException.printStackTrace();
+    public String getTestSuite() {
+        return testSuite;
+    }
+
+    public String getTestCase() {
+        return testCase;
+    }
+
+    @Override
+    public String toString() {
+        return "Script error on test suite '" + testSuite + "', test case '" + testCase + "', at " + location + ", message:\n" + originatingException.getMessage();
     }
 }

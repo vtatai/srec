@@ -39,8 +39,8 @@ public class ExecutionContextFactory {
         }
     }
 
-    public ExecutionContext create(File file, String... loadPath) {
-        ExecutionContext ctx = new ExecutionContext(file, loadPath);
+    public ExecutionContext create(TestSuite ts, TestCase tc, File file, String... loadPath) {
+        ExecutionContext ctx = new ExecutionContext(ts, tc, file, loadPath);
         for (MethodCommand builtinCommand : builtinCommands) {
             ctx.addSymbol(builtinCommand);
         }

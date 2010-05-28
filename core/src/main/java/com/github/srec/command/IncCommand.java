@@ -13,8 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Value;
 
@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 public class IncCommand extends BaseCommand {
     private String varName;
 
-    public IncCommand(ParseLocation location, String varName) {
+    public IncCommand(Location location, String varName) {
         super("inc", location);
         this.varName = varName;
     }

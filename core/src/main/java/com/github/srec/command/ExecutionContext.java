@@ -26,6 +26,8 @@ import java.util.*;
  * @author Victor Tatai
  */
 public class ExecutionContext {
+    private TestSuite testSuite;
+    private TestCase testCase;
     private List<Command> commands = new ArrayList<Command>();
     private Map<String, CommandSymbol> symbols = new HashMap<String, CommandSymbol>();
     /**
@@ -41,13 +43,15 @@ public class ExecutionContext {
      */
     private List<String> loadPath = new ArrayList<String>();
 
-    public ExecutionContext(File file, String... loadPaths) {
+    public ExecutionContext(TestSuite ts, TestCase tc, File file, String... loadPaths) {
+        testSuite = ts;
+        testCase = tc;
         this.file = file;
         loadPath.addAll(Arrays.asList(loadPaths));
     }
 
-    public ExecutionContext(Player player, File file, String... loadPaths) {
-        this(file, loadPaths);
+    public ExecutionContext(TestSuite ts, TestCase tc, Player player, File file, String... loadPaths) {
+        this(ts, tc, file, loadPaths);
         this.player = player;
     }
 
@@ -57,6 +61,8 @@ public class ExecutionContext {
      * @param other The other execution context
      */
     public ExecutionContext(ExecutionContext other) {
+        testSuite = other.testSuite;
+        testCase = other.testCase;
         commands.addAll(other.getCommands());
         symbols.putAll(other.getSymbols());
         loadPath.addAll(other.getLoadPath());
@@ -114,5 +120,21 @@ public class ExecutionContext {
 
     public Map<String, CommandSymbol> getSymbols() {
         return Collections.unmodifiableMap(symbols);
+    }
+
+    public TestSuite getTestSuite() {
+        return testSuite;
+    }
+
+    public void setTestSuite(TestSuite testSuite) {
+        this.testSuite = testSuite;
+    }
+
+    public TestCase getTestCase() {
+        return testCase;
+    }
+
+    public void setTestCase(TestCase testCase) {
+        this.testCase = testCase;
     }
 }

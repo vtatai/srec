@@ -13,16 +13,16 @@
 
 package com.github.srec.command.parser.antlr;
 
-import com.github.srec.command.parser.ParseLocation;
+import com.github.srec.Location;
 import org.antlr.runtime.tree.CommonTree;
 
 /**
  * @author Victor Tatai
  */
-public class ParseLocationCTAdapter extends ParseLocation {
+public class LocationCTAdapter extends Location {
     private CommonTree tree;
 
-    public ParseLocationCTAdapter(String fileName, CommonTree tree) {
+    public LocationCTAdapter(String fileName, CommonTree tree) {
         super(fileName, tree.getLine(), tree.getCharPositionInLine(), tree.toString());
         this.tree = tree;
     }

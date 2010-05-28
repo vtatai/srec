@@ -1,10 +1,10 @@
 package com.github.srec.command.method;
 
+import com.github.srec.Location;
 import com.github.srec.command.BaseCommand;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ValueCommand;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.value.Value;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class MethodCallCommand extends BaseCommand implements ValueCommand {
     protected Map<String, ValueCommand> parameters = new HashMap<String, ValueCommand>();
 
-    public MethodCallCommand(String name, ParseLocation tree) {
+    public MethodCallCommand(String name, Location tree) {
         super(name, tree);
     }
 

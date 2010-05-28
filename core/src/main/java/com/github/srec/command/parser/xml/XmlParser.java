@@ -1,5 +1,6 @@
 package com.github.srec.command.parser.xml;
 
+import com.github.srec.Location;
 import com.github.srec.command.*;
 import com.github.srec.command.method.MethodCallCommand;
 import com.github.srec.command.method.MethodCommand;
@@ -7,7 +8,6 @@ import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.method.MethodScriptCommand;
 import com.github.srec.command.parser.ParseError;
 import com.github.srec.command.parser.ParseException;
-import com.github.srec.command.parser.ParseLocation;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.value.*;
 import com.github.srec.util.Resource;
@@ -101,8 +101,10 @@ public class XmlParser implements Parser {
         final String name = element.getName().getLocalPart();
         if ("suite".equals(name)) {
             currentTestSuite = new TestSuite(getAttributeByName("name", element));
+            getCurrentExecutionContext().setTestSuite(currentTestSuite);
         } else if ("test_case".equals(name)) {
             currentTestCase = new TestCase(getAttributeByName("name", element), new ExecutionContext(contextPrototype));
+            getCurrentExecutionContext().setTestCase(currentTestCase);
         } else if ("require".equals(name)) {
             final String resourceName = getAttributeByName("name", element);
             Resource r = ResourceFactory.getGenericResource(resourceName);
@@ -216,8 +218,8 @@ public class XmlParser implements Parser {
         }
     }
 
-    private ParseLocation createParseLocation(XMLEvent event) {
-        return new ParseLocation(getParsingFileCanonicalPath(), event.getLocation().getLineNumber(),
+    private Location createParseLocation(XMLEvent event) {
+        return new Location(getParsingFileCanonicalPath(), event.getLocation().getLineNumber(),
                 event.getLocation().getColumnNumber(), event.toString());
     }
 
@@ -227,7 +229,7 @@ public class XmlParser implements Parser {
 
     private void error(XMLEvent event, String message) {
         errors.add(new ParseError(ParseError.Severity.ERROR,
-                new ParseLocation(parsingFile, event.getLocation().getLineNumber(),
+                new Location(parsingFile, event.getLocation().getLineNumber(),
                         event.getLocation().getColumnNumber(), event.toString()),
                 message));
         log.warn("Parse error: " + message);
