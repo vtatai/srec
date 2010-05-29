@@ -29,13 +29,14 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 @ExecutionContextCommand
 public class RowSelectCommand extends JemmyEventCommand {
     public RowSelectCommand() {
-        super("row_select", createParametersDefinition("table", Type.STRING, "row", Type.NUMBER));
+        super("row_select", createParametersDefinition("table", Type.STRING, "first", Type.NUMBER, "last", Type.NUMBER));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         table(coerceToString(params.get("table"), ctx))
-                .row(coerceToBigDecimal(params.get("row")).intValue())
-                .select();
+                .selectRows(
+                        coerceToBigDecimal(params.get("first")).intValue(),
+                        coerceToBigDecimal(params.get("last")).intValue());
     }
 }

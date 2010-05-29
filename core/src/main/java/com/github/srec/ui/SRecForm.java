@@ -3,6 +3,7 @@ package com.github.srec.ui;
 import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.play.Player;
 import com.github.srec.rec.Recorder;
+import com.github.srec.rec.RecorderEventCallback;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -35,7 +36,7 @@ import java.util.List;
 /**
  * @author Victor Tatai
  */
-public class SRecForm {
+public class SRecForm implements RecorderEventCallback {
     private static final Logger logger = Logger.getLogger(SRecForm.class);
     /**
      * The limit for the recent files list (Reopen menu).
@@ -197,8 +198,9 @@ public class SRecForm {
         statusBarTimer.start();
     }
 
-    public void addTextNewLine(String text) {
-        codeArea.insert("\n" + text, codeArea.getCaretPosition());
+    @Override
+    public void addEvent(MethodCallEventCommand event) {
+        codeArea.insert("\n" + event.print(), codeArea.getCaretPosition());
     }
 
     public void showFrame(String[] args) {
@@ -341,6 +343,7 @@ public class SRecForm {
      *
      * @param event The event
      */
+    @Override
     public void replaceLastEvent(MethodCallEventCommand event) {
         codeArea.replaceCurrentLine(event.print());
     }

@@ -3,7 +3,6 @@ package com.github.srec.rec;
 import com.github.srec.command.method.MethodCallEventCommand;
 import com.github.srec.rec.common.DefaultComponentDecoder;
 import com.github.srec.rec.component.*;
-import com.github.srec.ui.SRecForm;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -20,7 +19,7 @@ import java.util.List;
 public class Recorder implements EventRecorder {
     private static final Logger logger = Logger.getLogger(Recorder.class);
     private List<ComponentRecorder> componentRecorders = new ArrayList<ComponentRecorder>();
-    private SRecForm srecForm;
+    private RecorderEventCallback eventCallback;
 
     /**
      * The list of ignored containers, such as the recording frame itself.
@@ -29,13 +28,16 @@ public class Recorder implements EventRecorder {
     private boolean recording;
     private MethodCallEventCommand lastEvent;
 
-    public Recorder(SRecForm form) {
-        srecForm = form;
+    public Recorder(RecorderEventCallback callback) {
+        eventCallback = callback;
         componentRecorders.add(new ButtonClickRecorder(this));
         componentRecorders.add(new WindowActivationRecorder(this));
         componentRecorders.add(new TextFieldRecorder(this, new DefaultComponentVisibility()));
         componentRecorders.add(new SelectDropDownRecorder(this, new DefaultComponentDecoder(), new DefaultComponentVisibility()));
         componentRecorders.add(new CheckTextRecorder(this));
+        componentRecorders.add(new TabSwitchRecorder(this, new DefaultComponentVisibility()));
+        componentRecorders.add(new SliderRecorder(this));
+        componentRecorders.add(new TableRowSelectionRecorder(this));        
     }
 
     public void init() {
@@ -54,14 +56,13 @@ public class Recorder implements EventRecorder {
         if (!recording || isIgnored(event.getComponent()) || isOnJavaConsole(event.getComponent())) return;
         if (StringUtils.isBlank(event.getComponentLocator())) {
             logger.warn("Component has no way of being located (no name or label): " + event.getComponent());
-            return;
         }
         event.record(this, lastEvent);
         lastEvent = event;
     }
 
     public void addEvent(MethodCallEventCommand event) {
-        srecForm.addTextNewLine(event.print());
+        eventCallback.addEvent(event);
     }
 
     protected boolean isIgnored(Component component) {
@@ -95,7 +96,7 @@ public class Recorder implements EventRecorder {
 
     public void replaceLastEvent(MethodCallEventCommand event) {
         logger.debug("Replacing the last event with: " + event);
-        srecForm.replaceLastEvent(event);
+        eventCallback.replaceLastEvent(event);
     }
 
     public void addIgnoredContainer(Container container) {

@@ -143,15 +143,15 @@ public final class Utils {
     /**
      * Utility method useful for creating a parameter map.
      *
-     * @param params The params, should be in the form "param name", "param value"
+     * @param params The parameters, should be in the format "name", value
      * @return The parameters map
      */
-    public static Map<String, ValueCommand> createParameterMap(String... params) {
+    public static Map<String, ValueCommand> createParameterMap(Object... params) {
         assert params.length % 2 == 0;
         Map<String, ValueCommand> ret = new HashMap<String, ValueCommand>();
         for (int i = 0; i < params.length; i = i + 2) {
-            String param = params[i];
-            String value = params[i + 1];
+            String param = params[i].toString();
+            Value value = convertFromJava(params[i + 1]);
             ret.put(param, new LiteralCommand(value));
         }
         return ret;

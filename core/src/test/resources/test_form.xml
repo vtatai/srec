@@ -42,7 +42,7 @@
         <assert_header table="table" column="1" text="Last Name"/>
         <assert_header table="table" column="2" text="Sport"/>
         <assert_cell table="table" row="0" column="0" text="Mary"/>
-        <row_select table="table" row="0"/>
+        <row_select table="table" first="0" last="0"/>
         <assert_row_selected table="table" row="0"/>
 
         <close locator="TestForm"/>

@@ -613,6 +613,11 @@ public class JemmyDSL {
             return new TableHeader(component.getTableHeader());
         }
 
+        public Table selectRows(int first, int last) {
+            component.setRowSelectionInterval(first, last);
+            return this;
+        }
+
         public JTableOperator getComponent() {
             return component;
         }

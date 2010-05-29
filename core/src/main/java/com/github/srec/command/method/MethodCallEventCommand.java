@@ -49,7 +49,7 @@ public class MethodCallEventCommand extends MethodCallCommand {
     }
 
     public String getComponentLocator() {
-        if (parameters == null || parameters.size() == 0) return null;
+        if (parameters == null || parameters.size() == 0 || parameters.get("locator") == null) return null;
         Value value =  parameters.get("locator").getValue(null);
         if (!(value instanceof StringValue)) {
             throw new CommandExecutionException("First parameter is not a string, cannot be component locator");
