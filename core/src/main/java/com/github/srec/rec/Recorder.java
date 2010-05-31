@@ -38,6 +38,8 @@ public class Recorder implements EventRecorder {
         componentRecorders.add(new TabSwitchRecorder(this, new DefaultComponentVisibility()));
         componentRecorders.add(new SliderRecorder(this));
         componentRecorders.add(new TableRowSelectionRecorder(this));        
+        componentRecorders.add(new InternalFrameRecorder(this));
+        componentRecorders.add(new MenuNavigationRecorder(this));        
     }
 
     public void init() {

@@ -15,6 +15,8 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.exception.CommandExecutionException;
+import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
@@ -28,14 +30,22 @@ import static com.github.srec.jemmy.JemmyDSL.menuBar;
 @ExecutionContextCommand
 public class PushMenuCommand extends JemmyEventCommand {
     public PushMenuCommand() {
-        super("push_menu", createParametersDefinition("indices"));
+        super("push_menu", param("indices", Type.STRING, true, null), param("path", Type.STRING, true, null));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        String indicesStr = coerceToString(params.get("indices"), ctx);
-        String[] indicesArray = indicesStr.split("[ |,]+");
-        menuBar().clickMenu(convertToInt(indicesArray));
+        if (params.get("indices") != null) {
+            String indicesStr = coerceToString(params.get("indices"), ctx);
+            String[] indicesArray = indicesStr.split("[ |,]+");
+            menuBar().clickMenu(convertToInt(indicesArray));
+        } else if (params.get("path") != null) {
+            String pathStr = coerceToString(params.get("path"), ctx);
+            String[] pathArray = pathStr.split("[ |>]+");
+            menuBar().clickMenu(pathArray);
+        } else {
+            throw new CommandExecutionException("Either indices or path must be specified for push_menu");
+        }
     }
 
     private int[] convertToInt(String[] strings) {

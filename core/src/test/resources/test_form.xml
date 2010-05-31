@@ -18,6 +18,9 @@
         <hide_internal_frame locator="title=Internal Frame"/>
         <push_menu indices="1,0,1"/>
 
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>ShowA"/>
+
         <select locator="calculationCB" item="Future Value"/>
         <type locator="initialValueTF" text="100"/>
         <type_special locator="initialValueTF" text="Tab"/>
