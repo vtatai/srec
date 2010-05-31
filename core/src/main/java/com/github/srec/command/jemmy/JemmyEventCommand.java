@@ -42,7 +42,7 @@ public abstract class JemmyEventCommand extends MethodCommand {
             runJemmy(context, params);
         } catch (JemmyException e) {
             if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, params, e);
-            throw new UnsupportedFeatureException(e.getMessage());
+            throw new UnsupportedFeatureException(e);
         }
         return null;
     }

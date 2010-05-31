@@ -18,6 +18,7 @@ import com.github.srec.command.CommandSymbol;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.IllegalParametersException;
 import com.github.srec.command.exception.MethodDefinitionException;
+import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 
 import java.util.HashMap;
@@ -64,7 +65,19 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
         }
         return ps;
     }
-        
+
+    protected static MethodParameter param(String name) {
+        return new MethodParameter(name, Type.STRING);
+    }
+
+    protected static MethodParameter param(String name, Type type) {
+        return new MethodParameter(name, type);
+    }
+
+    protected static MethodParameter param(String name, Type type, boolean optional, Value value) {
+        return new MethodParameter(name, type, optional, value);
+    }
+
     /**
      * Executes the method call.
      *

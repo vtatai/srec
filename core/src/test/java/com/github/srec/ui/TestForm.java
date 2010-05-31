@@ -42,7 +42,10 @@ public class TestForm {
     private JButton toolbarButton1;
     private JTextField textField2;
     private JTextField textField3;
-    protected JFrame frame;
+
+    private JFrame frame;
+    private JDesktopPane desktop;
+    private JInternalFrame internalFrame;
 
     public TestForm() {
         $$$setupUI$$$();
@@ -71,19 +74,50 @@ public class TestForm {
 
     public void init() {
         frame = new JFrame("TestForm");
-        frame.setContentPane(mainPnl);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        frame.setMinimumSize(new Dimension(600, 300));
+        frame.setMinimumSize(new Dimension(800, 600));
+
+        desktop = new JDesktopPane();
+        frame.setContentPane(desktop);
+
+        internalFrame = new JInternalFrame("Internal Frame");
+        internalFrame.setClosable(true);
+        internalFrame.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
+        internalFrame.setResizable(true);
+        internalFrame.setContentPane(mainPnl);
+        internalFrame.pack();
+        desktop.add(internalFrame);
 
         calculationCB.addItem("Current Value");
         calculationCB.addItem("Future Value");
 
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(new JMenu("Menu1"));
+
+        final JMenu menu1 = new JMenu("Menu1");
+        final JMenu menu11 = new JMenu("Menu11");
+        menu1.add(menu11);
+        menuBar.add(menu1);
+
+        final JMenu menu2 = new JMenu("Menu2");
+        final JMenu menu21 = new JMenu("Menu21");
+        final JMenuItem menuItem1 = new JMenuItem("Dummy");
+        menu21.add(menuItem1);
+        final JMenuItem menuItem2 = new JMenuItem("Show");
+        menuItem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                internalFrame.show();
+            }
+        });
+        menu21.add(menuItem2);
+        menu2.add(menu21);
+        menuBar.add(menu2);
+        
         frame.setJMenuBar(menuBar);
 
         frame.setVisible(true);
+        internalFrame.show();
     }
 
     public static void main(String[] args) {
@@ -271,6 +305,7 @@ public class TestForm {
         final Spacer spacer2 = new Spacer();
         tab3.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
+        scrollPane2.setMinimumSize(new Dimension(100, 20));
         splitPane1.setLeftComponent(scrollPane2);
         tree1 = new JTree();
         scrollPane2.setViewportView(tree1);

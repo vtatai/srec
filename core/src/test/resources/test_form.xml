@@ -14,6 +14,10 @@
 <suite name="test_form">
     <test_case name="1">
         <window_activate locator="TestForm"/>
+
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu indices="1,0,1"/>
+
         <select locator="calculationCB" item="Future Value"/>
         <type locator="initialValueTF" text="100"/>
         <type_special locator="initialValueTF" text="Tab"/>

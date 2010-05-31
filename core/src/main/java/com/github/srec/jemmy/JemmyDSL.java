@@ -237,6 +237,12 @@ public class JemmyDSL {
                         + operator.getClass().getName() + " to " + clazz.getName());
             }
             component = (X) operator;
+        } else if (locatorMap.containsKey("title")) {
+            if (JInternalFrameOperator.class.isAssignableFrom(clazz)) {
+                component = newInstance(clazz, container().getComponent(), new JInternalFrameOperator.JInternalFrameByTitleFinder(locatorMap.get("title")));
+            } else {
+                throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
+            }
         } else {
             throw new JemmyDSLException("Unsupported locator: " + locator);
         }
@@ -291,6 +297,19 @@ public class JemmyDSL {
 
     public static Slider slider(String locator) {
         return new Slider(locator);
+    }
+
+    public static InternalFrame internalFrame(String locator) {
+        return new InternalFrame(locator);
+    }
+
+    /**
+     * Gets the menu bar for the last activated frame.
+     *
+     * @return The menu bar
+     */
+    public static MenuBar menuBar() {
+        return new MenuBar();
     }
 
     public static void waitEnabled(String locator, boolean enabled) {
@@ -740,6 +759,103 @@ public class JemmyDSL {
 
         @Override
         public ComponentOperator getComponent() {
+            return component;
+        }
+    }
+
+    public static class MenuBar extends Container {
+        private JMenuBarOperator component;
+
+        public MenuBar() {
+            component = new JMenuBarOperator(currentContainer.getComponent());
+        }
+
+        public MenuBar clickMenu(int... indices) {
+            if (indices.length == 0) return this;
+            String[] texts = new String[indices.length];
+            JMenu menu = component.getMenu(indices[0]);
+            texts[0] = menu.getText();
+            for (int i = 1; i < indices.length; i++) {
+                int index = indices[i];
+                if (i == indices.length - 1) {
+                    JMenuItem item = (JMenuItem) menu.getMenuComponent(index);
+                    texts[i] = item.getText();
+                    menu = null;
+                } else {
+                    menu = (JMenu) menu.getMenuComponent(index);
+                    texts[i] = menu.getText();
+                }
+            }
+            clickMenu(texts);
+            return this;
+        }
+
+        public MenuBar clickMenu(String... texts) {
+            if (texts.length == 0) return this;
+            component.showMenuItem(texts[0]);
+            for (int i = 1; i < texts.length; i++) {
+                String text = texts[i];
+                new JMenuOperator(currentContainer.getComponent(), texts[i - 1]).showMenuItem(new String[] {text});
+            }
+            new JMenuItemOperator(currentContainer.getComponent(), texts[texts.length - 1]).clickMouse();
+            return this;
+        }
+
+        @Override
+        public JMenuBarOperator getComponent() {
+            return component;
+        }
+    }
+
+    public static class Menu extends Container {
+        private JMenuOperator component;
+
+        public Menu() {
+        }
+
+        @Override
+        public JMenuOperator getComponent() {
+            return component;
+        }
+    }
+
+    public static class InternalFrame extends Container {
+        private JInternalFrameOperator component;
+
+        public InternalFrame(String locator) {
+            component = find(locator, JInternalFrameOperator.class);
+        }
+
+        public InternalFrame(JInternalFrame frame) {
+            component = new JInternalFrameOperator(frame);
+        }
+
+        public InternalFrame close() {
+            component.setClosed(true);
+            return this;
+        }
+
+        public InternalFrame hide() {
+            component.setVisible(false);
+            return this;
+        }
+
+        public InternalFrame show() {
+            component.setVisible(true);
+            return this;
+        }
+
+        public InternalFrame activate() {
+            component.activate();
+            return this;
+        }
+
+        public InternalFrame assertVisible(Boolean visible) {
+            component.waitComponentVisible(visible);
+            return this;
+        }
+
+        public JInternalFrameOperator getComponent() {
             return component;
         }
     }
