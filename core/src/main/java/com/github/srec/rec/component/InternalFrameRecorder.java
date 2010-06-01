@@ -50,6 +50,8 @@ public class InternalFrameRecorder extends AbstractComponentRecorder implements 
     }
 
     public void internalFrameClosing(InternalFrameEvent e) {
+        JInternalFrame iframe = e.getInternalFrame();
+        recorder.record(new MethodCallEventCommand("iframe_close", iframe, null, createParameterMap("title", iframe.getTitle())));
     }
 
     public void internalFrameClosed(InternalFrameEvent e) {

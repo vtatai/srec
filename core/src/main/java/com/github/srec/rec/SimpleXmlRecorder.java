@@ -18,6 +18,8 @@ import com.github.srec.command.method.MethodCallEventCommand;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -129,8 +131,18 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         lastEvent = event;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        SimpleXmlRecorder sr = new SimpleXmlRecorder(new PrintWriter(System.out, true));
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
+        if (args.length == 0 || args.length > 2) {
+            System.err.println("Usage: " + SimpleXmlRecorder.class.getSimpleName() + " <main class name> [output file]");
+            System.err.println("If output file is not specified recording is redirected to stdout.");
+            return;
+        }
+        SimpleXmlRecorder sr;
+        if (args.length == 1) {
+            sr = new SimpleXmlRecorder(new PrintWriter(System.out, true));
+        } else {
+            sr = new SimpleXmlRecorder(new PrintWriter(new FileWriter(args[1])));
+        }
         sr.start(args[0]);
     }
 }

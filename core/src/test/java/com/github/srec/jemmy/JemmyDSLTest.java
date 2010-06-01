@@ -25,11 +25,12 @@ import static com.github.srec.jemmy.JemmyDSL.*;
  */
 @Test
 public class JemmyDSLTest {
-    public void testMenu() throws IOException {
+    public void testMenu() throws IOException, InterruptedException {
         TestForm.main(new String[0]);
         init();
         frame("TestForm").activate();
-        internalFrame("title=Internal Frame").hide();
+        internalFrame("title=Internal Frame").close();
+        Thread.sleep(10000);
         menuBar().clickMenu(1, 0, 1);
         internalFrame("title=Internal Frame").assertVisible(true);
     }    

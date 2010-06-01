@@ -13,13 +13,14 @@
 
 package com.github.srec.rec;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Victor Tatai
  */
 public class SimpleXmlRecorderStub {
-    public static void main(String[] args) throws InvocationTargetException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException {
+    public static void main(String[] args) throws InvocationTargetException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IOException {
         SimpleXmlRecorder.main(new String[] {"com.github.srec.ui.TestForm"});
     }
 }

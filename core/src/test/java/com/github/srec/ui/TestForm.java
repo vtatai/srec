@@ -85,6 +85,8 @@ public class TestForm {
         internalFrame.setClosable(true);
         internalFrame.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
         internalFrame.setResizable(true);
+        internalFrame.setMaximizable(true);
+        internalFrame.setIconifiable(true);
         internalFrame.setContentPane(mainPnl);
         internalFrame.pack();
         desktop.add(internalFrame);

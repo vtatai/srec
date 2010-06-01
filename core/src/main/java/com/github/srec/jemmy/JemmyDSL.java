@@ -831,7 +831,7 @@ public class JemmyDSL {
         }
 
         public InternalFrame close() {
-            component.setClosed(true);
+            component.getMinimizeButton().clickMouse(); // hack due to a bug in Jemmy
             return this;
         }
 
