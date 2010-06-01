@@ -820,18 +820,18 @@ public class JemmyDSL {
     }
 
     public static class InternalFrame extends Container {
-        private JInternalFrameOperator component;
+        private CustomJInternalFrameOperator component;
 
         public InternalFrame(String locator) {
-            component = find(locator, JInternalFrameOperator.class);
+            component = find(locator, CustomJInternalFrameOperator.class);
         }
 
         public InternalFrame(JInternalFrame frame) {
-            component = new JInternalFrameOperator(frame);
+            component = new CustomJInternalFrameOperator(frame);
         }
 
         public InternalFrame close() {
-            component.getMinimizeButton().clickMouse(); // hack due to a bug in Jemmy
+            ((JInternalFrame) component.getSource()).doDefaultCloseAction();
             return this;
         }
 

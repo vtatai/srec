@@ -30,7 +30,6 @@ public class JemmyDSLTest {
         init();
         frame("TestForm").activate();
         internalFrame("title=Internal Frame").close();
-        Thread.sleep(10000);
         menuBar().clickMenu(1, 0, 1);
         internalFrame("title=Internal Frame").assertVisible(true);
     }    
