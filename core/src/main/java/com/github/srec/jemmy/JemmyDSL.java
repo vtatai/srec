@@ -820,14 +820,14 @@ public class JemmyDSL {
     }
 
     public static class InternalFrame extends Container {
-        private CustomJInternalFrameOperator component;
+        private JInternalFrameOperator component;
 
         public InternalFrame(String locator) {
-            component = find(locator, CustomJInternalFrameOperator.class);
+            component = find(locator, JInternalFrameOperator.class);
         }
 
         public InternalFrame(JInternalFrame frame) {
-            component = new CustomJInternalFrameOperator(frame);
+            component = new JInternalFrameOperator(frame);
         }
 
         public InternalFrame close() {
