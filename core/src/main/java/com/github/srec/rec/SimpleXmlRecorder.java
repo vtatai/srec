@@ -26,7 +26,13 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * A simple recorder which records XML.
+ * A simple recorder which records XML. Besides regular recording, it allows the following shortcuts:
+ * <ul>
+ * <li>Ctrl-D: Pause/resume recording</li>
+ * <li>Ctrl-Alt-S: Take a screenshot of the entire screen</li>
+ * <li>Ctrl-Shift-S: Take a screenshot of the current open frame</li>
+ * <li>Ctrl-Alt-Shift-S: Take a screenshot of the current open internal frame</li>
+ * </ul>
  *
  * @author Victor Tatai
  */
