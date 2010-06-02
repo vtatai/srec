@@ -114,10 +114,6 @@ public final class Utils {
             JLabel label = getLabelFor(component.getParent(), component);
             if (label != null) locator = "label=" + label.getText();
         }
-        if (isBlank(locator)) {
-            int index = findComponentIndex(component);
-            locator = "index=" + index;
-        }
         return locator;
     }
 

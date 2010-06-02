@@ -32,6 +32,7 @@ public class Recorder implements EventRecorder {
         eventCallback = callback;
         componentRecorders.add(new ButtonClickRecorder(this));
         componentRecorders.add(new WindowActivationRecorder(this));
+        componentRecorders.add(new WindowCloseRecorder(this));
         componentRecorders.add(new TextFieldRecorder(this, new DefaultComponentVisibility()));
         componentRecorders.add(new SelectDropDownRecorder(this, new DefaultComponentDecoder(), new DefaultComponentVisibility()));
         componentRecorders.add(new CheckTextRecorder(this));
