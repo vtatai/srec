@@ -34,7 +34,7 @@ public class WindowCloseRecorder implements ComponentRecorder, AWTEventListener 
     public WindowCloseRecorder(EventRecorder recorder) {
         this.recorder = recorder;
     }
-
+                                                             
     public void register() {
         Toolkit.getDefaultToolkit().addAWTEventListener(this, AWTEvent.WINDOW_EVENT_MASK);
     }
