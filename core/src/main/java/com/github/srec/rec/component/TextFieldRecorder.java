@@ -6,7 +6,6 @@ import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -40,58 +39,39 @@ public class TextFieldRecorder extends AbstractComponentRecorder {
             @Override
             public void eventDispatched(AWTEvent event) {
                 if (event.getID() != KeyEvent.KEY_TYPED) return;
-                if (((KeyEvent) event).getKeyChar() == '\t' && event.getSource() instanceof JTextField) {
-                    JTextField tf = (JTextField) event.getSource();
+                if (!(event.getSource() instanceof JTextField)) return;
+                JTextField tf = (JTextField) event.getSource();
+                String locator = getLocator(tf);
+                if (locator == null) return;
+                logger.debug("TextField event registered: '" + locator + "', value: '" + tf.getText() + "'");
+                if (((KeyEvent) event).getKeyChar() == '\t') {
                     recorder.record(new MethodCallEventCommand("type_special", tf, null,
-                            createParameterMap("locator", tf.getName(), "text", "Tab")));
+                            createParameterMap("locator", locator, "text", "Tab")));
+                } else {
+                    recorder.record(new MethodCallEventCommand("type", tf, null, createParameterMap(
+                            "locator", locator, "text", tf.getText() + ((KeyEvent) event).getKeyChar()), true));
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
     }
 
+    private String getLocator(JTextField tf) {
+        if (!visibility.isShowingAndHasFocus(tf)) return null;
+        String locator = Utils.getLocator(tf);
+        if (locator == null) {
+            logger.warn("No locator could be determined for text field");
+            return null;
+        }
+        return locator;
+    }
+
     void componentShown(Component component) {
-        DocumentListener listener = new TextFieldListener(textField(component));
-        textField(component).getDocument().addDocumentListener(listener);
-        listenerMap.put(textField(component), listener);
     }
 
     void componentHidden(Component component) {
-        DocumentListener listener = listenerMap.remove(textField(component));
-        textField(component).getDocument().removeDocumentListener(listener);
-    }
-
-    protected boolean matchesComponentType(AWTEvent event) {
-        return event.getSource() instanceof JTextComponent;
     }
 
     private JTextComponent textField(Component component) {
         return (JTextComponent) component;
-    }
-
-    private class TextFieldListener implements DocumentListener {
-        private JTextComponent textField;
-
-        public TextFieldListener(JTextComponent textField) {
-            this.textField = textField;
-        }
-
-        public void insertUpdate(DocumentEvent e) {
-            record();
-        }
-
-        private void record() {
-            if (!visibility.isShowingAndHasFocus(textField)) return;
-            String locator = Utils.getLocator(textField);
-            logger.debug("TextField event registered: '" + locator + "', value: '" + textField.getText() + "'");
-            recorder.record(new MethodCallEventCommand("type", textField, null, createParameterMap("locator", locator, "text", textField.getText()), true));
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-            record();
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-            //Do nothing for default text fields.
-        }
     }
 }

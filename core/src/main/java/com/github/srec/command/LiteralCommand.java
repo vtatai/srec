@@ -14,7 +14,7 @@ public class LiteralCommand extends BaseCommand implements ValueCommand {
     private Value value;
 
     public LiteralCommand(Value value) {
-        super(value.get().toString());
+        super(value == null || value.get() == null ? "" : value.get().toString());
         this.value = value;
     }
 

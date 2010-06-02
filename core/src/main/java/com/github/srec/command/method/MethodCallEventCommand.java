@@ -2,7 +2,6 @@ package com.github.srec.command.method;
 
 import com.github.srec.Location;
 import com.github.srec.command.ValueCommand;
-import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.StringValue;
 import com.github.srec.command.value.Value;
 import com.github.srec.rec.Recorder;
@@ -52,7 +51,7 @@ public class MethodCallEventCommand extends MethodCallCommand {
         if (parameters == null || parameters.size() == 0 || parameters.get("locator") == null) return null;
         Value value =  parameters.get("locator").getValue(null);
         if (!(value instanceof StringValue)) {
-            throw new CommandExecutionException("First parameter is not a string, cannot be component locator");
+            return null;
         }
         return ((StringValue) value).get();
     }

@@ -1,6 +1,7 @@
 package com.github.srec.util;
 
 import com.github.srec.MainMethodRunningException;
+import com.github.srec.SRecException;
 import com.github.srec.command.*;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.*;
@@ -113,7 +114,19 @@ public final class Utils {
             JLabel label = getLabelFor(component.getParent(), component);
             if (label != null) locator = "label=" + label.getText();
         }
+        if (isBlank(locator)) {
+            int index = findComponentIndex(component);
+            locator = "index=" + index;
+        }
         return locator;
+    }
+
+    private static int findComponentIndex(Component component) {
+        for (int i = 0; i < component.getParent().getComponents().length; i++) {
+            Component candidate = component.getParent().getComponents()[i];
+            if (candidate == component) return i;
+        }
+        throw new SRecException("Could not find component inside its parent");
     }
 
     public static String asString(Map<String, Value> parameters) {
