@@ -42,4 +42,8 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testWhile() throws IOException {
         runTest("while.xml");
     }
+
+    public void testCall() throws IOException {
+        runTest("call.xml");
+    }
 }

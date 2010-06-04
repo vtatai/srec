@@ -2,6 +2,7 @@ package com.github.srec.command.parser.xml;
 
 import com.github.srec.Location;
 import com.github.srec.command.*;
+import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.method.MethodCallCommand;
 import com.github.srec.command.method.MethodCommand;
 import com.github.srec.command.method.MethodParameter;
@@ -20,10 +21,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Parses an XML file.<br><br>
@@ -126,29 +124,33 @@ public class XmlParser implements Parser {
             if (type == null) throw new ParseException("'type' attribute missing for argument");
             ((MethodScriptCommand) peekCurrentBlock()).addParameter(new MethodParameter(getAttributeByName("name", element), type));
         } else if ("set".equals(name)) {
-            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
+            if (regularCommandsBlocked()) return;
             final SetCommand command = new SetCommand(createParseLocation(element),
                     getAttributeByName("var", element), new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))
             );
             addCommand(command);
         } else if ("inc".equals(name)) {
-            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
+            if (regularCommandsBlocked()) return;
             addCommand(new IncCommand(createParseLocation(element),
                     getAttributeByName("var", element)));
         } else if ("if".equals(name)) {
+            if (regularCommandsBlocked()) return;
             pushCurrentBlock(new IfCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))));
         } else if ("then".equals(name)) {
+            if (regularCommandsBlocked()) return;
             if (!(peekCurrentBlock() instanceof IfCommand)) error(element, "Then should be inside an if");
         } else if ("else".equals(name)) {
+            if (regularCommandsBlocked()) return;
             if (!(peekCurrentBlock() instanceof IfCommand)) {
                 error(element, "Else should be inside an if");
             } else {
                 pushCurrentBlock(new ElseCommand(createParseLocation(element)));
             }
         } else if ("elsif".equals(name)) {
+            if (regularCommandsBlocked()) return;
             if (!(peekCurrentBlock() instanceof IfCommand)) {
                 error(element, "Elsif should be inside an if");
             } else {
@@ -157,13 +159,38 @@ public class XmlParser implements Parser {
                                 createParseLocation(element.getAttributeByName(new QName("expression"))))));
             }
         } else if ("while".equals(name)) {
+            if (regularCommandsBlocked()) return;
             pushCurrentBlock(new WhileCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))));
         } else if ("break".equals(name)) {
+            if (regularCommandsBlocked()) return;
             addCommand(new BreakCommand(createParseLocation(element)));
+        } else if ("call".equals(name)) {
+            if (regularCommandsBlocked()) return;
+            String methodName = element.getAttributeByName(new QName("method")).getValue();
+            pushCurrentBlock(new CallCommandBlockStub(methodName));
+        } else if ("call_parameter".equals(name)) {
+            if (regularCommandsBlocked()) return;
+            if (!(peekCurrentBlock() instanceof CallCommandBlockStub)) error(element, "Illegal state while parsing call parameter");
+            ExecutionContext executionContext = getCurrentExecutionContext();
+            CallCommandBlockStub block = (CallCommandBlockStub) peekCurrentBlock();
+            CommandSymbol symbol = executionContext.findSymbol(block.getMethod());
+            if (symbol == null || !(symbol instanceof MethodCommand)) {
+                error(element, "Method with name '" + name + "' not found");
+                return;
+            }
+            Attribute attribute = element.getAttributeByName(new QName("name"));
+            String attributeValue = attribute.getValue();
+            MethodParameter methodParameter = ((MethodCommand) symbol).getParameters().get(attributeValue);
+            if (methodParameter == null) {
+                error(element, "Parameter with name '" + attribute.getName().getLocalPart() + "' not found");
+                return;
+            }
+            block.addParameter(attributeValue,
+                    createLiteralCommand(element.getAttributeByName(new QName("value")).getValue(), methodParameter.getType()));
         } else {
-            if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
+            if (regularCommandsBlocked()) return;
             ExecutionContext executionContext = getCurrentExecutionContext();
             CommandSymbol symbol = executionContext.findSymbol(name);
             if (symbol == null || !(symbol instanceof MethodCommand)) {
@@ -181,6 +208,10 @@ public class XmlParser implements Parser {
             }
             addCommand(command);
         }
+    }
+
+    private boolean regularCommandsBlocked() {
+        return parseSymbolsOnly && currentBlocks.isEmpty();
     }
 
     private ExecutionContext getCurrentExecutionContext() {
@@ -241,6 +272,13 @@ public class XmlParser implements Parser {
             ifCommand.addElsif(elsifCommand);
         } else if ("while".equals(name)) {
             addCommand(currentBlocks.pop());
+        } else if ("call".equals(name)) {
+            CallCommandBlockStub stub = (CallCommandBlockStub) popCurrentBlock();
+            final MethodCallCommand command = new MethodCallCommand(stub.getMethod(), createParseLocation(element));
+            for (Map.Entry<String, ValueCommand> entry : stub.getParameters().entrySet()) {
+                command.addParameter(entry.getKey(), entry.getValue());                
+            }
+            addCommand(command);
         }
     }
 
@@ -293,5 +331,51 @@ public class XmlParser implements Parser {
 
     public void setParseSymbolsOnly(boolean parseSymbolsOnly) {
         this.parseSymbolsOnly = parseSymbolsOnly;
+    }
+
+    private class CallCommandBlockStub implements BlockCommand {
+        private String method;
+        private Map<String, ValueCommand> parameters = new HashMap<String, ValueCommand>();
+
+        private CallCommandBlockStub(String method) {
+            this.method = method;
+        }
+
+        public void addParameter(String name, ValueCommand command) {
+            parameters.put(name, command);
+        }
+
+        public Map<String, ValueCommand> getParameters() {
+            return parameters;
+        }
+
+        @Override
+        public void addCommand(Command c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public List<Command> getCommands() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getName() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Location getLocation() {
+            throw new UnsupportedOperationException();
+        }
+
+        public String getMethod() {
+            return method;
+        }
     }
 }
