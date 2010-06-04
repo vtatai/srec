@@ -42,10 +42,6 @@
             <artifactId>gunit</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.sf.scannotation</groupId>
-            <artifactId>scannotation</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.fife</groupId>
             <artifactId>rsyntaxtextarea</artifactId>
         </dependency>

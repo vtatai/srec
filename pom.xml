@@ -299,11 +299,6 @@
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>net.sf.scannotation</groupId>
-                <artifactId>scannotation</artifactId>
-                <version>1.0.2</version>
-            </dependency>
-            <dependency>
                 <groupId>org.fife</groupId>
                 <artifactId>rsyntaxtextarea</artifactId>
                 <version>1.4.1</version>

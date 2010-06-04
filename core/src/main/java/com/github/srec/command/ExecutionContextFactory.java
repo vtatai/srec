@@ -2,12 +2,9 @@ package com.github.srec.command;
 
 import com.github.srec.SRecException;
 import com.github.srec.command.method.MethodCommand;
-import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
+import com.github.srec.util.ClasspathScanner;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,17 +21,11 @@ public class ExecutionContextFactory {
     private ExecutionContextFactory() {
     }
 
-    private void init() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        AnnotationDB ann = new AnnotationDB();
-        ann.setScanClassAnnotations(true);
-        ann.setScanMethodAnnotations(false);
-        ann.setScanFieldAnnotations(false);
-        ann.setScanParameterAnnotations(false);
-        URL[] urls = ClasspathUrlFinder.findClassPaths();
-        ann.scanArchives(urls);
-        Set<String> classes = ann.getAnnotationIndex().get(SRecCommand.class.getCanonicalName());
-        for (String clName : classes) {
-            Class cl = Class.forName(clName);
+    private void init() throws Exception {
+        ClasspathScanner scanner = new ClasspathScanner();
+        Set<? extends Class> classes = scanner.scanPackage("com.github.srec.command.jemmy",
+                new ClasspathScanner.AnnotatedClassSelector(SRecCommand.class));
+        for (Class cl: classes) {
             builtinCommands.add((MethodCommand) cl.newInstance());
         }
     }
@@ -52,13 +43,7 @@ public class ExecutionContextFactory {
             instance = new ExecutionContextFactory();
             try {
                 instance.init();
-            } catch (IOException e) {
-                throw new SRecException(e);
-            } catch (InstantiationException e) {
-                throw new SRecException(e);
-            } catch (IllegalAccessException e) {
-                throw new SRecException(e);
-            } catch (ClassNotFoundException e) {
+            } catch (Exception e) {
                 throw new SRecException(e);
             }
         }
