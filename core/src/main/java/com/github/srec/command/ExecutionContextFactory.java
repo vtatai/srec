@@ -3,11 +3,11 @@ package com.github.srec.command;
 import com.github.srec.SRecException;
 import com.github.srec.command.method.MethodCommand;
 import com.github.srec.util.ClasspathScanner;
+import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Interface which defines a context execution factory.
@@ -15,6 +15,8 @@ import java.util.Set;
  * @author Victor Tatai
  */
 public class ExecutionContextFactory {
+    private static final Logger log = Logger.getLogger(ExecutionContextFactory.class);
+    public static final String PACKAGES_TO_SCAN_PROPERTY_NAME = "packages_to_scan";
     private static ExecutionContextFactory instance;
     public List<MethodCommand> builtinCommands = new ArrayList<MethodCommand>();
 
@@ -22,8 +24,22 @@ public class ExecutionContextFactory {
     }
 
     private void init() throws Exception {
-        ClasspathScanner scanner = new ClasspathScanner();
-        Set<? extends Class> classes = scanner.scanPackage("com.github.srec.command.jemmy",
+        Enumeration<URL> urls = ClassLoader.getSystemResources("srec.properties");
+        while (urls.hasMoreElements()) {
+            URL url = urls.nextElement();
+            Properties prop = new Properties();
+            prop.load(url.openStream());
+            if (!prop.containsKey(PACKAGES_TO_SCAN_PROPERTY_NAME)) continue;
+            String[] packagesToScan = prop.getProperty(PACKAGES_TO_SCAN_PROPERTY_NAME).split("[ |,]+");
+            for (String packageName : packagesToScan) {
+                scanPackage(new ClasspathScanner(), packageName);
+            }
+        }
+    }
+
+    private void scanPackage(ClasspathScanner scanner, String packageName) throws Exception {
+        log.debug("Scanning package: " + packageName);
+        Set<? extends Class> classes = scanner.scanPackage(packageName,
                 new ClasspathScanner.AnnotatedClassSelector(SRecCommand.class));
         for (Class cl: classes) {
             builtinCommands.add((MethodCommand) cl.newInstance());
