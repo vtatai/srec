@@ -1,5 +1,7 @@
 package com.github.srec.command;
 
+import com.github.srec.command.base.CommandSymbol;
+
 import java.io.File;
 
 /**

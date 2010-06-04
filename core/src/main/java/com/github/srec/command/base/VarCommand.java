@@ -11,43 +11,47 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.Value;
 
 /**
- * A set statement.
+ * Represents a variable declaration.
  *
  * @author Victor Tatai
  */
-public class SetCommand extends BaseCommand {
-    private ExpressionCommand expression;
-    private String varName;
+public class VarCommand extends BaseCommand implements CommandSymbol, ValueCommand {
+    private Value value;
 
-    public SetCommand(Location location, String varName, ExpressionCommand expression) {
-        super("set", location);
-        this.expression = expression;
-        this.varName = varName;
+    public VarCommand(String name, Value value) {
+        super(name);
+        this.value = value;
+    }
+
+    public VarCommand(String name, Location location, Value value) {
+        super(name, location);
+        this.value = value;
     }
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        Value value = expression.getValue(context);
-        if (context.findSymbol(varName) == null) {
-            VarCommand var = new VarCommand(varName, location, value);
-            context.addSymbol(var);
-        } else {
-            CommandSymbol s = context.findSymbol(varName);
-            if (!(s instanceof VarCommand)) throw new CommandExecutionException("set statement should refer to a variable");
-            ((VarCommand) s).setValue(value);
-        }
         return CommandFlow.NEXT;
     }
 
     @Override
+    public Value getValue(ExecutionContext context) {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
+
+    @Override
     public String toString() {
-        return "set " + varName + " = " + expression;
+        return getName() + " = " + value.toString();
     }
 }

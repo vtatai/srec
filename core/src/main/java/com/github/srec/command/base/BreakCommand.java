@@ -11,20 +11,33 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.exception.CommandExecutionException;
 
 /**
+ * A break statement.
+ *
  * @author Victor Tatai
  */
-public class EndCommand extends BaseCommand {
-    public EndCommand(Location location) {
-        super("end", location);
+public class BreakCommand extends AbstractBlockCommand {
+    public BreakCommand() {
+        super("break");
     }
-    
+
+    public BreakCommand(Location location) {
+        super("break", location);
+    }
+
     @Override
-    public CommandFlow run(ExecutionContext context) {
-        return CommandFlow.NEXT;
+    public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
+        return CommandFlow.BREAK;
+    }
+
+    @Override
+    public String toString() {
+        return "break";
     }
 }

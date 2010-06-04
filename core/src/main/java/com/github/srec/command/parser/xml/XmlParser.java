@@ -1,7 +1,10 @@
 package com.github.srec.command.parser.xml;
 
 import com.github.srec.Location;
-import com.github.srec.command.*;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.TestCase;
+import com.github.srec.command.TestSuite;
+import com.github.srec.command.base.*;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.method.MethodCallCommand;
 import com.github.srec.command.method.MethodCommand;

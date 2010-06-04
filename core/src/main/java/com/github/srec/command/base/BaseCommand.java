@@ -1,4 +1,4 @@
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
 

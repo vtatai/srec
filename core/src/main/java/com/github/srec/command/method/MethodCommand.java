@@ -13,9 +13,9 @@
 
 package com.github.srec.command.method;
 
-import com.github.srec.command.BaseCommand;
-import com.github.srec.command.CommandSymbol;
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.base.BaseCommand;
+import com.github.srec.command.base.CommandSymbol;
 import com.github.srec.command.exception.IllegalParametersException;
 import com.github.srec.command.exception.MethodDefinitionException;
 import com.github.srec.command.value.Type;

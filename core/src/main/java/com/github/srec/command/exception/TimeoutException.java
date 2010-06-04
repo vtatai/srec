@@ -1,6 +1,6 @@
 package com.github.srec.command.exception;
 
-import com.github.srec.command.Command;
+import com.github.srec.command.base.Command;
 import com.github.srec.command.value.Value;
 import com.github.srec.util.Utils;
 

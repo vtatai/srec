@@ -2,7 +2,11 @@ package com.github.srec.util;
 
 import com.github.srec.MainMethodRunningException;
 import com.github.srec.SRecException;
-import com.github.srec.command.*;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.base.CommandSymbol;
+import com.github.srec.command.base.LiteralCommand;
+import com.github.srec.command.base.ValueCommand;
+import com.github.srec.command.base.VarCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.*;
 import com.github.srec.command.value.StringValue;

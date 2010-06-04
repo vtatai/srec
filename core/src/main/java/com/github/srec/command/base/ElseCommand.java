@@ -11,9 +11,10 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.play.PlayerException;
 

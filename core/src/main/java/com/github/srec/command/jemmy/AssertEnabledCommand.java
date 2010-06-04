@@ -1,7 +1,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.BooleanValue;
 import com.github.srec.command.value.Type;
@@ -15,7 +15,7 @@ import static com.github.srec.jemmy.JemmyDSL.waitEnabled;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class AssertEnabledCommand extends JemmyEventCommand {
     public AssertEnabledCommand() {
         super("assert_enabled", new MethodParameter(LOCATOR, Type.STRING),

@@ -13,7 +13,11 @@
 
 package com.github.srec.command.method;
 
-import com.github.srec.command.*;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.NestedExecutionContext;
+import com.github.srec.command.base.BlockCommand;
+import com.github.srec.command.base.Command;
+import com.github.srec.command.base.VarCommand;
 import com.github.srec.command.value.Value;
 import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;

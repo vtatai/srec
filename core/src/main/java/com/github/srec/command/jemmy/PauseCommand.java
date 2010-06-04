@@ -1,7 +1,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.Type;
@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class PauseCommand extends JemmyEventCommand implements KeyEventDispatcher {
     private static final Logger logger = Logger.getLogger(PauseCommand.class);
     private volatile boolean waiting;

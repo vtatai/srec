@@ -13,7 +13,7 @@
 
 package com.github.srec.rec;
 
-import com.github.srec.command.ValueCommand;
+import com.github.srec.command.base.ValueCommand;
 import com.github.srec.command.method.MethodCallEventCommand;
 
 import java.awt.*;

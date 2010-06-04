@@ -13,6 +13,8 @@
 
 package com.github.srec.command;
 
+import com.github.srec.command.base.Command;
+import com.github.srec.command.base.CommandSymbol;
 import com.github.srec.play.Player;
 
 import java.io.File;

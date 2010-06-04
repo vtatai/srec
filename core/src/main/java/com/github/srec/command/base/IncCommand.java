@@ -11,46 +11,43 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
+import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Value;
 
+import java.math.BigDecimal;
+
 /**
- * Represents a variable declaration.
+ * An inc statement.
  *
  * @author Victor Tatai
  */
-public class VarCommand extends BaseCommand implements CommandSymbol, ValueCommand {
-    private Value value;
+public class IncCommand extends BaseCommand {
+    private String varName;
 
-    public VarCommand(String name, Value value) {
-        super(name);
-        this.value = value;
-    }
-
-    public VarCommand(String name, Location location, Value value) {
-        super(name, location);
-        this.value = value;
+    public IncCommand(Location location, String varName) {
+        super("inc", location);
+        this.varName = varName;
     }
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
+        CommandSymbol s = context.findSymbol(varName);
+        if (!(s instanceof VarCommand)) throw new CommandExecutionException("Cannot inc " + varName + " since it is not a variable");
+        VarCommand var = (VarCommand) s;
+        Value value = var.getValue(context);
+        if (!(value instanceof NumberValue)) throw new CommandExecutionException("Cannot inc " + varName + " since it is not a number");
+        NumberValue number = (NumberValue) value;
+        number.set(number.get().add(BigDecimal.ONE));
         return CommandFlow.NEXT;
     }
 
     @Override
-    public Value getValue(ExecutionContext context) {
-        return value;
-    }
-
-    public void setValue(Value value) {
-        this.value = value;
-    }
-
-    @Override
     public String toString() {
-        return getName() + " = " + value.toString();
+        return "inc " + varName;
     }
 }

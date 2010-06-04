@@ -11,12 +11,21 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
+
+import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 
 /**
- * A command which should also be stored as a symbol for later reference in a script.
- * 
  * @author Victor Tatai
  */
-public interface CommandSymbol extends Command {
+public class EndCommand extends BaseCommand {
+    public EndCommand(Location location) {
+        super("end", location);
+    }
+    
+    @Override
+    public CommandFlow run(ExecutionContext context) {
+        return CommandFlow.NEXT;
+    }
 }

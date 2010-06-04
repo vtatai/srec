@@ -11,27 +11,12 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
-
-import java.util.List;
+package com.github.srec.command.base;
 
 /**
- * Class for blocks of commands such as while, if, for.
- *
+ * A command which should also be stored as a symbol for later reference in a script.
+ * 
  * @author Victor Tatai
  */
-public interface BlockCommand extends Command {
-    /**
-     * Adds a command.
-     *
-     * @param c The command
-     */
-    void addCommand(Command c);
-
-    /**
-     * Lists commands inside this block.
-     *
-     * @return The list of commands
-     */
-    List<Command> getCommands();
+public interface CommandSymbol extends Command {
 }

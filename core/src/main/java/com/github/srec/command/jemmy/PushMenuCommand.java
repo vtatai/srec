@@ -14,7 +14,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
@@ -27,7 +27,7 @@ import static com.github.srec.jemmy.JemmyDSL.menuBar;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class PushMenuCommand extends JemmyEventCommand {
     public PushMenuCommand() {
         super("push_menu", param("indices", Type.STRING, true, null), param("path", Type.STRING, true, null));

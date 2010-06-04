@@ -14,7 +14,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
 
@@ -25,7 +25,7 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class WindowCloseCommand extends JemmyEventCommand {
     public WindowCloseCommand() {
         super("window_close", createParametersDefinition(LOCATOR));

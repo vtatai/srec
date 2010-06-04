@@ -11,42 +11,44 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Value;
 
-import java.math.BigDecimal;
-
 /**
- * An inc statement.
+ * A set statement.
  *
  * @author Victor Tatai
  */
-public class IncCommand extends BaseCommand {
+public class SetCommand extends BaseCommand {
+    private ExpressionCommand expression;
     private String varName;
 
-    public IncCommand(Location location, String varName) {
-        super("inc", location);
+    public SetCommand(Location location, String varName, ExpressionCommand expression) {
+        super("set", location);
+        this.expression = expression;
         this.varName = varName;
     }
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        CommandSymbol s = context.findSymbol(varName);
-        if (!(s instanceof VarCommand)) throw new CommandExecutionException("Cannot inc " + varName + " since it is not a variable");
-        VarCommand var = (VarCommand) s;
-        Value value = var.getValue(context);
-        if (!(value instanceof NumberValue)) throw new CommandExecutionException("Cannot inc " + varName + " since it is not a number");
-        NumberValue number = (NumberValue) value;
-        number.set(number.get().add(BigDecimal.ONE));
+        Value value = expression.getValue(context);
+        if (context.findSymbol(varName) == null) {
+            VarCommand var = new VarCommand(varName, location, value);
+            context.addSymbol(var);
+        } else {
+            CommandSymbol s = context.findSymbol(varName);
+            if (!(s instanceof VarCommand)) throw new CommandExecutionException("set statement should refer to a variable");
+            ((VarCommand) s).setValue(value);
+        }
         return CommandFlow.NEXT;
     }
 
     @Override
     public String toString() {
-        return "inc " + varName;
+        return "set " + varName + " = " + expression;
     }
 }

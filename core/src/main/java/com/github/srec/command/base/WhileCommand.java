@@ -11,9 +11,10 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
+import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.BooleanValue;
 import com.github.srec.command.value.NilValue;
@@ -21,49 +22,48 @@ import com.github.srec.command.value.Value;
 import com.github.srec.play.PlayerException;
 
 /**
- * An elsif statement.
+ * A while statement.
  *
  * @author Victor Tatai
  */
-public class ElsifCommand extends AbstractBlockCommand {
+public class WhileCommand extends AbstractBlockCommand {
     private ValueCommand condition;
 
-    public ElsifCommand(ValueCommand condition) {
-        super("elsif");
+    public WhileCommand(ValueCommand condition) {
+        super("while");
         this.condition = condition;
     }
 
-    public ElsifCommand(Location location, ValueCommand condition) {
-        super("elsif", location);
+    public WhileCommand(Location location, ValueCommand condition) {
+        super("while", location);
         this.condition = condition;
     }
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        for (Command command : commands) {
-            CommandFlow flow = command.run(context);
-            if (flow == CommandFlow.NEXT) {}
-            else if (flow == CommandFlow.BREAK
-                    || flow == CommandFlow.EXIT
-                    || flow == CommandFlow.RETURN) return flow;
-            else throw new PlayerException("Flow management from command not supported");
+        boolean breakingFlow = false;
+        while (!breakingFlow && checkCondition(context)) {
+            for (Command command : commands) {
+                CommandFlow flow = command.run(context);
+                if (flow == CommandFlow.NEXT) {
+                } else if (flow == CommandFlow.BREAK) {
+                    breakingFlow = true;
+                    break;
+                } else if (flow == CommandFlow.EXIT || flow == CommandFlow.RETURN) {
+                    return flow;
+                } else throw new PlayerException("Flow management from command not supported");
+            }
         }
         return CommandFlow.NEXT;
     }
 
-    /**
-     * Evaluates the elsif condition.
-     *
-     * @param context The EC
-     * @return true if this block should run, false otherwise
-     */
-    public boolean evaluateCondition(ExecutionContext context) {
+    private boolean checkCondition(ExecutionContext context) {
         Value v = condition.getValue(context);
-        return !(v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get()));
+        return !(v instanceof NilValue) && (v instanceof BooleanValue && ((BooleanValue) v).get());
     }
 
     @Override
     public String toString() {
-        return "elsif " + condition;
+        return "while " + condition;
     }
 }

@@ -13,7 +13,9 @@
 
 package com.github.srec.command.parser.antlr;
 
-import com.github.srec.command.*;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.NestedExecutionContext;
+import com.github.srec.command.base.*;
 import com.github.srec.command.exception.UnsupportedCommandException;
 import com.github.srec.command.method.MethodCallCommand;
 import com.github.srec.command.method.MethodCommand;

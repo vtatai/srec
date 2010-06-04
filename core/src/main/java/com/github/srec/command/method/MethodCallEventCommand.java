@@ -1,7 +1,7 @@
 package com.github.srec.command.method;
 
 import com.github.srec.Location;
-import com.github.srec.command.ValueCommand;
+import com.github.srec.command.base.ValueCommand;
 import com.github.srec.command.value.StringValue;
 import com.github.srec.command.value.Value;
 import com.github.srec.rec.Recorder;

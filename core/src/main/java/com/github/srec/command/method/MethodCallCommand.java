@@ -1,9 +1,9 @@
 package com.github.srec.command.method;
 
 import com.github.srec.Location;
-import com.github.srec.command.BaseCommand;
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ValueCommand;
+import com.github.srec.command.base.BaseCommand;
+import com.github.srec.command.base.ValueCommand;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.Value;
 

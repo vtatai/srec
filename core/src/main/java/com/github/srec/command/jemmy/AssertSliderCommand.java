@@ -14,7 +14,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
@@ -26,7 +26,7 @@ import static com.github.srec.jemmy.JemmyDSL.slider;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class AssertSliderCommand extends JemmyEventCommand {
     public AssertSliderCommand() {
         super("assert_slider", createParametersDefinition(LOCATOR, Type.STRING, "value", Type.NUMBER));

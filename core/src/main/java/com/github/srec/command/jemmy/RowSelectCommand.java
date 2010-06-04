@@ -14,7 +14,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
@@ -26,7 +26,7 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class RowSelectCommand extends JemmyEventCommand {
     public RowSelectCommand() {
         super("row_select", createParametersDefinition("table", Type.STRING, "first", Type.NUMBER, "last", Type.NUMBER));

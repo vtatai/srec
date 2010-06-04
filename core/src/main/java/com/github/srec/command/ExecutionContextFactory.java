@@ -32,7 +32,7 @@ public class ExecutionContextFactory {
         ann.setScanParameterAnnotations(false);
         URL[] urls = ClasspathUrlFinder.findClassPaths();
         ann.scanArchives(urls);
-        Set<String> classes = ann.getAnnotationIndex().get(ExecutionContextCommand.class.getCanonicalName());
+        Set<String> classes = ann.getAnnotationIndex().get(SRecCommand.class.getCanonicalName());
         for (String clName : classes) {
             Class cl = Class.forName(clName);
             builtinCommands.add((MethodCommand) cl.newInstance());

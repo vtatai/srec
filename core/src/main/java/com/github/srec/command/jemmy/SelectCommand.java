@@ -1,7 +1,7 @@
 package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextCommand;
+import com.github.srec.command.SRecCommand;
 import com.github.srec.command.exception.IllegalParametersException;
 import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.StringValue;
@@ -17,7 +17,7 @@ import static com.github.srec.jemmy.JemmyDSL.comboBox;
 /**
  * @author Victor Tatai
  */
-@ExecutionContextCommand
+@SRecCommand
 public class SelectCommand extends JemmyEventCommand {
     public SelectCommand() {
         super("select", createParametersDefinition(LOCATOR, Type.STRING, "item", Type.STRING, "index", Type.NUMBER));

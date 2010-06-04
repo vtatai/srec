@@ -1,6 +1,10 @@
 package com.github.srec.play;
 
-import com.github.srec.command.*;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextFactory;
+import com.github.srec.command.TestCase;
+import com.github.srec.command.TestSuite;
+import com.github.srec.command.base.Command;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;

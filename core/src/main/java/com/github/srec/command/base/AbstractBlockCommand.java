@@ -11,32 +11,34 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
 import com.github.srec.Location;
-import com.github.srec.command.exception.CommandExecutionException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A break statement.
- *
  * @author Victor Tatai
  */
-public class BreakCommand extends AbstractBlockCommand {
-    public BreakCommand() {
-        super("break");
+public abstract class AbstractBlockCommand extends BaseCommand implements BlockCommand {
+    protected List<Command> commands = new ArrayList<Command>();
+
+    protected AbstractBlockCommand(String name) {
+        super(name);
     }
 
-    public BreakCommand(Location location) {
-        super("break", location);
-    }
-
-    @Override
-    public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        return CommandFlow.BREAK;
+    protected AbstractBlockCommand(String name, Location location) {
+        super(name, location);
     }
 
     @Override
-    public String toString() {
-        return "break";
+    public void addCommand(Command c) {
+        commands.add(c);
+    }
+
+    @Override
+    public List<Command> getCommands() {
+        return commands;
     }
 }

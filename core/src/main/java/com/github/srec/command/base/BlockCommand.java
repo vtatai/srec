@@ -11,34 +11,27 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command;
+package com.github.srec.command.base;
 
-import com.github.srec.Location;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class for blocks of commands such as while, if, for.
+ *
  * @author Victor Tatai
  */
-public abstract class AbstractBlockCommand extends BaseCommand implements BlockCommand {
-    protected List<Command> commands = new ArrayList<Command>();
+public interface BlockCommand extends Command {
+    /**
+     * Adds a command.
+     *
+     * @param c The command
+     */
+    void addCommand(Command c);
 
-    protected AbstractBlockCommand(String name) {
-        super(name);
-    }
-
-    protected AbstractBlockCommand(String name, Location location) {
-        super(name, location);
-    }
-
-    @Override
-    public void addCommand(Command c) {
-        commands.add(c);
-    }
-
-    @Override
-    public List<Command> getCommands() {
-        return commands;
-    }
+    /**
+     * Lists commands inside this block.
+     *
+     * @return The list of commands
+     */
+    List<Command> getCommands();
 }
