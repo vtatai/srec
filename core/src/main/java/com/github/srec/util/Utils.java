@@ -67,25 +67,36 @@ public final class Utils {
         return map;
     }
 
-    public static void runMain(String clName, String[] args) {
+    public static void runSwingMain(String clName, final String[] args) {
         try {
             Class cl = Class.forName(clName);
-            Method m = cl.getMethod("main", String[].class);
+            final Method m = cl.getMethod("main", String[].class);
             if (!Modifier.isStatic(m.getModifiers())) {
                 throw new MainMethodRunningException("Incorrect signature for main method");
             }
             if (!m.getReturnType().equals(void.class)) {
                 throw new MainMethodRunningException("Incorrect signature for main method");
             }
-            m.invoke(null, new Object[]{ args });
-        } catch (ClassNotFoundException e1) {
-            throw new MainMethodRunningException("Incorrect signature for main method");
-        } catch (NoSuchMethodException e1) {
-            throw new MainMethodRunningException("Incorrect signature for main method");
-        } catch (InvocationTargetException e1) {
-            throw new MainMethodRunningException("Incorrect signature for main method");
-        } catch (IllegalAccessException e1) {
-            throw new MainMethodRunningException("Incorrect signature for main method");
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        m.invoke(null, new Object[]{ args });
+                    } catch (IllegalAccessException e) {
+                        throw new MainMethodRunningException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new MainMethodRunningException(e);
+                    }
+                }
+            });
+        } catch (ClassNotFoundException e) {
+            throw new MainMethodRunningException(e);
+        } catch (NoSuchMethodException e) {
+            throw new MainMethodRunningException(e);
+        } catch (InvocationTargetException e) {
+            throw new MainMethodRunningException(e);
+        } catch (InterruptedException e) {
+            throw new MainMethodRunningException(e);
         }
     }
 

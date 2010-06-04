@@ -15,39 +15,37 @@ package com.github.srec.command;
 
 import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.value.Value;
+import com.github.srec.play.PlayerException;
 
 /**
- * A set statement.
+ * An else statement.
  *
  * @author Victor Tatai
  */
-public class SetCommand extends BaseCommand {
-    private ExpressionCommand expression;
-    private String varName;
+public class ElseCommand extends AbstractBlockCommand {
+    public ElseCommand() {
+        super("else");
+    }
 
-    public SetCommand(Location location, String varName, ExpressionCommand expression) {
-        super("set", location);
-        this.expression = expression;
-        this.varName = varName;
+    public ElseCommand(Location location) {
+        super("else", location);
     }
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        Value value = expression.getValue(context);
-        if (context.findSymbol(varName) == null) {
-            VarCommand var = new VarCommand(varName, location, value);
-            context.addSymbol(var);
-        } else {
-            CommandSymbol s = context.findSymbol(varName);
-            if (!(s instanceof VarCommand)) throw new CommandExecutionException("set statement should refer to a variable");
-            ((VarCommand) s).setValue(value);
+        for (Command command : commands) {
+            CommandFlow flow = command.run(context);
+            if (flow == CommandFlow.NEXT) {}
+            else if (flow == CommandFlow.BREAK
+                    || flow == CommandFlow.EXIT
+                    || flow == CommandFlow.RETURN) return flow;
+            else throw new PlayerException("Flow management from command not supported");
         }
         return CommandFlow.NEXT;
     }
 
     @Override
     public String toString() {
-        return "set " + varName + " = " + expression;
+        return "else";
     }
 }

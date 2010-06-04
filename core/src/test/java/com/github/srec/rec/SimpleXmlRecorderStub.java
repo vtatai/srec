@@ -22,5 +22,5 @@ import java.lang.reflect.InvocationTargetException;
 public class SimpleXmlRecorderStub {
     public static void main(String[] args) throws InvocationTargetException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IOException {
         SimpleXmlRecorder.main(new String[] {"com.github.srec.ui.TestForm"});
-    }
+    }                                                   
 }

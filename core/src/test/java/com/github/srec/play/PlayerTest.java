@@ -1,5 +1,6 @@
 package com.github.srec.play;
 
+import com.github.srec.command.parser.ParseException;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -49,8 +50,10 @@ public class PlayerTest {
                     .startAndPlay(new File(TEST_SCRIPT_DIR + script), "com.github.srec.ui.TestForm", new String[0]);
             p.printErrors();
             assertEquals(p.getErrors().size(), 0);
-        } catch (Throwable t) {
-            t.printStackTrace();
+        } catch (ParseException e) {
+            e.printErrors();
+            fail();
+        } catch (IOException e) {
             fail();
         }
     }

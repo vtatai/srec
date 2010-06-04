@@ -7,4 +7,8 @@ public class MainMethodRunningException extends SRecException {
     public MainMethodRunningException(String message) {
         super(message);
     }
+
+    public MainMethodRunningException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -45,7 +45,7 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         this.writer = writer;
     }
 
-    public void start(String className) {
+    public void start(String className, String[] params) {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
             public boolean dispatchKeyEvent(KeyEvent keyEvent) {
@@ -77,7 +77,7 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         try {
             Class<?> cl = Class.forName(className);
             Method m = cl.getMethod("main", String[].class);
-            m.invoke(null, new Object[] {new String[] {}});
+            m.invoke(null, new Object[] {params});
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -149,6 +149,6 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         } else {
             sr = new SimpleXmlRecorder(new PrintWriter(new FileWriter(args[1])));
         }
-        sr.start(args[0]);
+        sr.start(args[0], new String[0]);
     }
 }

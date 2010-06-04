@@ -8,7 +8,7 @@ module SRec
 
   # Starts an application
   def start(file)
-    Utils.runMain "com.github.srec.ui.#{file}", [].to_java(:string)
+    Utils.runSwingMain "com.github.srec.ui.#{file}", [].to_java(:string)
   end
 
 

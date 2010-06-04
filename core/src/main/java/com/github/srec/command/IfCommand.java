@@ -20,6 +20,9 @@ import com.github.srec.command.value.NilValue;
 import com.github.srec.command.value.Value;
 import com.github.srec.play.PlayerException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An if statement.
  *
@@ -27,6 +30,8 @@ import com.github.srec.play.PlayerException;
  */
 public class IfCommand extends AbstractBlockCommand {
     private ValueCommand condition;
+    private List<ElsifCommand> elsifs = new ArrayList<ElsifCommand>();
+    private ElseCommand elseCommand;
 
     public IfCommand(ValueCommand condition) {
         super("if");
@@ -40,17 +45,57 @@ public class IfCommand extends AbstractBlockCommand {
 
     @Override
     public CommandFlow run(ExecutionContext context) throws CommandExecutionException {
-        Value v = condition.getValue(context);
-        if (v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get())) return CommandFlow.NEXT;
-        for (Command command : commands) {
-            CommandFlow flow = command.run(context);
-            if (flow == CommandFlow.NEXT) {}
-            else if (flow == Command.CommandFlow.BREAK
-                    || flow == Command.CommandFlow.EXIT
-                    || flow == Command.CommandFlow.RETURN) return flow;
-            else throw new PlayerException("Flow management from command not supported");
+        boolean cond = evaluateCondition(context);
+        if (cond) {
+            for (Command command : commands) {
+                CommandFlow flow = command.run(context);
+                if (flow == CommandFlow.NEXT) {}
+                else if (flow == Command.CommandFlow.BREAK
+                        || flow == Command.CommandFlow.EXIT
+                        || flow == Command.CommandFlow.RETURN) return flow;
+                else throw new PlayerException("Flow management from command not supported");
+            }
+        } else if (!runElsif(context) && elseCommand != null) {
+            elseCommand.run(context);
         }
         return CommandFlow.NEXT;
+    }
+
+    private boolean runElsif(ExecutionContext context) {
+        for (ElsifCommand elsif : elsifs) {
+            if (elsif.evaluateCondition(context)) {
+                elsif.run(context);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Evaluates the elsif condition.
+     *
+     * @param context The EC
+     * @return true if this block should run, false otherwise
+     */
+    public boolean evaluateCondition(ExecutionContext context) {
+        Value v = condition.getValue(context);
+        return !(v instanceof NilValue || (v instanceof BooleanValue && !((BooleanValue) v).get()));
+    }
+
+    public void addElsif(ElsifCommand elsif) {
+        elsifs.add(elsif);
+    }
+
+    public List<ElsifCommand> getElsifs() {
+        return elsifs;
+    }
+
+    public ElseCommand getElseCommand() {
+        return elseCommand;
+    }
+
+    public void setElseCommand(ElseCommand elseCommand) {
+        this.elseCommand = elseCommand;
     }
 
     @Override

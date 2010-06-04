@@ -17,7 +17,7 @@ include Test::Unit::Assertions
 module Jemmy
 
     def start(file)
-        Utils.runMain "com.github.srec.ui.#{file}", [].to_java(:string)
+        Utils.runSwingMain "com.github.srec.ui.#{file}", [].to_java(:string)
     end
 
     def frame(name)

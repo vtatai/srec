@@ -32,7 +32,7 @@ public class SimpleXmlRecorderTest {
     public void test() {
         StringWriter writer = new StringWriter();
         SimpleXmlRecorder sr = new SimpleXmlRecorder(new PrintWriter(writer));
-        sr.start("com.github.srec.ui.TestForm");
+        sr.start("com.github.srec.ui.TestForm", new String[0]);
 
         button("text=Ok").click();
         slider("slider").value(10);

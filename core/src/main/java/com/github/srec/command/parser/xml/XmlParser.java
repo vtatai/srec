@@ -128,9 +128,9 @@ public class XmlParser implements Parser {
         } else if ("set".equals(name)) {
             if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
             final SetCommand command = new SetCommand(createParseLocation(element),
-                    new ExpressionCommand(getAttributeByName("expression", element),
-                            createParseLocation(element.getAttributeByName(new QName("expression")))),
-                    getAttributeByName("var", element));
+                    getAttributeByName("var", element), new ExpressionCommand(getAttributeByName("expression", element),
+                            createParseLocation(element.getAttributeByName(new QName("expression"))))
+            );
             addCommand(command);
         } else if ("inc".equals(name)) {
             if (parseSymbolsOnly && currentBlocks.isEmpty()) return; // if only parsing for symbols AND not inside a method
@@ -140,6 +140,22 @@ public class XmlParser implements Parser {
             pushCurrentBlock(new IfCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
                             createParseLocation(element.getAttributeByName(new QName("expression"))))));
+        } else if ("then".equals(name)) {
+            if (!(peekCurrentBlock() instanceof IfCommand)) error(element, "Then should be inside an if");
+        } else if ("else".equals(name)) {
+            if (!(peekCurrentBlock() instanceof IfCommand)) {
+                error(element, "Else should be inside an if");
+            } else {
+                pushCurrentBlock(new ElseCommand(createParseLocation(element)));
+            }
+        } else if ("elsif".equals(name)) {
+            if (!(peekCurrentBlock() instanceof IfCommand)) {
+                error(element, "Elsif should be inside an if");
+            } else {
+                pushCurrentBlock(new ElsifCommand(createParseLocation(element),
+                        new ExpressionCommand(getAttributeByName("expression", element),
+                                createParseLocation(element.getAttributeByName(new QName("expression"))))));
+            }
         } else if ("while".equals(name)) {
             pushCurrentBlock(new WhileCommand(createParseLocation(element),
                     new ExpressionCommand(getAttributeByName("expression", element),
@@ -215,6 +231,14 @@ public class XmlParser implements Parser {
             context.addSymbol((MethodScriptCommand) popCurrentBlock());
         } else if ("if".equals(name)) {
             addCommand(currentBlocks.pop());
+        } else if ("else".equals(name)) {
+            ElseCommand elseCommand = (ElseCommand) popCurrentBlock();
+            IfCommand ifCommand = (IfCommand) peekCurrentBlock();
+            ifCommand.setElseCommand(elseCommand);
+        } else if ("elsif".equals(name)) {
+            ElsifCommand elsifCommand = (ElsifCommand) popCurrentBlock();
+            IfCommand ifCommand = (IfCommand) peekCurrentBlock();
+            ifCommand.addElsif(elsifCommand);
         } else if ("while".equals(name)) {
             addCommand(currentBlocks.pop());
         }

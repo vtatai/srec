@@ -6,7 +6,6 @@ import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.parser.ParserFactory;
 import com.github.srec.jemmy.JemmyDSL;
-import com.github.srec.util.Utils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.srec.util.Utils.closeWindows;
-import static com.github.srec.util.Utils.runMain;
+import static com.github.srec.util.Utils.runSwingMain;
 
 /**
  * Class which plays srec scripts / commands.
@@ -27,6 +26,15 @@ public class Player {
     private long commandInterval = 50;
     private Parser parser;
 
+    /**
+     * Class to run before each test case. May be null.
+     */
+    private String classToRun;
+    /**
+     * Arguments when running the class to run. May be null.
+     */
+    private String[] classToRunArgs;
+
     public Player init() {
         JemmyDSL.init();
         parser = ParserFactory.create();
@@ -34,9 +42,9 @@ public class Player {
     }
 
     public Player startAndPlay(File file, String className, String[] args) throws IOException {
-        Utils.runMain(className, args);
+        classToRun = className;
+        classToRunArgs = args;
         play(file);
-        closeWindows();
         return this;
     }
 
@@ -76,11 +84,13 @@ public class Player {
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
         for (TestCase testCase : suite.getTestCases()) {
+            if (classToRun != null) runSwingMain(classToRun, classToRunArgs);
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
             testCaseEC.setPlayer(this);
             testCaseEC.setTestCase(testCase);
             play(testCaseEC);
+            if (classToRun != null) closeWindows();
         }
         return this;
     }
@@ -142,7 +152,7 @@ public class Player {
     }
 
     public static void main(final String[] args) throws IOException {
-        runMain(args[0], null);
+        runSwingMain(args[0], null);
 
         Player player = new Player().init();
         player.play(new File(args[1]));
