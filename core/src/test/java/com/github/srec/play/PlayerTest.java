@@ -1,26 +1,26 @@
 package com.github.srec.play;
 
-import com.github.srec.command.parser.ParseException;
+import com.github.srec.testng.AbstractSRecTestNGTest;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
 
 @Test
-public class PlayerTest {
+public class PlayerTest extends AbstractSRecTestNGTest {
     private static final String TEST_SCRIPT_DIR = "src/test/resources/";
+
+    public PlayerTest() {
+        super(TEST_SCRIPT_DIR, "com.github.srec.ui.TestForm", new String[0]);
+    }
 
     public void test() throws IOException {
         runTest("test_form.xml");
     }
 
     public void testError() throws IOException {
-        Player p = new Player()
-                .init()
-                .startAndPlay(new File(TEST_SCRIPT_DIR + "test_form_error.xml"), "com.github.srec.ui.TestForm", new String[0]);
+        Player p = runTest("test_form_error.xml", false);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
         assertEquals(p.getErrors().get(0).getLineNumber(), 18);
@@ -41,20 +41,5 @@ public class PlayerTest {
 
     public void testWhile() throws IOException {
         runTest("while.xml");
-    }
-
-    private void runTest(String script) {
-        try {
-            Player p = new Player()
-                    .init()
-                    .startAndPlay(new File(TEST_SCRIPT_DIR + script), "com.github.srec.ui.TestForm", new String[0]);
-            p.printErrors();
-            assertEquals(p.getErrors().size(), 0);
-        } catch (ParseException e) {
-            e.printErrors();
-            fail();
-        } catch (IOException e) {
-            fail();
-        }
     }
 }

@@ -239,6 +239,7 @@
                 <artifactId>testng</artifactId>
                 <version>5.11</version>
                 <classifier>jdk15</classifier>
+                <scope>test</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>junit</groupId>

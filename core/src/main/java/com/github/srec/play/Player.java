@@ -41,14 +41,18 @@ public class Player {
         return this;
     }
 
-    public Player startAndPlay(File file, String className, String[] args) throws IOException {
+    public Player play(File file, String testCase, String className, String[] args) throws IOException {
         classToRun = className;
         classToRunArgs = args;
-        play(file);
+        play(file, testCase);
         return this;
     }
 
     public Player play(File file) throws IOException {
+        return play(file, null);
+    }
+
+    public Player play(File file, String testCase) throws IOException {
         if (file == null) return null;
         if (file.isDirectory()) {
             log.info("Playing files inside dir: " + file.getCanonicalPath());
@@ -74,16 +78,26 @@ public class Player {
             return this;
         } else {
             log.info("Playing file: " + file.getCanonicalPath());
-            return play(new FileInputStream(file), file);
+            return play(new FileInputStream(file), file, testCase);
         }
     }
 
-    public Player play(InputStream is, File file) throws IOException {
+    /**
+     * Plays a script.
+     *
+     * @param is The input stream from where to read the script
+     * @param file The originating file, may be null
+     * @param testCaseName The name of the test case to play, if null all test cases are played
+     * @return The player
+     * @throws IOException in case there is an error reading the file
+     */
+    public Player play(InputStream is, File file, String testCaseName) throws IOException {
         ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
         TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
         for (TestCase testCase : suite.getTestCases()) {
+            if (testCaseName != null && !testCase.getName().equals(testCaseName)) continue;
             if (classToRun != null) runSwingMain(classToRun, classToRunArgs);
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
