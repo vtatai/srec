@@ -226,6 +226,8 @@ public final class Utils {
                 return ((DateValue) value).get();
             case NIL:
                 return null;
+            case OBJECT:
+                return value.get();
         }
         throw new CommandExecutionException("Could not convert value " + value + " to an equivalent Java object");
     }
