@@ -9,6 +9,7 @@ import org.netbeans.jemmy.util.NameComponentChooser;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
@@ -26,21 +27,27 @@ public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
 
     public enum ComponentType {
-        text_field(JTextFieldOperator.class),
-        combo_box(JComboBoxOperator.class),
-        button(JButtonOperator.class),
-        radio_button(JRadioButtonOperator.class),
-        check_box(JCheckBoxOperator.class),
-        table(JTableOperator.class);
+        text_field(JTextFieldOperator.class, JTextField.class),
+        combo_box(JComboBoxOperator.class, JComboBox.class),
+        button(JButtonOperator.class, JButton.class),
+        radio_button(JRadioButtonOperator.class, JRadioButton.class),
+        check_box(JCheckBoxOperator.class, JCheckBox.class),
+        table(JTableOperator.class, JTable.class);
 
-        private Class associatedClass;
+        private Class<? extends JComponentOperator> operatorClass;
+        private Class<? extends java.awt.Component> awtClass;
 
-        ComponentType(Class associatedClass) {
-            this.associatedClass = associatedClass;
+        ComponentType(Class<? extends JComponentOperator> operatorClass, Class<? extends java.awt.Component> awtClass) {
+            this.operatorClass = operatorClass;
+            this.awtClass = awtClass;
         }
 
-        public Class getAssociatedClass() {
-            return associatedClass;
+        public Class<? extends JComponentOperator> getOperatorClass() {
+            return operatorClass;
+        }
+
+        public Class<? extends java.awt.Component> getAwtClass() {
+            return awtClass;
         }
     }
 
@@ -165,17 +172,77 @@ public class JemmyDSL {
 
     /**
      * Finds a component and stores it under the given id. The component can later be used on other commands using the
-     * locator "id=ID_ASSIGNED".
+     * locator "id=ID_ASSIGNED". This method searches both VISIBLE and INVISIBLE components.
      *
-     * @param locator  The locator
-     * @param findType The find type name
-     * @param id       The id
+     * @param name  The name
+     * @param id The id
+     * @param componentType The component type
      * @return The component found
      */
     @SuppressWarnings({"unchecked"})
-    public static Component find(String locator, String id, String findType) {
-        JComponentOperator comp = find(locator, id, translateFindType(findType));
-        return convertFind(comp);
+    public static Component find(String name, String id, String componentType) {
+        java.awt.Component component = findComponent(name, currentContainer.getComponent().getSource(), translateFindType(componentType));
+        if (component == null) throw new JemmyDSLException("Could not find component with name: " + name);
+        JComponentOperator operator = convertFind(component);
+        componentMap.putComponent(id, operator);
+        return convertFind(operator);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private static Class<? extends java.awt.Component> translateFindType(String findType) {
+        for (ComponentType componentType : ComponentType.values()) {
+            if (findType.equals(componentType.name())) return componentType.getAwtClass();
+        }
+        try {
+            return (Class<? extends java.awt.Component>) Class.forName(findType);
+        } catch (ClassNotFoundException e) {
+            throw new JemmyDSLException("Unsupported find type " + findType);
+        }
+    }
+
+    private static java.awt.Component findComponent(String name, java.awt.Component component, Class<? extends java.awt.Component> componentClass) {
+        assert name != null;
+        if (name.equals(component.getName())) {
+            if (componentClass == null || componentClass.isAssignableFrom(component.getClass())) {
+                return component;
+            } else {
+                // This is a fallback method to search for the first child of the given class, useful when a table is
+                // inside a scrollpane for instance
+                return findComponent((java.awt.Container) component, componentClass);
+            }
+        }
+        if (component instanceof java.awt.Container) {
+            java.awt.Container container = (java.awt.Container) component;
+            for (java.awt.Component child : container.getComponents()) {
+                java.awt.Component found = findComponent(name, child, componentClass);
+                if (found != null) return found;
+            }
+        }
+        return null;
+    }
+
+    private static java.awt.Component findComponent(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
+        for (java.awt.Component component : container.getComponents()) {
+            if (componentClass.isAssignableFrom(component.getClass())) {
+                return component;
+            }
+            if (component instanceof java.awt.Container) {
+                java.awt.Component comp = findComponent((java.awt.Container) component, componentClass);
+                if (comp != null) return comp;
+            }
+        }
+        return null;
+    }
+
+    private static JComponentOperator convertFind(java.awt.Component comp) {
+        if (comp instanceof JComboBox) return new JComboBoxOperator((JComboBox) comp);
+        if (comp instanceof JTextComponent) return new JTextFieldOperator((JTextField) comp);
+        if (comp instanceof JCheckBox) return new JCheckBoxOperator((JCheckBox) comp);
+        if (comp instanceof JRadioButton) return new JRadioButtonOperator((JRadioButton) comp);
+        if (comp instanceof JButton) return new JButtonOperator((JButton) comp);
+        if (comp instanceof AbstractButton) return new AbstractButtonOperator((AbstractButton) comp);
+        if (comp instanceof JTable) return new JTableOperator((JTable) comp);
+        throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
     private static Component convertFind(JComponentOperator comp) {
@@ -185,14 +252,8 @@ public class JemmyDSL {
         if (comp instanceof JRadioButtonOperator) return new RadioButton((JRadioButtonOperator) comp);
         if (comp instanceof JButtonOperator) return new Button((JButtonOperator) comp);
         if (comp instanceof AbstractButtonOperator) return new GenericButton((AbstractButtonOperator) comp);
+        if (comp instanceof JTableOperator) return new Table((JTableOperator) comp);
         throw new JemmyDSLException("Unsupported find type " + comp);
-    }
-
-    private static Class translateFindType(String findType) {
-        for (ComponentType componentType : ComponentType.values()) {
-            if (findType.equals(componentType.name())) return componentType.getAssociatedClass();
-        }
-        throw new JemmyDSLException("Unsupported find type " + findType);
     }
 
     /**
@@ -630,6 +691,10 @@ public class JemmyDSL {
 
         public Table(String locator) {
             component = find(locator, JTableOperator.class);
+        }
+
+        public Table(JTableOperator component) {
+            this.component = component;
         }
 
         public Row row(int index) {

@@ -6,6 +6,7 @@ import com.github.srec.util.ClasspathScanner;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.*;
 
@@ -42,7 +43,8 @@ public class ExecutionContextFactory {
         Set<? extends Class> classes = scanner.scanPackage(packageName,
                 new ClasspathScanner.AnnotatedClassSelector(SRecCommand.class));
         for (Class cl: classes) {
-            builtinCommands.add((MethodCommand) cl.newInstance());
+            Constructor constructor = cl.getConstructor();
+            builtinCommands.add((MethodCommand) constructor.newInstance());
         }
     }
 

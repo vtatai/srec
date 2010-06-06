@@ -5,7 +5,7 @@ package com.github.srec.command.value;
  *
  * @author Victor Tatai
  */
-public class Value <T> {
+public abstract class Value <T> {
     protected Type type;
     protected T value;
 

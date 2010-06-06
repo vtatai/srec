@@ -17,11 +17,11 @@ import static com.github.srec.jemmy.JemmyDSL.find;
 @SRecCommand
 public class FindCommand extends JemmyEventCommand {
     public FindCommand() {
-        super("find", createParametersDefinition(LOCATOR, Type.STRING, "id", Type.STRING, "findComponentType", Type.STRING));
+        super("find", createParametersDefinition("name", Type.STRING, "id", Type.STRING, "findComponentType", Type.STRING));
     }
 
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
-        find(coerceToString(params.get(LOCATOR), ctx), asString("id", params, ctx), asString("findComponentType", params, ctx));
+        find(coerceToString(params.get("name"), ctx), asString("id", params, ctx), asString("findComponentType", params, ctx));
     }
 }

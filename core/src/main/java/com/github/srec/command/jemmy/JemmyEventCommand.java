@@ -18,6 +18,7 @@ public abstract class JemmyEventCommand extends MethodCommand {
     public static final String LOCATOR = "locator";
 
     protected JemmyEventCommand(String name, MethodParameter... parameters) {
+        // Jemmy defined commands have no location information as they are native
         super(name, parameters);
     }
 

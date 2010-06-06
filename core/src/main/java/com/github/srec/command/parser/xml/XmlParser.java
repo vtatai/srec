@@ -180,7 +180,7 @@ public class XmlParser implements Parser {
             CallCommandBlockStub block = (CallCommandBlockStub) peekCurrentBlock();
             CommandSymbol symbol = executionContext.findSymbol(block.getMethod());
             if (symbol == null || !(symbol instanceof MethodCommand)) {
-                error(element, "Method with name '" + name + "' not found");
+                error(element, "Method with name '" + block.getMethod() + "' not found");
                 return;
             }
             Attribute attribute = element.getAttributeByName(new QName("name"));
