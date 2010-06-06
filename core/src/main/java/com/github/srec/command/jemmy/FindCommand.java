@@ -10,6 +10,8 @@ import java.util.Map;
 import static com.github.srec.jemmy.JemmyDSL.find;
 
 /**
+ * Finds a component assigning and id to it. This id can later be used as a locator in the form "id=XXX".
+ * 
  * @author Victor Tatai
  */
 @SRecCommand
@@ -20,6 +22,6 @@ public class FindCommand extends JemmyEventCommand {
 
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
-        find(coerceToString(params.get(LOCATOR), ctx), coerceToString(params.get("id"), ctx), coerceToString(params.get("findComponentType"), ctx));
+        find(coerceToString(params.get(LOCATOR), ctx), asString("id", params, ctx), asString("findComponentType", params, ctx));
     }
 }

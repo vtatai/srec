@@ -30,7 +30,8 @@ public class JemmyDSL {
         combo_box(JComboBoxOperator.class),
         button(JButtonOperator.class),
         radio_button(JRadioButtonOperator.class),
-        check_box(JCheckBoxOperator.class);
+        check_box(JCheckBoxOperator.class),
+        table(JTableOperator.class);
 
         private Class associatedClass;
 
@@ -62,7 +63,7 @@ public class JemmyDSL {
     }
 
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
-    private static Map<String, JComponentOperator> idMap = new HashMap<String, JComponentOperator>();
+    private static ComponentMap componentMap = new DefaultComponentMap();
 
     public static void init(java.awt.Container... ignored) {
         Timeouts timeouts = JemmyProperties.getCurrentTimeouts();
@@ -85,6 +86,14 @@ public class JemmyDSL {
 
     public static boolean isRobotMode() {
         return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.ROBOT_MODEL_MASK;
+    }
+
+    public static ComponentMap getComponentMap() {
+        return componentMap;
+    }
+
+    public static void setComponentMap(ComponentMap componentMap) {
+        JemmyDSL.componentMap = componentMap;
     }
 
     public static Frame frame(String title) {
@@ -180,11 +189,9 @@ public class JemmyDSL {
     }
 
     private static Class translateFindType(String findType) {
-        if (findType.equals(ComponentType.combo_box.name())) return ComponentType.combo_box.getAssociatedClass();
-        if (findType.equals(ComponentType.text_field.name())) return ComponentType.text_field.getAssociatedClass();
-        if (findType.equals(ComponentType.check_box.name())) return ComponentType.check_box.getAssociatedClass();
-        if (findType.equals(ComponentType.radio_button.name())) return ComponentType.radio_button.getAssociatedClass();
-        if (findType.equals(ComponentType.button.name())) return ComponentType.button.getAssociatedClass();
+        for (ComponentType componentType : ComponentType.values()) {
+            if (findType.equals(componentType.name())) return componentType.getAssociatedClass();
+        }
         throw new JemmyDSLException("Unsupported find type " + findType);
     }
 
@@ -199,7 +206,7 @@ public class JemmyDSL {
      */
     private static <X extends JComponentOperator> X find(String locator, String id, Class<X> cl) {
         X x = find(locator, cl);
-        if (id != null) idMap.put(id, x);
+        if (id != null) componentMap.putComponent(id, x);
         return x;
     }
 
@@ -231,7 +238,8 @@ public class JemmyDSL {
                 throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
             }
         } else if (locatorMap.containsKey("id")) {
-            JComponentOperator operator = idMap.get(locatorMap.get("id"));
+            final String id = locatorMap.get("id");
+            JComponentOperator operator = componentMap.getComponent(locatorMap.get("id"));
             if (!clazz.isAssignableFrom(operator.getClass())) {
                 throw new JemmyDSLException("Cannot convert component with " + locator + " from "
                         + operator.getClass().getName() + " to " + clazz.getName());
@@ -283,7 +291,7 @@ public class JemmyDSL {
     }
 
     public static JComponent getSwingComponentById(String id) {
-        JComponentOperator op = idMap.get(id);
+        JComponentOperator op = componentMap.getComponent(id);
         return (JComponent) op.getSource();
     }
 
@@ -777,6 +785,7 @@ public class JemmyDSL {
             texts[0] = menu.getText();
             for (int i = 1; i < indices.length; i++) {
                 int index = indices[i];
+                assert menu != null;
                 if (i == indices.length - 1) {
                     JMenuItem item = (JMenuItem) menu.getMenuComponent(index);
                     texts[i] = item.getText();

@@ -8,5 +8,6 @@ public enum Type {
     NUMBER,
     BOOLEAN,
     DATE,
-    NIL 
+    NIL,
+    OBJECT
 }

@@ -16,11 +16,14 @@ package com.github.srec.command.method;
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.base.BaseCommand;
 import com.github.srec.command.base.CommandSymbol;
+import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.exception.IllegalParametersException;
 import com.github.srec.command.exception.MethodDefinitionException;
-import com.github.srec.command.value.Type;
-import com.github.srec.command.value.Value;
+import com.github.srec.command.value.*;
+import com.github.srec.command.value.StringValue;
+import com.github.srec.util.Utils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +64,7 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
     private static MethodParameter[] convertParameters(String[] parameters) {
         MethodParameter[] ps = new MethodParameter[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
-            ps[i] = new MethodParameter(parameters[i]);
+            ps[i] = new MethodParameter(parameters[i], Type.STRING);
         }
         return ps;
     }
@@ -115,6 +118,12 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
         for (String name : callParameters.keySet()) {
             if (!parameters.containsKey(name)) throw new IllegalParametersException("Parameter not supported: " + name);
         }
+        for (Map.Entry<String, MethodParameter> entry : parameters.entrySet()) {
+            if (entry.getValue().isOptional()) continue;
+            if (!callParameters.containsKey(entry.getKey())) {
+                throw new IllegalParametersException("Parameter not supplied: " + entry.getKey());
+            }
+        }
     }
 
     /**
@@ -152,5 +161,110 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
 
     public void addParameter(MethodParameter parameter) {
         this.parameters.put(parameter.getName(), parameter);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // UTILITIES METHODS                                                                                              //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Gets a parameter value as a Java String.
+     *
+     * @param name The parameter name
+     * @param params The parameters
+     * @param context The EC
+     * @return The String
+     */
+    protected String asString(String name, Map<String, Value> params, ExecutionContext context) {
+        return coerceToString(params.get(name), context);
+    }
+    
+    /**
+     * Gets a parameter value as a Java Boolean.
+     *
+     * @param name The parameter name
+     * @param params The parameters
+     * @return The boolean
+     */
+    protected Boolean asBoolean(String name, Map<String, Value> params) {
+        return coerceToBoolean(params.get(name));
+    }
+
+    /**
+     * Gets a parameter value as a Java Boolean.
+     *
+     * @param name The parameter name
+     * @param params The parameters
+     * @return The boolean
+     */
+    protected BigDecimal asBigDecimal(String name, Map<String, Value> params) {
+        return coerceToBigDecimal(params.get(name));
+    }
+
+    /**
+     * Coerces a value to String. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
+     * is not of the expected type.
+     *
+     * @param value The value
+     * @param context The context used to evaluate the text, required if there is string interpolation
+     * @return The converted value
+     */
+    protected static String coerceToString(Value value, ExecutionContext context) {
+        if (value == null) return null;
+        if (!(value instanceof StringValue)) throw new CommandExecutionException("Value " + value + ", class "
+                + value.getClass().getCanonicalName() + " is not a string");
+        String str = value.toString();
+        if (str.indexOf("$") == -1 || context == null) return str;
+        return (String) Utils.groovyEvaluate(context, "\"" + str + "\"");
+    }
+
+    /**
+     * Coerces a value to BigDecimal. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
+     * is not of the expected type.
+     *
+     *
+     * @param value The value
+     * @return The converted value
+     */
+    protected BigDecimal coerceToBigDecimal(Value value) {
+        if (!(value instanceof NumberValue)) throw new CommandExecutionException("Value is not a number");
+        return ((NumberValue) value).get();
+    }
+
+    /**
+     * Coerces a value to Boolean. Throws a {@link com.github.srec.command.exception.CommandExecutionException} if value
+     * is not of the expected type.
+     *
+     * @param value The value
+     * @return The converted value
+     */
+    protected Boolean coerceToBoolean(Value value) {
+        if (!(value instanceof BooleanValue)) throw new CommandExecutionException("Value is not a boolean");
+        return ((BooleanValue) value).get();
+    }
+
+    /**
+     * Shortcut for creating an array of parameters. The values passed should be the parameter name and the parameter
+     * type, such as "text", Type.STRING, "index", Type.NUMBER. If only one item is passed it is assumed to be of type
+     * STRING.
+     *
+     * @param params The array of parameter names and types
+     * @return The array of created MethodParameters
+     */
+    protected static MethodParameter[] createParametersDefinition(Object... params) {
+        if (params.length == 0) return null;
+        if (params.length != 1 && params.length % 2 != 0) throw new IllegalParametersException("Incorrect number of params");
+        if (params.length == 1) {
+            MethodParameter[] ret = new MethodParameter[1];
+            ret[0] = new MethodParameter(params[0].toString(), Type.STRING);
+            return ret;
+        }
+        MethodParameter[] ret = new MethodParameter[params.length / 2];
+        for (int i = 0; i < ret.length; i++) {
+            String name = (String) params[i * 2];
+            Type type = (Type) params[i * 2 + 1];
+            ret[i] = new MethodParameter(name, type);
+        }
+        return ret;
     }
 }

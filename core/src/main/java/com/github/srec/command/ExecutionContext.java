@@ -121,7 +121,7 @@ public class ExecutionContext {
     }
 
     public Map<String, CommandSymbol> getSymbols() {
-        return Collections.unmodifiableMap(symbols);
+        return symbols;
     }
 
     public TestSuite getTestSuite() {

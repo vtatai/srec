@@ -20,7 +20,8 @@ import static com.github.srec.jemmy.JemmyDSL.comboBox;
 @SRecCommand
 public class SelectCommand extends JemmyEventCommand {
     public SelectCommand() {
-        super("select", createParametersDefinition(LOCATOR, Type.STRING, "item", Type.STRING, "index", Type.NUMBER));
+        super("select", param(LOCATOR, Type.STRING), param("item", Type.STRING, true, null),
+                param("index", Type.NUMBER, true, null));
     }
 
     @Override

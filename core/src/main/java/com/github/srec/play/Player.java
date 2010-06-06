@@ -114,13 +114,14 @@ public class Player {
     }
 
     public Command.CommandFlow play(ExecutionContext context) {
+        JemmyDSL.setComponentMap(new ComponentMapSymbolsAdapter(context.getSymbols()));
         for (Command command : context.getCommands()) {
             log.debug("Running line: " + getLine(command) + ", command: " + command);
             try {
                 Command.CommandFlow flow = command.run(context);
                 if (flow == Command.CommandFlow.NEXT) {} 
                 else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
-                else throw new PlayerException("Flow management instruction " + flow + "  from command "
+                else throw new PlayerException("Flow management instruction " + flow + " from command "
                             + command.getName() + " not supported");
             } catch (CommandExecutionException e) {
                 handleError(context.getTestSuite(), context.getTestCase(), command, e);

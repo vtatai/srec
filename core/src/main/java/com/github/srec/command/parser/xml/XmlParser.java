@@ -187,7 +187,11 @@ public class XmlParser implements Parser {
             String attributeValue = attribute.getValue();
             MethodParameter methodParameter = ((MethodCommand) symbol).getParameters().get(attributeValue);
             if (methodParameter == null) {
-                error(element, "Parameter with name '" + attribute.getName().getLocalPart() + "' not found");
+                error(element, "Parameter with name '" + attributeValue + "' not found");
+                return;
+            }
+            if (methodParameter.getType() == null) {
+                error(element, "No type information for parameter with name '" + attribute.getName().getLocalPart() + "'");
                 return;
             }
             block.addParameter(attributeValue,

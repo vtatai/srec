@@ -38,8 +38,9 @@ public class TypeSpecialCommand extends JemmyEventCommand {
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         int key;
         String keyString = coerceToString(params.get("text"), ctx);
-        if ("Tab".equals(keyString)) key = KeyEvent.VK_TAB;
-        else if ("End".equals(keyString)) key = KeyEvent.VK_END;
+        if ("Tab".equalsIgnoreCase(keyString)) key = KeyEvent.VK_TAB;
+        else if ("End".equalsIgnoreCase(keyString)) key = KeyEvent.VK_END;
+        else if ("Backspace".equalsIgnoreCase(keyString)) key = KeyEvent.VK_BACK_SPACE;
         else throw new UnsupportedFeatureException("Type special for " + params.get("text") + " not supported");
         textField(coerceToString(params.get(LOCATOR), ctx)).type(key);
     }
