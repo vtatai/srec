@@ -31,12 +31,15 @@
         <xs:choice maxOccurs="unbounded" minOccurs="0">
             <xs:element type="defType" name="def"/>
             <xs:element type="window_activateType" name="window_activate"/>
+            <xs:element type="dialog_activateType" name="dialog_activate"/>
             <xs:element type="hide_internal_frameType" name="hide_internal_frame"/>
             <xs:element type="push_menuType" name="push_menu"/>
             <xs:element type="selectType" name="select"/>
             <xs:element type="typeType" name="type"/>
             <xs:element type="type_specialType" name="type_special"/>
             <xs:element type="assertType" name="assert"/>
+            <xs:element type="assert_emptyType" name="assert_empty"/>
+            <xs:element type="assert_comboboxType" name="assert_combobox"/>
             <xs:element type="clickType" name="click" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="assert_enabledType" name="assert_enabled"/>
             <xs:element type="slideType" name="slide"/>
@@ -91,14 +94,33 @@
     </xs:complexType>
     <xs:complexType name="assertType">
         <xs:annotation><xs:documentation>
-            Command which asserts that a component contains the given text or index, in the case of a combobox
+            Command which asserts that a text component contains the given text
         </xs:documentation></xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="locator" use="required"/>
-                <xs:attribute type="xs:string" name="text" use="optional"/>
-                <xs:attribute type="xs:string" name="item" use="optional"/>
-                <xs:attribute type="xs:string" name="index" use="optional"/>
+                <xs:attribute type="xs:string" name="text" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_emptyType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a text component is empty
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_comboboxType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a combobox contains the given text
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator" use="required"/>
+                <xs:attribute type="xs:string" name="text" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -108,7 +130,17 @@
         </xs:documentation></xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="locator" use="optional"/>
+                <xs:attribute type="xs:string" name="locator" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="dialog_activateType">
+        <xs:annotation><xs:documentation>
+            Command which activates a dialog
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -430,10 +462,8 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="locator" use="required"/>
-                <xs:choice>
-                    <xs:attribute type="xs:string" name="item"/>
-                    <xs:attribute type="xs:string" name="index"/>
-                </xs:choice>
+                <xs:attribute type="xs:string" name="item"/>
+                <xs:attribute type="xs:string" name="index"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
