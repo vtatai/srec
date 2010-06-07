@@ -52,6 +52,9 @@
         <row_select table="table" first="0" last="0"/>
         <assert_row_selected table="table" row="0"/>
 
+        <screenshot mode="INTERNAL_FRAME" iframe="Internal Frame" />
+        <screenshot mode="FRAME" />
+        <screenshot mode="DESKTOP"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>

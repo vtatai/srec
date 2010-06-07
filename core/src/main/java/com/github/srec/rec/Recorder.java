@@ -41,7 +41,7 @@ public class Recorder implements EventRecorder {
         componentRecorders.add(new TableRowSelectionRecorder(this));        
         componentRecorders.add(new InternalFrameRecorder(this));
         componentRecorders.add(new MenuNavigationRecorder(this));
-        componentRecorders.add(new ScreenShotRecorder());
+        componentRecorders.add(new ScreenShotRecorder(this));
     }
 
     public void init() {

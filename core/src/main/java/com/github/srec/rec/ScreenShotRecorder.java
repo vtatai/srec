@@ -33,8 +33,10 @@ import java.awt.event.KeyEvent;
 public class ScreenShotRecorder implements ComponentRecorder, KeyEventDispatcher {
     private static final Logger log = Logger.getLogger(ScreenShotRecorder.class);
     private ScreenShot screenShot;
+    private Recorder recorder;
 
-    public ScreenShotRecorder() {
+    public ScreenShotRecorder(Recorder recorder) {
+        this.recorder = recorder;
         screenShot = new DefaultScreenShot();
     }
 
@@ -53,23 +55,20 @@ public class ScreenShotRecorder implements ComponentRecorder, KeyEventDispatcher
         if (keyEvent.getKeyCode() == KeyEvent.VK_S) {
             String filename = null;
             if (keyEvent.isAltDown() && keyEvent.isShiftDown()) {
-                log.debug("Capturing internal frame screenshot");
                 try {
-                    filename = screenShot.captureInternalFrame("", new Robot());
+                    filename = screenShot.captureInternalFrame(null, new Robot());
                 } catch (AWTException e) {
                     throw new SRecException(e);
                 }                
             } else if (keyEvent.isShiftDown()) {
-                log.debug("Capturing frame screenshot");
                 try {
-                    filename = screenShot.captureFrame("", new Robot());
+                    filename = screenShot.captureFrame(null, new Robot());
                 } catch (AWTException e) {
                     throw new SRecException(e);
                 }
             } else if (keyEvent.isAltDown()) {
-                log.debug("Capturing entire desktop screenshot");
                 try {
-                    filename = screenShot.capture("", new Robot());
+                    filename = screenShot.captureDesktop(null, new Robot());
                 } catch (AWTException e) {
                     throw new SRecException(e);
                 }

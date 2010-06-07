@@ -43,13 +43,9 @@ public class Player {
 
     public Player init() {
         JemmyDSL.init();
-        try {
-            String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
-            if (!isBlank(intervalString)) {
-                commandInterval = Integer.parseInt(intervalString);
-            }
-        } catch (IOException e) {
-            throw new PlayerException(e);
+        String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
+        if (!isBlank(intervalString)) {
+            commandInterval = Integer.parseInt(intervalString);
         }
         parser = ParserFactory.create();
         return this;

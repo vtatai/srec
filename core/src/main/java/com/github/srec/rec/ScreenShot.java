@@ -21,7 +21,37 @@ import java.awt.*;
  * @author vivek
  */
 public interface ScreenShot {
-    String capture(String parentFolder, Robot robot);
-    String captureFrame(String parent, Robot robot);
-    String captureInternalFrame(String parent, Robot robot);
+    /**
+     * Captures the entire desktop.
+     *
+     * @param parentFolder The folder where to store the screenshot
+     * @param robot The robot used for taking screenshots
+     * @return The file name for the screenshot, a PNG inside the screenshots dir
+     */
+    String captureDesktop(String parentFolder, Robot robot);
+    /**
+     * Captures the current active frame.
+     *
+     * @param parentFolder The folder where to store the screenshot
+     * @param robot The robot used for taking screenshots
+     * @return The file name for the screenshot, a PNG inside the screenshots dir
+     */
+    String captureFrame(String parentFolder, Robot robot);
+    /**
+     * Captures the internal frame which is under the mouse.
+     *
+     * @param parentFolder The folder where to store the screenshot
+     * @param robot The robot used for taking screenshots
+     * @return The file name for the screenshot, a PNG inside the screenshots dir
+     */
+    String captureInternalFrame(String parentFolder, Robot robot);
+    /**
+     * Captures the internal frame which has the specified name. The internal frame must be visible and unobstructed. 
+     *
+     * @param iframeName The internal frame name
+     * @param parentFolder The folder where to store the screenshot
+     * @param robot The robot used for taking screenshots
+     * @return The file name for the screenshot, a PNG inside the screenshots dir
+     */
+    String captureInternalFrame(String iframeName, String parentFolder, Robot robot);
 }

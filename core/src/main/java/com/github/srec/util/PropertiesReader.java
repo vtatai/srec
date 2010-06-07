@@ -13,6 +13,8 @@
 
 package com.github.srec.util;
 
+import com.github.srec.SRecException;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -26,11 +28,20 @@ import java.util.Properties;
  */
 public class PropertiesReader {
     public static final String PACKAGES_TO_SCAN_PROPERTY_NAME = "packages_to_scan";
-    public static final String PLAYER_COMMAND_INTERVAL= "player_command_interval";
+    public static final String PLAYER_COMMAND_INTERVAL = "player_command_interval";
+    public static final String SCREENSHOTS_DIR = "screenshots_dir";
 
     private static Properties properties;
 
-    public static Properties getProperties() throws IOException {
+    public static Properties getProperties() {
+        try {
+            return getProperties0();
+        } catch (IOException e) {
+            throw new SRecException(e);
+        }
+    }
+
+    private static Properties getProperties0() throws IOException {
         if (properties != null) return properties;
         properties = new Properties();
         Enumeration<URL> urls = ClassLoader.getSystemResources("srec.properties");
