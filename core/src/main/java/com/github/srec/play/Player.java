@@ -10,6 +10,7 @@ import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.parser.ParserFactory;
 import com.github.srec.jemmy.JemmyDSL;
+import com.github.srec.util.PropertiesReader;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static com.github.srec.util.Utils.closeWindows;
 import static com.github.srec.util.Utils.runSwingMain;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Class which plays srec scripts / commands.
@@ -41,6 +43,14 @@ public class Player {
 
     public Player init() {
         JemmyDSL.init();
+        try {
+            String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
+            if (!isBlank(intervalString)) {
+                commandInterval = Integer.parseInt(intervalString);
+            }
+        } catch (IOException e) {
+            throw new PlayerException(e);
+        }
         parser = ParserFactory.create();
         return this;
     }
