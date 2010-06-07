@@ -23,8 +23,8 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         Player p = runTest("test_form_error.xml", false);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
-        assertEquals(p.getErrors().get(0).getLineNumber(), 18);
-        assertEquals(p.getErrors().get(1).getLineNumber(), 26);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
+        assertEquals(p.getErrors().get(1).getLineNumber(), 27);
     }
 
     public void testMethod() throws IOException {

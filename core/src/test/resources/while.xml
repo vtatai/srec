@@ -11,7 +11,8 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="while_suite">
+<suite name="while_suite" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <def name="type_initialValueTF" >
         <parameter name="text" type="string"/>
         <parameter name="times" type="number"/>
@@ -28,7 +29,10 @@
     </def>
     <test_case name="while_test_case">
         <window_activate locator="TestForm"/>
-        <type_initialValueTF text="9" times="5"/>
+        <call method="type_initialValueTF">
+            <call_parameter name="text" value="9"/>
+            <call_parameter name="times" value="5"/>
+        </call>
         <assert locator="initialValueTF" text="99999"/>
         <close locator="TestForm"/>
     </test_case>

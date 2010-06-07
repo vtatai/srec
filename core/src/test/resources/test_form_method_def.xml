@@ -11,7 +11,8 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_form">
+<suite name="test_form" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <def name="close_window" >
         <parameter name="name" type="string"/>
         <close locator="${name}"/>

@@ -11,9 +11,12 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_form_method_deep_1">
+<suite name="test_form_method_deep_1" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <require name="test_form_method_deep2.xml"/>
     <def name="type_initialValueTF_100" >
-        <type_initialValueTF text="100"/>
+        <call method="type_initialValueTF">
+            <call_parameter name="text" value="100"/>
+        </call>
     </def>
 </suite>

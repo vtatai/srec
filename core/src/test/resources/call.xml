@@ -11,7 +11,8 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="call_suite">
+<suite name="call_suite" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <def name="type_initialValueTF">
         <parameter name="text" type="string"/>
         <if expression="text == '100'">

@@ -10,8 +10,8 @@
   ~ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   ~ the specific language governing permissions and limitations under the License.
   -->
-
-<suite name="if_suite">
+<suite name="if_suite" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <def name="type_initialValueTF">
         <parameter name="text" type="string"/>
         <if expression="text == '100'">
@@ -24,7 +24,9 @@
         <window_activate locator="TestForm"/>
         <if expression="true">
             <then>
-                <type_initialValueTF text="100"/>
+                <call method="type_initialValueTF">
+                    <call_parameter name="text" value="100"/>
+                </call>
             </then>
         </if>
         <assert locator="initialValueTF" text="100"/>
@@ -34,13 +36,19 @@
         <set var="k" expression="0" type="number"/>
         <if expression="k == 10">
             <then>
-                <type_initialValueTF text="1"/>
+                <call method="type_initialValueTF">
+                    <call_parameter name="text" value="1"/>
+                </call>
             </then>
             <elsif expression="k == 100">
-                <type_initialValueTF text="10"/>
+                <call method="type_initialValueTF">
+                    <call_parameter name="text" value="10"/>
+                </call>
             </elsif>
             <else>
-                <type_initialValueTF text="100"/>
+                <call method="type_initialValueTF">
+                    <call_parameter name="text" value="100"/>
+                </call>
             </else>
         </if>
         <assert locator="initialValueTF" text="100"/>

@@ -10,7 +10,7 @@ import java.util.Map;
 import static com.github.srec.jemmy.JemmyDSL.find;
 
 /**
- * Finds a component assigning and id to it. This id can later be used as a locator in the form "id=XXX".
+ * Finds a component assigning an id to it. This id can later be used as a locator in the form "id=XXX".
  * 
  * @author Victor Tatai
  */

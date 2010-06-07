@@ -11,7 +11,8 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_form_method_call">
+<suite name="test_form_method_call" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <require name="test_form_method_def.xml"/>
     <def name="activate_test_form" >
         <window_activate locator="TestForm"/>
@@ -23,13 +24,15 @@
     <test_case name="1">
         <window_activate locator="TestForm"/>
         <select locator="calculationCB" item="Future Value"/>
-        <type_initialValueTF text="100"/>
+        <call method="type_initialValueTF">
+            <call_parameter name="text" value="100"/>
+        </call>
         <type_special locator="initialValueTF" text="Tab"/>
         <assert locator="initialValueTF" text="100"/>
         <select locator="calculationCB" index="0"/>
         <click locator="text=Ok"/>
         <click locator="cb1"/>
         <assert_enabled locator="textField2" enabled="true"/>
-        <close_window name="TestForm"/>
+        <close locator="TestForm"/>
     </test_case>
 </suite>

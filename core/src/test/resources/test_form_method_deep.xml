@@ -11,12 +11,13 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_form_method_deep">
+<suite name="test_form_method_deep" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
     <require name="test_form_method_deep1.xml"/>
     <test_case name="1">
         <window_activate locator="TestForm"/>
         <select locator="calculationCB" item="Future Value"/>
-        <type_initialValueTF_100/>
+        <call method="type_initialValueTF_100"/>
         <type_special locator="initialValueTF" text="Tab"/>
         <assert locator="initialValueTF" text="100"/>
         <close locator="TestForm"/>
