@@ -15,7 +15,7 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @SRecCommand
 public class CloseCommand extends JemmyEventCommand {
     public CloseCommand() {
-        super("close", createParametersDefinition(LOCATOR));
+        super("close", params(LOCATOR));
     }
 
     @Override

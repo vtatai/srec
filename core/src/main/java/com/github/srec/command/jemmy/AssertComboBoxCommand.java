@@ -15,7 +15,7 @@ import java.util.Map;
 @SRecCommand
 public class AssertComboBoxCommand extends JemmyEventCommand {
     public AssertComboBoxCommand() {
-        super("assert_combobox", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("assert_combobox", params(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override

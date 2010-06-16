@@ -46,15 +46,15 @@ public abstract class AbstractSRecTestNGTest {
      * Runs an entire suite or a single test case.
      *
      * @param script The name of the script to run, located inside {@link #scriptDir}
-     * @param testCase The name of the test case to run
+     * @param testCases The names of the test cases to run
      * @param failOnError true if an error should result in a test failure
      * @return The errors
      */
-    protected Player runTest(String script, String testCase, boolean failOnError) {
+    protected Player runTest(String script, boolean failOnError, String... testCases) {
         try {
             Player p = new Player()
                     .init()
-                    .play(new File(scriptDir + File.separator + script), testCase, className, params);
+                    .play(new File(scriptDir + File.separator + script), testCases, className, params);
             p.printErrors();
             if (failOnError) {
                 assertEquals(p.getErrors().size(), 0);
@@ -63,12 +63,13 @@ public abstract class AbstractSRecTestNGTest {
         } catch (ParseException e) {
             if (failOnError) {
                 e.printErrors();
-                fail();
+                fail("Errors encountered during srec script run, failing");
             } else {
                 throw e;
             }
         } catch (IOException e) {
-            fail();
+            e.printStackTrace();
+            fail(e.getMessage());
         }
         return null;
     }
@@ -77,22 +78,11 @@ public abstract class AbstractSRecTestNGTest {
      * Runs an entire suite or a single test case, failing if there is an error.
      *
      * @param script The name of the script to run, located inside {@link #scriptDir}
-     * @param testCase The name of the test case to run
+     * @param testCases The names of the test cases to run
      * @return The errors
      */
-    protected Player runTest(String script, String testCase) {
-        return runTest(script, testCase, true);
-    }
-
-    /**
-     * Runs an entire suite.
-     *
-     * @param script The name of the script to run, located inside {@link #scriptDir}
-     * @param failOnError If an error should cause the test to fail
-     * @return The player errors
-     */
-    protected Player runTest(String script, boolean failOnError) {
-        return runTest(script, null, failOnError);
+    protected Player runTest(String script, String... testCases) {
+        return runTest(script, true, testCases);
     }
 
     /**
@@ -102,6 +92,6 @@ public abstract class AbstractSRecTestNGTest {
      * @return The player errors
      */
     protected Player runTest(String script) {
-        return runTest(script, null, true);
+        return runTest(script, true);
     }
 }

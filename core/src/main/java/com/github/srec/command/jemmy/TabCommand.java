@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.tabbedPane;
 @SRecCommand
 public class TabCommand extends JemmyEventCommand {
     public TabCommand() {
-        super("tab", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("tab", params(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override

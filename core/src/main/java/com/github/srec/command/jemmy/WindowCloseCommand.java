@@ -28,7 +28,7 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @SRecCommand
 public class WindowCloseCommand extends JemmyEventCommand {
     public WindowCloseCommand() {
-        super("window_close", createParametersDefinition(LOCATOR));
+        super("window_close", params(LOCATOR));
     }
 
     @Override

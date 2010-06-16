@@ -17,7 +17,7 @@
         <window_activate locator="TestForm"/>
 
         <hide_internal_frame locator="title=Internal Frame"/>
-        <push_menu indices="1,0,1"/>
+        <push_menu indexes="1,0,1"/>
 
         <hide_internal_frame locator="title=Internal Frame"/>
         <push_menu path="Menu2>Menu21>Show"/>

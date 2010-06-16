@@ -15,7 +15,7 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @SRecCommand
 public class WindowActivateCommand extends JemmyEventCommand {
     public WindowActivateCommand() {
-        super("window_activate", createParametersDefinition(LOCATOR));
+        super("window_activate", params(LOCATOR));
     }
 
     @Override

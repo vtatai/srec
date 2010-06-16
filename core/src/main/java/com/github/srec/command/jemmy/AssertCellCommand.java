@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 @SRecCommand
 public class AssertCellCommand extends JemmyEventCommand {
     public AssertCellCommand() {
-        super("assert_cell", createParametersDefinition("table", Type.STRING, "row", Type.NUMBER, "text", Type.STRING,
+        super("assert_cell", params("table", Type.STRING, "row", Type.NUMBER, "text", Type.STRING,
                 "column", Type.NUMBER));
     }
 

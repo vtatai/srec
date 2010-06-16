@@ -19,7 +19,7 @@ import com.github.srec.command.value.ObjectValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import com.github.srec.jemmy.ComponentMap;
-import org.netbeans.jemmy.operators.JComponentOperator;
+import org.netbeans.jemmy.operators.ComponentOperator;
 
 import java.util.Map;
 
@@ -35,20 +35,21 @@ public class ComponentMapSymbolsAdapter implements ComponentMap {
     }
 
     @Override
-    public JComponentOperator getComponent(String id) {
+    public ComponentOperator getComponent(String id) {
         CommandSymbol s = symbols.get(id);
         if (s == null) return null;
-        if (!(s instanceof VarCommand)) throw new PlayerException("Symbol cannot be converted to a JComponentOperator because it is not a variable");
+        if (!(s instanceof VarCommand)) throw new PlayerException("Symbol cannot be converted to a ComponentOperator because it is not a variable");
         Value value = ((VarCommand) s).getValue(null);
         if (value == null || value.getType() == Type.NIL) return null;
-        if (value.getType() != Type.OBJECT) throw new PlayerException("Variable value cannot be converted to a JComponentOperator");
+        if (value.getType() != Type.OBJECT) throw new PlayerException("Variable value cannot be converted to a ComponentOperator");
         Object object = value.get();
-        if (!(object instanceof JComponentOperator)) throw new PlayerException("Variable value cannot be converted to a JComponentOperator");
-        return (JComponentOperator) object;
+        if (object == null) return null;
+        if (!(object instanceof ComponentOperator)) throw new PlayerException("Variable value cannot be converted to a ComponentOperator");
+        return (ComponentOperator) object;
     }
 
     @Override
-    public void putComponent(String id, JComponentOperator component) {
+    public void putComponent(String id, ComponentOperator component) {
         symbols.put(id, new VarCommand(id, new ObjectValue(component)));
     }
 }

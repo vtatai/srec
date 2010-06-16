@@ -15,7 +15,7 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @SRecCommand
 public class AssertEmptyCommand extends JemmyEventCommand {
     public AssertEmptyCommand() {
-        super("assert_empty", createParametersDefinition(LOCATOR));
+        super("assert_empty", params(LOCATOR));
     }
 
     @Override

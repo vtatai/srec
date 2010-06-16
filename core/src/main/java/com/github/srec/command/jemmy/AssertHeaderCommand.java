@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 @SRecCommand
 public class AssertHeaderCommand extends JemmyEventCommand {
     public AssertHeaderCommand() {
-        super("assert_header", createParametersDefinition("table", Type.STRING, "text", Type.STRING, "column", Type.NUMBER));
+        super("assert_header", params("table", Type.STRING, "text", Type.STRING, "column", Type.NUMBER));
     }
 
     @Override

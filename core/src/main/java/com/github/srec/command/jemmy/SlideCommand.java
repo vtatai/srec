@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.slider;
 @SRecCommand
 public class SlideCommand extends JemmyEventCommand {
     public SlideCommand() {
-        super("slide", createParametersDefinition(LOCATOR, Type.STRING, "value", Type.NUMBER));
+        super("slide", params(LOCATOR, Type.STRING, "value", Type.NUMBER));
     }
 
     @Override

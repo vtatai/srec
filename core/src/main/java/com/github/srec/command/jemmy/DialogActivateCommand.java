@@ -15,7 +15,7 @@ import static com.github.srec.jemmy.JemmyDSL.dialog;
 @SRecCommand
 public class DialogActivateCommand extends JemmyEventCommand {
     public DialogActivateCommand() {
-        super("dialog_activate", createParametersDefinition(LOCATOR));
+        super("dialog_activate", params(LOCATOR));
     }
 
     @Override

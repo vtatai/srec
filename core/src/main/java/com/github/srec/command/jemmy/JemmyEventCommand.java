@@ -2,6 +2,7 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.exception.TimeoutException;
 import com.github.srec.command.method.MethodCommand;
 import com.github.srec.command.method.MethodParameter;
@@ -29,6 +30,8 @@ public abstract class JemmyEventCommand extends MethodCommand {
         } catch (JemmyException e) {
             if (e instanceof TimeoutExpiredException) throw new TimeoutException(this, params, e);
             throw new UnsupportedFeatureException(e);
+        } catch (Exception e) {
+            throw new CommandExecutionException(e);
         }
         return null;
     }

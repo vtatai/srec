@@ -16,7 +16,7 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @SRecCommand
 public class AssertCommand extends JemmyEventCommand {
     public AssertCommand() {
-        super("assert", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("assert", params(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override

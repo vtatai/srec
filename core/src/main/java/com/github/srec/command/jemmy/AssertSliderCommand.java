@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.slider;
 @SRecCommand
 public class AssertSliderCommand extends JemmyEventCommand {
     public AssertSliderCommand() {
-        super("assert_slider", createParametersDefinition(LOCATOR, Type.STRING, "value", Type.NUMBER));
+        super("assert_slider", params(LOCATOR, Type.STRING, "value", Type.NUMBER));
     }
 
     @Override

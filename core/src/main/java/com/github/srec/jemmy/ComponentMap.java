@@ -13,7 +13,7 @@
 
 package com.github.srec.jemmy;
 
-import org.netbeans.jemmy.operators.JComponentOperator;
+import org.netbeans.jemmy.operators.ComponentOperator;
 
 /**
  * Stores a simple map of id to components.
@@ -21,6 +21,6 @@ import org.netbeans.jemmy.operators.JComponentOperator;
  * @author Victor Tatai
  */
 public interface ComponentMap {
-    JComponentOperator getComponent(String id);
-    void putComponent(String id, JComponentOperator component);
+    ComponentOperator getComponent(String id);
+    void putComponent(String id, ComponentOperator component);
 }

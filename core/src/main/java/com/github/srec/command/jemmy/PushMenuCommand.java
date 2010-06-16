@@ -29,22 +29,25 @@ import static com.github.srec.jemmy.JemmyDSL.menuBar;
  */
 @SRecCommand
 public class PushMenuCommand extends JemmyEventCommand {
+    public static final String INDEXES = "indexes";
+    public static final String PATH = "path";
+
     public PushMenuCommand() {
-        super("push_menu", param("indices", Type.STRING, true, null), param("path", Type.STRING, true, null));
+        super("push_menu", param(INDEXES, Type.STRING, true, null), param(PATH, Type.STRING, true, null));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        if (params.get("indices") != null) {
-            String indicesStr = coerceToString(params.get("indices"), ctx);
-            String[] indicesArray = indicesStr.split("[ |,]+");
-            menuBar().clickMenu(convertToInt(indicesArray));
-        } else if (params.get("path") != null) {
-            String pathStr = coerceToString(params.get("path"), ctx);
+        if (params.get(INDEXES) != null) {
+            String indexesStr = coerceToString(params.get(INDEXES), ctx);
+            String[] indexesArray = indexesStr.split("[ |,]+");
+            menuBar().clickMenu(convertToInt(indexesArray));
+        } else if (params.get(PATH) != null) {
+            String pathStr = coerceToString(params.get(PATH), ctx);
             String[] pathArray = pathStr.split("[ |>]+");
             menuBar().clickMenu(pathArray);
         } else {
-            throw new CommandExecutionException("Either indices or path must be specified for push_menu");
+            throw new CommandExecutionException("Either indexes or path must be specified for push_menu");
         }
     }
 

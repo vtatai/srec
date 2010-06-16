@@ -47,7 +47,10 @@
             <xs:element type="tabType" name="tab"/>
             <xs:element type="assert_headerType" name="assert_header" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="assert_cellType" name="assert_cell"/>
+            <xs:element type="assert_nullType" name="assert_null"/>
+            <xs:element type="assert_not_nullType" name="assert_not_null"/>
             <xs:element type="row_selectType" name="row_select"/>
+            <xs:element type="cell_selectType" name="cell_select"/>
             <xs:element type="assert_row_selectedType" name="assert_row_selected"/>
             <xs:element type="screenshotType" name="screenshot" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="setType" name="set"/>
@@ -55,8 +58,12 @@
             <xs:element type="whileType" name="while"/>
             <xs:element type="callType" name="call"/>
             <xs:element type="findType" name="find"/>
+            <xs:element type="find_by_typeType" name="find_by_type"/>
+            <xs:element type="find_dialogType" name="find_dialog"/>
+            <xs:element type="find_frameType" name="find_frame"/>
             <xs:element type="closeType" name="close"/>
             <xs:element type="incType" name="inc"/>
+            <xs:element type="pauseType" name="pause"/>
         </xs:choice>
     </xs:complexType>
     <xs:complexType name="test_caseType">
@@ -173,6 +180,34 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+    <xs:complexType name="assert_nullType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a variable is null
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="varName" use="required">
+                    <xs:annotation><xs:documentation>
+                        The variable name
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_not_nullType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a variable is not null
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="varName" use="required">
+                    <xs:annotation><xs:documentation>
+                        The variable name
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
     <xs:complexType name="type_specialType">
         <xs:annotation><xs:documentation>
             Command which types special characters such as Tab, Backspace, End
@@ -190,14 +225,14 @@
     </xs:complexType>
     <xs:complexType name="push_menuType">
         <xs:annotation><xs:documentation>
-            Command which pushes a menu sequence, either using its indices or texts. The menu bar for the current active
+            Command which pushes a menu sequence, either using its indexes or texts. The menu bar for the current active
             window is used 
         </xs:documentation></xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="indices" use="optional">
+                <xs:attribute type="xs:string" name="indexes" use="optional">
                     <xs:annotation><xs:documentation>
-                        The indices separated by comma such as 0,1,0
+                        The menu indexes separated by comma such as 0,1,0
                     </xs:documentation></xs:annotation>
                 </xs:attribute>
                 <xs:attribute type="xs:string" name="path" use="optional">
@@ -272,7 +307,7 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="locator" use="required"/>
-                <xs:attribute type="xs:string" name="indices" use="optional"/>
+                <xs:attribute type="xs:string" name="indexes" use="optional"/>
                 <xs:attribute type="xs:string" name="path" use="optional"/>
             </xs:extension>
         </xs:simpleContent>
@@ -286,6 +321,19 @@
                 <xs:attribute type="xs:string" name="table" use="required"/>
                 <xs:attribute type="xs:string" name="first" use="required"/>
                 <xs:attribute type="xs:string" name="last" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="cell_selectType">
+        <xs:annotation><xs:documentation>
+            Command which selects table cells
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="table" use="required"/>
+                <xs:attribute type="xs:string" name="column" use="required"/>
+                <xs:attribute type="xs:string" name="row" use="required"/>
+                <xs:attribute type="xs:string" name="clicks" use="optional"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -353,6 +401,21 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="locator" use="required"/>
+                <xs:attribute type="xs:string" name="modifiers" use="optional">
+                    <xs:annotation><xs:documentation>
+                        Modifiers when clicking
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute type="xs:integer" name="count" use="optional">
+                    <xs:annotation><xs:documentation>
+                        Click count, default is one
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
+                <xs:attribute type="xs:string" name="textColumn" use="optional">
+                    <xs:annotation><xs:documentation>
+                        When clicking on a text field, which char should be clicked
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -439,9 +502,43 @@
         </xs:documentation></xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="name" use="required"/>
+                <xs:attribute type="xs:string" name="locator" use="required"/>
+                <xs:attribute type="xs:string" name="id" use="required"/>
+                <xs:attribute type="xs:string" name="findComponentType" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="find_by_typeType">
+        <xs:annotation><xs:documentation>
+            Command which finds a component by type, assigning it to the given id
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="id" use="required"/>
                 <xs:attribute type="xs:string" name="findComponentType" use="required"/>
+                <xs:attribute type="xs:string" name="containerId" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="find_dialogType">
+        <xs:annotation><xs:documentation>
+            Command which finds a dialog, assigning it to the given id
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="title" use="required"/>
+                <xs:attribute type="xs:string" name="id" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="find_frameType">
+        <xs:annotation><xs:documentation>
+            Command which finds a frame, assigning it to the given id
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="title" use="required"/>
+                <xs:attribute type="xs:string" name="id" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -475,5 +572,11 @@
             <xs:element type="call_parameterType" name="call_parameter"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="method" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="pauseType">
+        <xs:annotation><xs:documentation>
+            Command which pauses execution either for a finite amount of time or until Ctrl-P is pressed
+        </xs:documentation></xs:annotation>
+        <xs:attribute type="xs:integer" name="interval" use="optional"/>
     </xs:complexType>
 </xs:schema>

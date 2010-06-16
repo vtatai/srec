@@ -15,6 +15,9 @@ package com.github.srec.command;
 
 import com.github.srec.command.base.Command;
 import com.github.srec.command.base.CommandSymbol;
+import com.github.srec.command.base.VarCommand;
+import com.github.srec.command.value.NilValue;
+import com.github.srec.command.value.Value;
 import com.github.srec.play.Player;
 
 import java.io.File;
@@ -78,6 +81,23 @@ public class ExecutionContext {
      */
     public CommandSymbol findSymbol(String name) {
         return symbols.get(name);
+    }
+
+    /**
+     * Returns true if the symbol is null or has not been defined.
+     *
+     * @param name The symbol's name
+     * @return true if null
+     */
+    public boolean isSymbolNull(String name) {
+        CommandSymbol s = findSymbol(name);
+        if (s == null) return true;
+        if (s instanceof VarCommand) {
+            VarCommand var = (VarCommand) s;
+            Value v = var.getValue(this);
+            if (v == null || v.get() == null || v instanceof NilValue) return true;
+        }
+        return false;
     }
     
     public void addCommand(Command... commands) {

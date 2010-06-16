@@ -29,7 +29,7 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 @SRecCommand
 public class RowSelectCommand extends JemmyEventCommand {
     public RowSelectCommand() {
-        super("row_select", createParametersDefinition("table", Type.STRING, "first", Type.NUMBER, "last", Type.NUMBER));
+        super("row_select", params("table", Type.STRING, "first", Type.NUMBER, "last", Type.NUMBER));
     }
 
     @Override

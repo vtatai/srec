@@ -17,7 +17,6 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.base.BaseCommand;
 import com.github.srec.command.base.CommandSymbol;
 import com.github.srec.command.exception.IllegalParametersException;
-import com.github.srec.command.exception.MethodDefinitionException;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 
@@ -35,17 +34,6 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
 
     protected MethodCommand(String name, MethodParameter... parameters) {
         super(name);
-        boolean startOptional = false;
-        for (MethodParameter parameter : parameters) {
-            assert parameter != null;
-            if (startOptional && !parameter.isOptional()) {
-                throw new MethodDefinitionException("All optional parameters must be defined last in method '" + name
-                        + "'");
-            }
-            if (!startOptional && parameter.isOptional()) {
-                startOptional = true;
-            }
-        }
         addParameters(parameters);
     }
 
@@ -206,7 +194,7 @@ public abstract class MethodCommand extends BaseCommand implements CommandSymbol
      * @param params The array of parameter names and types
      * @return The array of created MethodParameters
      */
-    protected static MethodParameter[] createParametersDefinition(Object... params) {
+    protected static MethodParameter[] params(Object... params) {
         if (params.length == 0) return null;
         if (params.length != 1 && params.length % 2 != 0) throw new IllegalParametersException("Incorrect number of params");
         if (params.length == 1) {

@@ -17,25 +17,27 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
-import org.netbeans.jemmy.JemmyException;
 
 import java.util.Map;
 
-import static com.github.srec.jemmy.JemmyDSL.table;
+import static com.github.srec.jemmy.JemmyDSL.frame;
 
 /**
+ * Finds a frame assigning an id to it. This id can later be used as a locator in the form "id=XXX". Notice that if
+ * the component is not found an error is thrown.
+ *
  * @author Victor Tatai
  */
 @SRecCommand
-public class AssertRowSelectedCommand extends JemmyEventCommand {
-    public AssertRowSelectedCommand() {
-        super("assert_row_selected", params("table", Type.STRING, "row", Type.NUMBER));
+public class FindFrameCommand extends JemmyEventCommand {
+    public FindFrameCommand() {
+        super("find_frame", params("title", Type.STRING, "id", Type.STRING));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        table(coerceToString(params.get("table"), ctx))
-                .row(coerceToBigDecimal(params.get("row")).intValue())
-                .assertSelected(true);
+    public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
+        String title = coerceToString(params.get("title"), ctx);
+        String id = coerceToString(params.get("id"), ctx);
+        frame(title).activate().store(id);
     }
 }

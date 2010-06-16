@@ -17,25 +17,25 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
-import org.netbeans.jemmy.JemmyException;
 
 import java.util.Map;
 
-import static com.github.srec.jemmy.JemmyDSL.table;
+import static com.github.srec.jemmy.JemmyDSL.findByComponentType;
 
 /**
+ * Finds a component by its type, assigning an id to it. This id can later be used as a locator in the form "id=XXX".
+ * Notice that if the component is not found no error is thrown, and the id is assigned a null value.
+ *
  * @author Victor Tatai
  */
 @SRecCommand
-public class AssertRowSelectedCommand extends JemmyEventCommand {
-    public AssertRowSelectedCommand() {
-        super("assert_row_selected", params("table", Type.STRING, "row", Type.NUMBER));
+public class FindByTypeCommand extends JemmyEventCommand {
+    public FindByTypeCommand() {
+        super("find_by_type", param("id", Type.STRING), param("containerId", Type.STRING, true, null), param("findComponentType", Type.STRING));
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        table(coerceToString(params.get("table"), ctx))
-                .row(coerceToBigDecimal(params.get("row")).intValue())
-                .assertSelected(true);
+    public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
+        findByComponentType(asString("id", params, ctx), asString("containerId", params, ctx), asString("findComponentType", params, ctx));
     }
 }

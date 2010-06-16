@@ -11,31 +11,41 @@
  * the specific language governing permissions and limitations under the License.
  */
 
-package com.github.srec.command.jemmy;
+package com.github.srec.command.ext;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
-import com.github.srec.command.value.Type;
+import com.github.srec.command.exception.AssertionFailedException;
+import com.github.srec.command.method.MethodCommand;
 import com.github.srec.command.value.Value;
-import org.netbeans.jemmy.JemmyException;
 
 import java.util.Map;
 
-import static com.github.srec.jemmy.JemmyDSL.table;
-
 /**
+ * A command which asserts that a variable is null.
+ *
  * @author Victor Tatai
  */
 @SRecCommand
-public class AssertRowSelectedCommand extends JemmyEventCommand {
-    public AssertRowSelectedCommand() {
-        super("assert_row_selected", params("table", Type.STRING, "row", Type.NUMBER));
+public class AssertNullCommand extends MethodCommand {
+    public AssertNullCommand() {
+        super("assert_null", "varName");
     }
 
     @Override
-    protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        table(coerceToString(params.get("table"), ctx))
-                .row(coerceToBigDecimal(params.get("row")).intValue())
-                .assertSelected(true);
+    protected Value internalCallMethod(ExecutionContext context, Map<String, Value> params) {
+        String varName = asString("varName", params, context);
+        if (context.isSymbolNull(varName)) return null;
+        throw new AssertionFailedException("var " +varName + " is null");
+    }
+
+    @Override
+    public boolean isNative() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "assert_null";
     }
 }

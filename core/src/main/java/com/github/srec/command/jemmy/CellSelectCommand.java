@@ -15,6 +15,7 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
+import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
@@ -27,15 +28,16 @@ import static com.github.srec.jemmy.JemmyDSL.table;
  * @author Victor Tatai
  */
 @SRecCommand
-public class AssertRowSelectedCommand extends JemmyEventCommand {
-    public AssertRowSelectedCommand() {
-        super("assert_row_selected", params("table", Type.STRING, "row", Type.NUMBER));
+public class CellSelectCommand extends JemmyEventCommand {
+    public CellSelectCommand() {
+        super("cell_select", param("table", Type.STRING), param("row", Type.NUMBER), param("column", Type.NUMBER),
+                param("clicks", Type.NUMBER, true, new NumberValue("1")));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         table(coerceToString(params.get("table"), ctx))
                 .row(coerceToBigDecimal(params.get("row")).intValue())
-                .assertSelected(true);
+                .clickCell(coerceToBigDecimal(params.get("column")).intValue(), asBigDecimal("clicks", params).intValue());
     }
 }

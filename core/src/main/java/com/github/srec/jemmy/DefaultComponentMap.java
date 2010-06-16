@@ -13,21 +13,21 @@
 
 package com.github.srec.jemmy;
 
-import org.netbeans.jemmy.operators.JComponentOperator;
+import org.netbeans.jemmy.operators.ComponentOperator;
 
 import java.util.HashMap;
 
 /**
  * @author Victor Tatai
  */
-public class DefaultComponentMap extends HashMap<String, JComponentOperator> implements ComponentMap {
+public class DefaultComponentMap extends HashMap<String, ComponentOperator> implements ComponentMap {
     @Override
-    public JComponentOperator getComponent(String id) {
+    public ComponentOperator getComponent(String id) {
         return get(id);
     }
 
     @Override
-    public void putComponent(String id, JComponentOperator component) {
+    public void putComponent(String id, ComponentOperator component) {
         put(id, component);
     }
 }

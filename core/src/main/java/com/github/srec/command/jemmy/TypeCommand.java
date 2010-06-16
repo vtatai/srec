@@ -16,7 +16,7 @@ import static com.github.srec.jemmy.JemmyDSL.textField;
 @SRecCommand
 public class TypeCommand extends JemmyEventCommand {
     public TypeCommand() {
-        super("type", createParametersDefinition(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("type", params(LOCATOR, Type.STRING, "text", Type.STRING));
     }
 
     @Override

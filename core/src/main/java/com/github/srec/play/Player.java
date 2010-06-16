@@ -14,8 +14,7 @@ import com.github.srec.util.PropertiesReader;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.github.srec.util.Utils.closeWindows;
 import static com.github.srec.util.Utils.runSwingMain;
@@ -51,10 +50,20 @@ public class Player {
         return this;
     }
 
-    public Player play(File file, String testCase, String className, String[] args) throws IOException {
+    /**
+     * Plays a script.
+     *
+     * @param file The script file name
+     * @param testCases The test case to run, use null to run all
+     * @param className The class name of the application under test, null to not launch - notice that the application is restarted for each TC
+     * @param args The arguments to pass to the class above
+     * @return The created player
+     * @throws IOException The exception
+     */
+    public Player play(File file, String[] testCases, String className, String[] args) throws IOException {
         classToRun = className;
         classToRunArgs = args;
-        play(file, testCase);
+        play(file, testCases);
         return this;
     }
 
@@ -62,7 +71,7 @@ public class Player {
         return play(file, null);
     }
 
-    public Player play(File file, String testCase) throws IOException {
+    public Player play(File file, String[] testCases) throws IOException {
         if (file == null) return null;
         if (file.isDirectory()) {
             log.info("Playing files inside dir: " + file.getCanonicalPath());
@@ -88,7 +97,7 @@ public class Player {
             return this;
         } else {
             log.info("Playing file: " + file.getCanonicalPath());
-            return play(new FileInputStream(file), file, testCase);
+            return play(new FileInputStream(file), file, testCases);
         }
     }
 
@@ -97,17 +106,18 @@ public class Player {
      *
      * @param is The input stream from where to read the script
      * @param file The originating file, may be null
-     * @param testCaseName The name of the test case to play, if null all test cases are played
+     * @param testCases The names of the test cases to play, if null or empty all test cases are played
      * @return The player
      * @throws IOException in case there is an error reading the file
      */
-    public Player play(InputStream is, File file, String testCaseName) throws IOException {
+    public Player play(InputStream is, File file, String[] testCases) throws IOException {
         ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
         TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
+        Set<String> testCasesSet = testCases == null || testCases.length == 0 ? null : new HashSet<String>(Arrays.asList(testCases));
         for (TestCase testCase : suite.getTestCases()) {
-            if (testCaseName != null && !testCase.getName().equals(testCaseName)) continue;
+            if (testCasesSet != null && !testCasesSet.contains(testCase.getName())) continue;
             if (classToRun != null) runSwingMain(classToRun, classToRunArgs);
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
@@ -153,6 +163,7 @@ public class Player {
         System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
         System.err.println(command.getLocation().getLine());
         errors.add(error);
+        log.debug("Error in script play", e);
     }
 
     public List<PlayerError> getErrors() {

@@ -13,7 +13,12 @@
 
 package com.github.srec.util;
 
+import com.github.srec.SRecException;
+
+import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Scans a tree of components for the one component which matches a given condition.
@@ -23,7 +28,8 @@ import java.awt.*;
 public class AWTTreeScanner {
 
     /**
-     * Scans a component tree searching for the one which matches the given name.
+     * Scans a component tree searching for the one which is matched by the given matcher. In case of multiple matches
+     * the firs one found is returned.
      *
      * @param root The component root
      * @param matcher The matcher
@@ -52,7 +58,60 @@ public class AWTTreeScanner {
 
         @Override
         public boolean matches(Component component) {
-            return component != null && component.getName().equals(name);
+            return component != null && component.getName() != null && component.getName().equals(name);
+        }
+    }
+
+    /**
+     * Matches by component name.
+     */
+    public static class TitleScannerMatcher implements ScannerMatcher {
+        private String title;
+
+        public TitleScannerMatcher(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public boolean matches(Component component) {
+            if (component == null || !(component instanceof JDialog || component instanceof JFrame || component instanceof JInternalFrame))
+                return false;
+            if (component instanceof JDialog) return ((JDialog) component).getTitle().equals(title);
+            if (component instanceof JFrame) return ((JFrame) component).getTitle().equals(title);
+            return ((JInternalFrame) component).getTitle().equals(title);
+        }
+    }
+
+    /**
+     * Matches by component name.
+     */
+    public static class TextScannerMatcher implements ScannerMatcher {
+        private String text;
+
+        public TextScannerMatcher(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public boolean matches(Component component) {
+            if (component == null) return false;
+            Method m = findGetTextMethod(component.getClass());
+            if (m == null) return false;
+            try {
+                String currText = (String) m.invoke(component);
+                return text.equals(currText);
+            } catch (IllegalAccessException e) {
+                throw new SRecException(e);
+            } catch (InvocationTargetException e) {
+                throw new SRecException(e);
+            }
+        }
+
+        private Method findGetTextMethod(Class<? extends Component> clazz) {
+            for (Method method : clazz.getMethods()) {
+                if ("getText".equals(method.getName()) && method.getParameterTypes().length == 0) return method;
+            }
+            return null;
         }
     }
 }

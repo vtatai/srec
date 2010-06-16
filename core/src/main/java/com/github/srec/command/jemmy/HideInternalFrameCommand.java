@@ -28,7 +28,7 @@ import static com.github.srec.jemmy.JemmyDSL.internalFrame;
 @SRecCommand
 public class HideInternalFrameCommand extends JemmyEventCommand {
     public HideInternalFrameCommand() {
-        super("hide_internal_frame", createParametersDefinition(LOCATOR));
+        super("hide_internal_frame", params(LOCATOR));
     }
 
     @Override

@@ -28,7 +28,7 @@ import static com.github.srec.jemmy.JemmyDSL.internalFrame;
 @SRecCommand
 public class IFrameActivateCommand extends JemmyEventCommand {
     public IFrameActivateCommand() {
-        super("iframe_activate", createParametersDefinition("title"));
+        super("iframe_activate", params("title"));
     }
 
     @Override
