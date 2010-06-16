@@ -34,6 +34,7 @@ public class SimpleXmlRecorderTest {
         SimpleXmlRecorder sr = new SimpleXmlRecorder(new PrintWriter(writer));
         sr.start("com.github.srec.ui.TestForm", new String[0]);
 
+        frame("TestForm").activate();
         button("text=Ok").click();
         slider("slider").value(10);
         tabbedPane("tabbedPane").select("Table");
