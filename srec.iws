@@ -2,11 +2,11 @@
 <project version="4">
   <component name="BuildServerSettings">
     <option name="HISTORY" value="" />
-    <option name="LOGIN" value="" />
-    <option name="SERVER_URL" value="http://buildserver" />
-    <option name="PASSWORD" />
+    <option name="LOGIN" value="aristides" />
+    <option name="SERVER_URL" value="http://teamcity" />
+    <option name="PASSWORD" value="dfdadfc3dfdedfc8dfdfdfc6df98df9f" />
     <option name="REMEMBER_ME" value="true" />
-    <option name="USE_IDEA_PROXY_SETTINGS" value="true" />
+    <option name="USE_IDEA_PROXY_SETTINGS" value="false" />
     <option name="INSPECTIONS_BUILD_TYPE_NAME" />
     <option name="INSPECTIONS_PROJECT_ID" />
     <option name="INSPECTIONS_BUILD_TYPE_ID" />
@@ -22,11 +22,24 @@
     <option name="FILTER_REMOTE_RUN_TREE" value="true" />
     <option name="FILTER_BY_STATUS" value="false" />
     <option name="SHOW_CLOSE_PROMPT" value="true" />
+    <SELECTED_PROJECT id="project11" />
+    <SELECTED_TYPE id="bt50" />
+    <SELECTED_AGENT id="bt50:" />
     <TreeState key="project">
       <PATH>
         <PATH_ELEMENT>
           <option name="myItemId" value="Root" />
           <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.RootDescriptor" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Root" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.RootDescriptor" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="DDA" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.ProjectDescriptor" />
         </PATH_ELEMENT>
       </PATH>
     </TreeState>
@@ -37,16 +50,34 @@
           <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.RootDescriptor" />
         </PATH_ELEMENT>
       </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Root" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.RootDescriptor" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ChangesGroup::Older" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.ChangesGroupDescriptor" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Root" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.RootDescriptor" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="ChangesGroup::Today" />
+          <option name="myItemType" value="jetbrains.buildServer.tree.descriptors.ChangesGroupDescriptor" />
+        </PATH_ELEMENT>
+      </PATH>
     </TreeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="012e8d8f-5b33-4472-8b89-79a52e9cfaf8" name="Default" comment="Fixing When two select commands are together in the srec xml the second &quot;select&quot; fails.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hadoop/pom.xml" afterPath="$PROJECT_DIR$/hadoop/pom.xml" />
+    <list default="true" readonly="true" id="012e8d8f-5b33-4472-8b89-79a52e9cfaf8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srec.iws" afterPath="$PROJECT_DIR$/srec.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/screenshots/screenshot-2.png" afterPath="$PROJECT_DIR$/core/screenshots/screenshot-2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/pom.xml" afterPath="$PROJECT_DIR$/examples/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/pom.xml" afterPath="$PROJECT_DIR$/core/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/test/resources/while.xml" afterPath="$PROJECT_DIR$/core/src/test/resources/while.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/test/resources/if.xml" afterPath="$PROJECT_DIR$/core/src/test/resources/if.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/screenshots/screenshot-3.png" afterPath="$PROJECT_DIR$/core/screenshots/screenshot-3.png" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
@@ -110,7 +141,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="297" column="30" selection-start="11155" selection-end="11155" vertical-scroll-proportion="-8.166667">
+            <state line="310" column="28" selection-start="11635" selection-end="11635" vertical-scroll-proportion="-16.291666">
               <folding />
             </state>
           </provider>
@@ -125,55 +156,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/pom.xml">
+      <file leaf-file-name="FindCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/FindCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="25" selection-start="2437" selection-end="2437" vertical-scroll-proportion="-5.0416665">
+            <state line="18" column="43" selection-start="595" selection-end="595" vertical-scroll-proportion="-6.875">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hadoop/pom.xml">
+      <file leaf-file-name="JemmyEventCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/JemmyEventCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="44" selection-start="519" selection-end="519" vertical-scroll-proportion="0.33333334">
+            <state line="19" column="21" selection-start="685" selection-end="685" vertical-scroll-proportion="-5.625">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlayerTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/play/PlayerTest.java">
+      <file leaf-file-name="if.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/test/resources/if.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="29" selection-start="844" selection-end="844" vertical-scroll-proportion="-14.375">
+            <state line="59" column="91" selection-start="2455" selection-end="2538" vertical-scroll-proportion="-14.458333">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="call.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/test/resources/call.xml">
+      <file leaf-file-name="while.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/test/resources/while.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="7.375">
+            <state line="31" column="91" selection-start="1448" selection-end="1448" vertical-scroll-proportion="0.67607975">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JemmyDSL.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java">
+      <file leaf-file-name="test_form.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="671" column="4" selection-start="27133" selection-end="27133" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TypeCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/TypeCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="63" selection-start="727" selection-end="727" vertical-scroll-proportion="0.0">
+            <state line="24" column="111" selection-start="1110" selection-end="1110" vertical-scroll-proportion="-0.625">
               <folding />
             </state>
           </provider>
@@ -218,6 +240,8 @@
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/examples/pom.xml" />
         <option value="$PROJECT_DIR$/hadoop/pom.xml" />
+        <option value="$PROJECT_DIR$/core/src/test/resources/if.xml" />
+        <option value="$PROJECT_DIR$/core/src/test/resources/while.xml" />
       </list>
     </option>
   </component>
@@ -562,6 +586,82 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="command" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="srec" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="command" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jemmy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -890,7 +990,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979977" sideWeight="0.0" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46604216" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25526932" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -902,9 +1002,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32873377" sideWeight="0.5257611" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32873377" sideWeight="0.8056206" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18618266" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18618266" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -914,7 +1014,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
     <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
@@ -948,31 +1048,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/net/java/dev/jemmy/2.3/jemmy-2.3-sources.jar!/org/netbeans/jemmy/operators/JComboBoxOperator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="591" column="18" selection-start="20847" selection-end="20847" vertical-scroll-proportion="0.36380598" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="111" selection-start="1110" selection-end="1110" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/command/parser/xml/XmlParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="70" selection-start="1609" selection-end="1609" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/TypeSpecialCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="67" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form_error.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="23" selection-start="1366" selection-end="1366" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/SelectCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="29" column="48" selection-start="1137" selection-end="1137" vertical-scroll-proportion="0.0" />
@@ -1005,16 +1080,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/play/PlayerTest.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="29" selection-start="844" selection-end="844" vertical-scroll-proportion="-14.375">
+        <state line="310" column="28" selection-start="11635" selection-end="11635" vertical-scroll-proportion="-16.291666">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/play/PlayerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="297" column="30" selection-start="11155" selection-end="11155" vertical-scroll-proportion="-8.166667">
+        <state line="38" column="22" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.5430108">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hadoop/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="32" selection-start="649" selection-end="649" vertical-scroll-proportion="0.36095765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="25" selection-start="2437" selection-end="2437" vertical-scroll-proportion="0.22283609">
           <folding />
         </state>
       </provider>
@@ -1026,16 +1115,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/pom.xml">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/FindCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="25" selection-start="2437" selection-end="2437" vertical-scroll-proportion="-5.0416665">
+        <state line="18" column="43" selection-start="595" selection-end="595" vertical-scroll-proportion="-6.875">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hadoop/pom.xml">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/JemmyEventCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="44" selection-start="519" selection-end="519" vertical-scroll-proportion="0.33333334">
+        <state line="19" column="21" selection-start="685" selection-end="685" vertical-scroll-proportion="-5.625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="111" selection-start="1110" selection-end="1110" vertical-scroll-proportion="-0.625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/resources/if.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="91" selection-start="2455" selection-end="2538" vertical-scroll-proportion="-14.458333">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/resources/while.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="91" selection-start="1448" selection-end="1448" vertical-scroll-proportion="0.67607975">
           <folding />
         </state>
       </provider>

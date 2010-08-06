@@ -29,6 +29,7 @@
     </def>
     <test_case name="while_test_case">
         <window_activate locator="TestForm"/>
+        <find locator="initialValueTF" id="initialValueTF" findComponentType="text_field"/>
         <call method="type_initialValueTF">
             <call_parameter name="text" value="9"/>
             <call_parameter name="times" value="5"/>
