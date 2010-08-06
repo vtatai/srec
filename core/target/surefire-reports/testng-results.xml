@@ -6,29 +6,29 @@
     </groups>
     <test name="Command line test">
       <class name="com.github.srec.command.parser.xml.XmlParserTest">
-        <test-method status="PASS" signature="testForm()" name="testForm" duration-ms="136" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:04Z">
+        <test-method status="PASS" signature="testForm()" name="testForm" duration-ms="317" started-at="2010-08-06T17:37:42Z" finished-at="2010-08-06T17:37:42Z">
         </test-method>
-        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="11" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:04Z">
-        </test-method>
-      </class>
-      <class name="com.github.srec.rec.SimpleXmlRecorderTest">
-        <test-method status="PASS" signature="test()" name="test" duration-ms="377" started-at="2010-08-04T16:09:33Z" finished-at="2010-08-04T16:09:34Z">
+        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="11" started-at="2010-08-06T17:37:42Z" finished-at="2010-08-06T17:37:42Z">
         </test-method>
       </class>
       <class name="com.github.srec.play.PlayerTest">
-        <test-method status="PASS" signature="test()" name="test" duration-ms="7801" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:12Z">
+        <test-method status="PASS" signature="test()" name="test" duration-ms="9846" started-at="2010-08-06T17:37:42Z" finished-at="2010-08-06T17:37:52Z">
         </test-method>
-        <test-method status="PASS" signature="testCall()" name="testCall" duration-ms="814" started-at="2010-08-04T16:09:12Z" finished-at="2010-08-04T16:09:13Z">
+        <test-method status="PASS" signature="testCall()" name="testCall" duration-ms="1560" started-at="2010-08-06T17:37:52Z" finished-at="2010-08-06T17:37:54Z">
         </test-method>
-        <test-method status="PASS" signature="testError()" name="testError" duration-ms="15888" started-at="2010-08-04T16:09:13Z" finished-at="2010-08-04T16:09:29Z">
+        <test-method status="PASS" signature="testError()" name="testError" duration-ms="16248" started-at="2010-08-06T17:37:54Z" finished-at="2010-08-06T17:38:10Z">
         </test-method>
-        <test-method status="PASS" signature="testIf()" name="testIf" duration-ms="1527" started-at="2010-08-04T16:09:29Z" finished-at="2010-08-04T16:09:30Z">
+        <test-method status="PASS" signature="testIf()" name="testIf" duration-ms="1848" started-at="2010-08-06T17:38:10Z" finished-at="2010-08-06T17:38:12Z">
         </test-method>
-        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="1041" started-at="2010-08-04T16:09:30Z" finished-at="2010-08-04T16:09:31Z">
+        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="1214" started-at="2010-08-06T17:38:12Z" finished-at="2010-08-06T17:38:13Z">
         </test-method>
-        <test-method status="PASS" signature="testMethodDeep()" name="testMethodDeep" duration-ms="788" started-at="2010-08-04T16:09:31Z" finished-at="2010-08-04T16:09:32Z">
+        <test-method status="PASS" signature="testMethodDeep()" name="testMethodDeep" duration-ms="915" started-at="2010-08-06T17:38:13Z" finished-at="2010-08-06T17:38:14Z">
         </test-method>
-        <test-method status="PASS" signature="testWhile()" name="testWhile" duration-ms="958" started-at="2010-08-04T16:09:32Z" finished-at="2010-08-04T16:09:33Z">
+        <test-method status="PASS" signature="testWhile()" name="testWhile" duration-ms="1053" started-at="2010-08-06T17:38:14Z" finished-at="2010-08-06T17:38:15Z">
+        </test-method>
+      </class>
+      <class name="com.github.srec.rec.SimpleXmlRecorderTest">
+        <test-method status="PASS" signature="test()" name="test" duration-ms="890" started-at="2010-08-06T17:38:15Z" finished-at="2010-08-06T17:38:16Z">
         </test-method>
       </class>
     </test>
