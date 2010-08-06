@@ -110,7 +110,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="40" selection-start="385" selection-end="385" vertical-scroll-proportion="-3.125">
+            <state line="297" column="30" selection-start="11155" selection-end="11155" vertical-scroll-proportion="-8.166667">
               <folding />
             </state>
           </provider>
@@ -119,7 +119,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="22" selection-start="493" selection-end="493" vertical-scroll-proportion="-5.625">
+            <state line="9" column="22" selection-start="493" selection-end="493" vertical-scroll-proportion="-5.0416665">
               <folding />
             </state>
           </provider>
@@ -128,7 +128,7 @@
       <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="44" selection-start="523" selection-end="523" vertical-scroll-proportion="-5.625">
+            <state line="66" column="25" selection-start="2437" selection-end="2437" vertical-scroll-proportion="-5.0416665">
               <folding />
             </state>
           </provider>
@@ -137,25 +137,25 @@
       <file leaf-file-name="pom.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/hadoop/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.54469275">
+            <state line="9" column="44" selection-start="519" selection-end="519" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_form_error.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form_error.xml">
+      <file leaf-file-name="PlayerTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/play/PlayerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="23" selection-start="1366" selection-end="1366" vertical-scroll-proportion="0.0">
+            <state line="28" column="29" selection-start="844" selection-end="844" vertical-scroll-proportion="-14.375">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SelectCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/SelectCommand.java">
+      <file leaf-file-name="call.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/test/resources/call.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="48" selection-start="1137" selection-end="1137" vertical-scroll-proportion="0.0">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="7.375">
               <folding />
             </state>
           </provider>
@@ -586,7 +586,7 @@
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="dynamic.classpath" value="false" />
   </component>
-  <component name="RunManager" selected="TestNG.XmlParserTest">
+  <component name="RunManager" selected="TestNG.PlayerTest">
     <configuration default="false" name="XmlParserTest" type="TestNG" factoryName="TestNG" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -640,6 +640,42 @@
       <option name="METHOD_NAME" value="test" />
       <option name="GROUP_NAME" value="" />
       <option name="TEST_OBJECT" value="METHOD" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" value="" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" value="" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="PlayerTest" type="TestNG" factoryName="TestNG" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.github.srec.play.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="srec-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="SUITE_NAME" value="" />
+      <option name="PACKAGE_NAME" value="com.github.srec.play" />
+      <option name="MAIN_CLASS_NAME" value="com.github.srec.play.PlayerTest" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" value="" />
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
@@ -812,9 +848,10 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="TestNG.XmlParserTest" />
       <item index="1" class="java.lang.String" itemvalue="TestNG.PlayerTest.test" />
+      <item index="2" class="java.lang.String" itemvalue="TestNG.PlayerTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -848,29 +885,29 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="198" y="24" width="1280" height="976" extended-state="0" />
+    <frame x="-1" y="24" width="1282" height="981" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32979977" sideWeight="0.0" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4687868" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46604216" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3292683" sideWeight="0.5229682" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32873377" sideWeight="0.5257611" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30506477" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18618266" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2495935" sideWeight="0.6866902" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout>
@@ -911,16 +948,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///usr/lib/jvm/java-6-sun-1.6.0.20/src.zip!/java/awt/Component.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7562" column="16" selection-start="280625" selection-end="280625" vertical-scroll-proportion="0.33208954" />
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/net/java/dev/jemmy/2.3/jemmy-2.3-sources.jar!/org/netbeans/jemmy/operators/ComponentOperator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1788" column="34" selection-start="63814" selection-end="63814" vertical-scroll-proportion="0.30410448" />
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/net/java/dev/jemmy/2.3/jemmy-2.3-sources.jar!/org/netbeans/jemmy/operators/JComboBoxOperator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="591" column="18" selection-start="20847" selection-end="20847" vertical-scroll-proportion="0.36380598" />
@@ -971,30 +998,44 @@
         <state line="346" column="16" selection-start="13295" selection-end="13295" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/resources/call.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="7.375">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/java/com/github/srec/play/PlayerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="29" selection-start="844" selection-end="844" vertical-scroll-proportion="-14.375">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="40" selection-start="385" selection-end="385" vertical-scroll-proportion="-3.125">
+        <state line="297" column="30" selection-start="11155" selection-end="11155" vertical-scroll-proportion="-8.166667">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="22" selection-start="493" selection-end="493" vertical-scroll-proportion="-5.625">
+        <state line="9" column="22" selection-start="493" selection-end="493" vertical-scroll-proportion="-5.0416665">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="44" selection-start="523" selection-end="523" vertical-scroll-proportion="-5.625">
+        <state line="66" column="25" selection-start="2437" selection-end="2437" vertical-scroll-proportion="-5.0416665">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hadoop/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="20" selection-start="616" selection-end="616" vertical-scroll-proportion="0.54469275">
+        <state line="9" column="44" selection-start="519" selection-end="519" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
