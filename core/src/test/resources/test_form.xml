@@ -26,6 +26,7 @@
         <type locator="initialValueTF" text="100"/>
         <type_special locator="initialValueTF" text="Tab"/>
         <assert locator="initialValueTF" text="100"/>
+        <select locator="calculationCB" index="1"/>
         <select locator="calculationCB" index="0"/>
         <click locator="text=Ok"/>
         <click locator="cb1"/>

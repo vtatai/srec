@@ -604,6 +604,10 @@ public class JemmyDSL {
             if (text.contains("\t") || text.contains("\r") || text.contains("\n")) {
                 throw new IllegalParametersException("Text cannot contain \\t \\r \\n");
             }
+            // TODO: find a better way to guarantee focus on the target typing component
+            // The solution proposed here tries to guarantee that the textField has the focus
+            // to make the test as closes as the human interactions as possible.
+            component.requestFocus();            
             component.setVerification(false);
             component.typeText(text);
             return this;
@@ -635,6 +639,10 @@ public class JemmyDSL {
             else if ("Backspace".equalsIgnoreCase(keyString)) key = KeyEvent.VK_BACK_SPACE;
             else if ("Delete".equalsIgnoreCase(keyString)) key = KeyEvent.VK_DELETE;
             else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
+            // TODO: find a better way to guarantee focus on the target typing component
+            // The solution proposed here tries to guarantee that the textField has the focus
+            // to make the test as closes as the human interactions as possible.
+            component.requestFocus();
             type(key);
             return this;
         }
@@ -722,6 +730,14 @@ public class JemmyDSL {
         }
 
         public void select(int index) {
+
+            // hack:begin
+            // TODO: find a better way to avoid timeouts when this method is invoked twice in a row
+            // The solution proposed here may not work in all cases because changing the focus to the next
+            // component may trigger other undesired event handlers
+            if (component.hasFocus()) {component.transferFocus();}
+            // hack:end
+
             clickDropDown();
             component.setSelectedIndex(index);
             component.waitItemSelected(index);
