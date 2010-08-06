@@ -28,7 +28,8 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
     private List<PlayerError> errors = new ArrayList<PlayerError>();
-    private long commandInterval = 50;
+    //TODO this wait must be smaller, just trying to avoid timeout    
+    private long commandInterval = 500;
     private Parser parser;
 
     /**

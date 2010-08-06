@@ -601,12 +601,6 @@ public class JemmyDSL {
         }
 
         public TextField type(String text) {
-            //TODO Remove this wait, just trying to avoid timeout
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             if (text.contains("\t") || text.contains("\r") || text.contains("\n")) {
                 throw new IllegalParametersException("Text cannot contain \\t \\r \\n");
             }
@@ -638,13 +632,6 @@ public class JemmyDSL {
         }
 
         public TextField typeSpecial(String keyString) {
-            //TODO Remove this wait, just trying to avoid timeout
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
             int key;
             if ("Tab".equalsIgnoreCase(keyString)) key = KeyEvent.VK_TAB;
             else if ("Enter".equalsIgnoreCase(keyString)) key = KeyEvent.VK_ENTER;

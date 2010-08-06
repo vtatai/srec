@@ -75,8 +75,8 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="012e8d8f-5b33-4472-8b89-79a52e9cfaf8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/srec.iws" afterPath="$PROJECT_DIR$/srec.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/screenshots/screenshot-2.png" afterPath="$PROJECT_DIR$/core/screenshots/screenshot-2.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/main/java/com/github/srec/play/Player.java" afterPath="$PROJECT_DIR$/core/src/main/java/com/github/srec/play/Player.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/screenshots/screenshot-3.png" afterPath="$PROJECT_DIR$/core/screenshots/screenshot-3.png" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
@@ -191,10 +191,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JemmyDSL.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="JemmyDSL.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="626" column="35" selection-start="25325" selection-end="25325" vertical-scroll-proportion="0.9137931">
+            <state line="634" column="1" selection-start="25444" selection-end="25444" vertical-scroll-proportion="-14.875">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Player.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/play/Player.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="36" selection-start="1093" selection-end="1093" vertical-scroll-proportion="0.3448276">
               <folding />
             </state>
           </provider>
@@ -204,15 +213,6 @@
         <entry file="file://$PROJECT_DIR$/core/src/test/resources/test_form.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state line="24" column="111" selection-start="1110" selection-end="1110" vertical-scroll-proportion="-0.625">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JComponentOperator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/net/java/dev/jemmy/2.3/jemmy-2.3-sources.jar!/org/netbeans/jemmy/operators/JComponentOperator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="13" selection-start="3468" selection-end="3468" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -250,6 +250,7 @@
         <option value="$PROJECT_DIR$/core/src/test/resources/if.xml" />
         <option value="$PROJECT_DIR$/core/src/test/resources/while.xml" />
         <option value="$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/com/github/srec/play/Player.java" />
       </list>
     </option>
   </component>
@@ -1056,11 +1057,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/SelectCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="48" selection-start="1137" selection-end="1137" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/command/jemmy/TypeCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="63" selection-start="727" selection-end="727" vertical-scroll-proportion="0.0" />
@@ -1155,7 +1151,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/jemmy/JemmyDSL.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="626" column="35" selection-start="25325" selection-end="25325" vertical-scroll-proportion="0.9137931">
+        <state line="634" column="1" selection-start="25444" selection-end="25444" vertical-scroll-proportion="-14.875">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/com/github/srec/play/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="36" selection-start="1093" selection-end="1093" vertical-scroll-proportion="0.3448276">
           <folding />
         </state>
       </provider>
