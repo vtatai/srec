@@ -601,6 +601,12 @@ public class JemmyDSL {
         }
 
         public TextField type(String text) {
+            //TODO Remove this wait, just trying to avoid timeout
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             if (text.contains("\t") || text.contains("\r") || text.contains("\n")) {
                 throw new IllegalParametersException("Text cannot contain \\t \\r \\n");
             }
@@ -618,7 +624,7 @@ public class JemmyDSL {
             if (!isRobotMode()) {
                 // This is a hack because type key in queue mode does not wait for events to be fired
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     throw new JemmyDSLException(e);
                 }
@@ -632,6 +638,13 @@ public class JemmyDSL {
         }
 
         public TextField typeSpecial(String keyString) {
+            //TODO Remove this wait, just trying to avoid timeout
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             int key;
             if ("Tab".equalsIgnoreCase(keyString)) key = KeyEvent.VK_TAB;
             else if ("Enter".equalsIgnoreCase(keyString)) key = KeyEvent.VK_ENTER;
