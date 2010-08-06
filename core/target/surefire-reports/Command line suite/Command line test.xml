@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Command line test" failures="0" tests="10" time="29.359" errors="0">
+  <properties/>
+  <testcase name="testForm" time="0.136" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="testMethod" time="0.011" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="test" time="7.801" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testCall" time="0.814" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testError" time="15.888" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testIf" time="1.527" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethod" time="1.041" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethodDeep" time="0.788" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testWhile" time="0.958" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="test" time="0.377" classname="com.github.srec.rec.SimpleXmlRecorderTest"/>
+</testsuite>

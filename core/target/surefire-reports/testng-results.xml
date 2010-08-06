@@ -1,0 +1,36 @@
+<testng-results>
+  <reporter-output>
+  </reporter-output>
+  <suite name="Command line suite">
+    <groups>
+    </groups>
+    <test name="Command line test">
+      <class name="com.github.srec.command.parser.xml.XmlParserTest">
+        <test-method status="PASS" signature="testForm()" name="testForm" duration-ms="136" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:04Z">
+        </test-method>
+        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="11" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:04Z">
+        </test-method>
+      </class>
+      <class name="com.github.srec.rec.SimpleXmlRecorderTest">
+        <test-method status="PASS" signature="test()" name="test" duration-ms="377" started-at="2010-08-04T16:09:33Z" finished-at="2010-08-04T16:09:34Z">
+        </test-method>
+      </class>
+      <class name="com.github.srec.play.PlayerTest">
+        <test-method status="PASS" signature="test()" name="test" duration-ms="7801" started-at="2010-08-04T16:09:04Z" finished-at="2010-08-04T16:09:12Z">
+        </test-method>
+        <test-method status="PASS" signature="testCall()" name="testCall" duration-ms="814" started-at="2010-08-04T16:09:12Z" finished-at="2010-08-04T16:09:13Z">
+        </test-method>
+        <test-method status="PASS" signature="testError()" name="testError" duration-ms="15888" started-at="2010-08-04T16:09:13Z" finished-at="2010-08-04T16:09:29Z">
+        </test-method>
+        <test-method status="PASS" signature="testIf()" name="testIf" duration-ms="1527" started-at="2010-08-04T16:09:29Z" finished-at="2010-08-04T16:09:30Z">
+        </test-method>
+        <test-method status="PASS" signature="testMethod()" name="testMethod" duration-ms="1041" started-at="2010-08-04T16:09:30Z" finished-at="2010-08-04T16:09:31Z">
+        </test-method>
+        <test-method status="PASS" signature="testMethodDeep()" name="testMethodDeep" duration-ms="788" started-at="2010-08-04T16:09:31Z" finished-at="2010-08-04T16:09:32Z">
+        </test-method>
+        <test-method status="PASS" signature="testWhile()" name="testWhile" duration-ms="958" started-at="2010-08-04T16:09:32Z" finished-at="2010-08-04T16:09:33Z">
+        </test-method>
+      </class>
+    </test>
+  </suite>
+</testng-results>
