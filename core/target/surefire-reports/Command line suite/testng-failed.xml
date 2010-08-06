@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="5" skipfailedinvocationCounts="false" verbose="0" name="Failed suite [Command line suite]" junit="false" annotations="JDK" data-provider-thread-count="10">
+  <test name="Command line test(failed)" junit="false" annotations="JDK">
+    <classes>
+      <class name="com.github.srec.play.PlayerTest">
+        <methods>
+          <include name="testMethod"/>
+          <include name="testMethodDeep"/>
+          <include name="testIf"/>
+          <include name="testError"/>
+          <include name="testWhile"/>
+          <include name="test"/>
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>

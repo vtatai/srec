@@ -1,4 +1,87 @@
 -------------------------------------------------------------------------------
 Test set: TestSuite
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.248 sec
+Tests run: 10, Failures: 6, Errors: 0, Skipped: 0, Time elapsed: 91.079 sec <<< FAILURE!
+test(com.github.srec.play.PlayerTest)  Time elapsed: 15.913 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<0> but was:<1>
+	at org.testng.Assert.fail(Assert.java:87)
+	at org.testng.Assert.failNotEquals(Assert.java:441)
+	at org.testng.Assert.assertEquals(Assert.java:111)
+	at org.testng.Assert.assertEquals(Assert.java:326)
+	at org.testng.Assert.assertEquals(Assert.java:336)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
+	at com.github.srec.play.PlayerTest.test(PlayerTest.java:19)
+
+testError(com.github.srec.play.PlayerTest)  Time elapsed: 48.673 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<19> but was:<18>
+	at org.testng.Assert.fail(Assert.java:87)
+	at org.testng.Assert.failNotEquals(Assert.java:441)
+	at org.testng.Assert.assertEquals(Assert.java:111)
+	at org.testng.Assert.assertEquals(Assert.java:326)
+	at org.testng.Assert.assertEquals(Assert.java:336)
+	at com.github.srec.play.PlayerTest.testError(PlayerTest.java:26)
+
+testIf(com.github.srec.play.PlayerTest)  Time elapsed: 4.221 sec  <<< FAILURE!
+com.github.srec.UnsupportedFeatureException: org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus
+	at com.github.srec.command.jemmy.JemmyEventCommand.internalCallMethod(JemmyEventCommand.java:32)
+	at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
+	at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
+	at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
+	at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
+	at com.github.srec.play.Player.play(Player.java:156)
+	at com.github.srec.command.method.MethodScriptCommand.internalCallMethod(MethodScriptCommand.java:52)
+	at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
+	at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
+	at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
+	at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
+	at com.github.srec.play.Player.play(Player.java:156)
+	at com.github.srec.play.Player.play(Player.java:145)
+	at com.github.srec.play.Player.play(Player.java:119)
+	at com.github.srec.play.Player.play(Player.java:85)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:55)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
+	at com.github.srec.play.PlayerTest.testIf(PlayerTest.java:39)
+Caused by: org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus
+	at org.netbeans.jemmy.QueueTool.invokeAndWait(QueueTool.java:428)
+	at org.netbeans.jemmy.QueueTool.invokeSmoothly(QueueTool.java:358)
+	at org.netbeans.jemmy.drivers.focus.MouseFocusDriver.giveFocus(MouseFocusDriver.java:74)
+	at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.changeCaretPosition(TextKeyboardDriver.java:75)
+	at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.typeText(TextKeyboardDriver.java:101)
+	at org.netbeans.jemmy.operators.JTextComponentOperator$4.launch(JTextComponentOperator.java:532)
+	at org.netbeans.jemmy.ActionProducer.launchAction(ActionProducer.java:336)
+	at org.netbeans.jemmy.ActionProducer.run(ActionProducer.java:295)
+
+testMethod(com.github.srec.play.PlayerTest)  Time elapsed: 2.122 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<0> but was:<1>
+	at org.testng.Assert.fail(Assert.java:87)
+	at org.testng.Assert.failNotEquals(Assert.java:441)
+	at org.testng.Assert.assertEquals(Assert.java:111)
+	at org.testng.Assert.assertEquals(Assert.java:326)
+	at org.testng.Assert.assertEquals(Assert.java:336)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
+	at com.github.srec.play.PlayerTest.testMethod(PlayerTest.java:31)
+
+testMethodDeep(com.github.srec.play.PlayerTest)  Time elapsed: 2.252 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<0> but was:<1>
+	at org.testng.Assert.fail(Assert.java:87)
+	at org.testng.Assert.failNotEquals(Assert.java:441)
+	at org.testng.Assert.assertEquals(Assert.java:111)
+	at org.testng.Assert.assertEquals(Assert.java:326)
+	at org.testng.Assert.assertEquals(Assert.java:336)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
+	at com.github.srec.play.PlayerTest.testMethodDeep(PlayerTest.java:35)
+
+testWhile(com.github.srec.play.PlayerTest)  Time elapsed: 8.211 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<0> but was:<2>
+	at org.testng.Assert.fail(Assert.java:87)
+	at org.testng.Assert.failNotEquals(Assert.java:441)
+	at org.testng.Assert.assertEquals(Assert.java:111)
+	at org.testng.Assert.assertEquals(Assert.java:326)
+	at org.testng.Assert.assertEquals(Assert.java:336)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
+	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
+	at com.github.srec.play.PlayerTest.testWhile(PlayerTest.java:43)
+

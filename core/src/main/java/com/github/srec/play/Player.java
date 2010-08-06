@@ -28,8 +28,7 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
     private List<PlayerError> errors = new ArrayList<PlayerError>();
-    //TODO this wait must be smaller, just trying to avoid timeout    
-    private long commandInterval = 500;
+    private long commandInterval = 50;
     private Parser parser;
 
     /**
@@ -47,8 +46,27 @@ public class Player {
         if (!isBlank(intervalString)) {
             commandInterval = Integer.parseInt(intervalString);
         }
+
+        //Overrides properties file if using the command line param
+        commandInterval = getIntProperty("com.github.srec.commandInterval", commandInterval);
+
         parser = ParserFactory.create();
         return this;
+    }
+
+    public static long getIntProperty(String key, long defaultValue){
+        String s = System.getProperty(key);
+        if (isBlank(s) || s.startsWith("${")){
+            return defaultValue;
+        } else {
+            try {
+                return Long.parseLong(s);
+            } catch (NumberFormatException e) {
+                log.warn("Invalid '" + key + "'. Reverting to default value " + defaultValue);
+                return defaultValue;
+            }
+        }
+
     }
 
     /**
