@@ -73,7 +73,7 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         writer.println("  <test_case>");
 
         recorder.init();
-
+        recorder.setRecording(true);
         try {
             Class<?> cl = Class.forName(className);
             Method m = cl.getMethod("main", String[].class);
@@ -87,8 +87,6 @@ public class SimpleXmlRecorder implements RecorderEventCallback {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-
-        recorder.setRecording(true);
     }
 
     public void stop() {

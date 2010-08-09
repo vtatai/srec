@@ -72,7 +72,7 @@ public class TestForm {
         }
     }
 
-    public void init() {
+    public void init() {        
         frame = new JFrame("TestForm");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
@@ -121,7 +121,12 @@ public class TestForm {
     }
 
     public static void main(String[] args) {
-        new TestForm().init();
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                new TestForm().init();
+            }
+        });
     }
 
     private void createUIComponents() {

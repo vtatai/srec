@@ -29,12 +29,11 @@ import static org.testng.Assert.assertTrue;
 
 @Test
 public class SimpleXmlRecorderTest {
-    public void test() {
+    public void test() throws InterruptedException {
         StringWriter writer = new StringWriter();
         SimpleXmlRecorder sr = new SimpleXmlRecorder(new PrintWriter(writer));
-        sr.start("com.github.srec.ui.TestForm", new String[0]);
-
-        frame("TestForm").activate();
+        sr.start("com.github.srec.ui.TestForm", new String[0]);        
+        frame("TestForm").activate();        
         button("text=Ok").click();
         slider("slider").value(10);
         tabbedPane("tabbedPane").select("Table");
@@ -42,6 +41,7 @@ public class SimpleXmlRecorderTest {
 
         sr.stop();
         assertCommands(writer.toString(),
+                new Tag("iframe_activate", "title", "Internal Frame"),
                 new Tag("window_activate", "locator", "TestForm"),
                 new Tag("click", "locator", "text=Ok"),
                 new Tag("slide", "locator", "slider", "value", "10"),

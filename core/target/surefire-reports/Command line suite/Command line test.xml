@@ -1,114 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Command line test" failures="6" tests="10" time="90.734" errors="0">
+<testsuite name="Command line test" failures="0" tests="10" time="29.096" errors="0">
   <properties/>
-  <testcase name="testForm" time="0.157" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
-  <testcase name="testMethod" time="0.01" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
-  <testcase name="test" time="15.911" classname="com.github.srec.play.PlayerTest">
-    <failure type="java.lang.AssertionError" message="expected:&amp;lt;0&amp;gt; but was:&amp;lt;1&amp;gt;">
-      <![CDATA[java.lang.AssertionError: expected:<0> but was:<1>
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-	at com.github.srec.play.PlayerTest.test(PlayerTest.java:19)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-... Removed 29 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="testCall" time="8.615" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testError" time="48.673" classname="com.github.srec.play.PlayerTest">
-    <failure type="java.lang.AssertionError" message="expected:&amp;lt;19&amp;gt; but was:&amp;lt;18&amp;gt;">
-      <![CDATA[java.lang.AssertionError: expected:<19> but was:<18>
-	at com.github.srec.play.PlayerTest.testError(PlayerTest.java:26)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-... Removed 29 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="testIf" time="4.22" classname="com.github.srec.play.PlayerTest">
-    <failure type="com.github.srec.UnsupportedFeatureException" message="org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus">
-      <![CDATA[com.github.srec.UnsupportedFeatureException: org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus
-	at com.github.srec.command.jemmy.JemmyEventCommand.internalCallMethod(JemmyEventCommand.java:32)
-	at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
-	at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
-	at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
-	at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
-	at com.github.srec.play.Player.play(Player.java:156)
-	at com.github.srec.command.method.MethodScriptCommand.internalCallMethod(MethodScriptCommand.java:52)
-	at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
-	at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
-	at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
-	at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
-	at com.github.srec.play.Player.play(Player.java:156)
-	at com.github.srec.play.Player.play(Player.java:145)
-	at com.github.srec.play.Player.play(Player.java:119)
-	at com.github.srec.play.Player.play(Player.java:85)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:55)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-	at com.github.srec.play.PlayerTest.testIf(PlayerTest.java:39)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-Caused by: org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus
-	at org.netbeans.jemmy.QueueTool.invokeAndWait(QueueTool.java:428)
-	at org.netbeans.jemmy.QueueTool.invokeSmoothly(QueueTool.java:358)
-	at org.netbeans.jemmy.drivers.focus.MouseFocusDriver.giveFocus(MouseFocusDriver.java:74)
-	at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.changeCaretPosition(TextKeyboardDriver.java:75)
-	at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.typeText(TextKeyboardDriver.java:101)
-	at org.netbeans.jemmy.operators.JTextComponentOperator$4.launch(JTextComponentOperator.java:532)
-	at org.netbeans.jemmy.ActionProducer.launchAction(ActionProducer.java:336)
-	at org.netbeans.jemmy.ActionProducer.run(ActionProducer.java:295)
-... Removed 24 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="testMethod" time="2.122" classname="com.github.srec.play.PlayerTest">
-    <failure type="java.lang.AssertionError" message="expected:&amp;lt;0&amp;gt; but was:&amp;lt;1&amp;gt;">
-      <![CDATA[java.lang.AssertionError: expected:<0> but was:<1>
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-	at com.github.srec.play.PlayerTest.testMethod(PlayerTest.java:31)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-... Removed 29 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="testMethodDeep" time="2.251" classname="com.github.srec.play.PlayerTest">
-    <failure type="java.lang.AssertionError" message="expected:&amp;lt;0&amp;gt; but was:&amp;lt;1&amp;gt;">
-      <![CDATA[java.lang.AssertionError: expected:<0> but was:<1>
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-	at com.github.srec.play.PlayerTest.testMethodDeep(PlayerTest.java:35)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-... Removed 29 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="testWhile" time="8.211" classname="com.github.srec.play.PlayerTest">
-    <failure type="java.lang.AssertionError" message="expected:&amp;lt;0&amp;gt; but was:&amp;lt;2&amp;gt;">
-      <![CDATA[java.lang.AssertionError: expected:<0> but was:<2>
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-	at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-	at com.github.srec.play.PlayerTest.testWhile(PlayerTest.java:43)
-	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:62)
-	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:141)
-	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
-	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
-	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
-... Removed 29 stack frames]]>
-    </failure>
-  </testcase>
-  <testcase name="test" time="0.536" classname="com.github.srec.rec.SimpleXmlRecorderTest"/>
+  <testcase name="testForm" time="0.139" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="testMethod" time="0.0090" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="test" time="7.574" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testCall" time="0.804" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testError" time="15.86" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testIf" time="1.635" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethod" time="1.034" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethodDeep" time="0.753" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testWhile" time="0.913" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="test" time="0.359" classname="com.github.srec.rec.SimpleXmlRecorderTest"/>
 </testsuite>

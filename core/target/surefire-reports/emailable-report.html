@@ -29,126 +29,34 @@ div.shootout {padding:2em;border:3px #4854A8 solid}
 <body>
 <table cellspacing=0 cellpadding=0 class="param">
 <tr><th>Test</th><th class="numi">Methods<br/>Passed</th><th class="numi">Scenarios<br/>Passed</th><th class="numi"># skipped</th><th class="numi"># failed</th><th class="numi">Total<br/>Time</th><th class="numi">Included<br/>Groups</th><th class="numi">Excluded<br/>Groups</th></tr>
-<tr><td style="text-align:left;padding-right:2em">Command line test</td><td class="numi">4</td><td class="numi">4</td><td class="numi">0</td><td class="numi_attn">6</td><td class="numi">90.7 seconds</td><td class="numi"></td><td class="numi"></td></tr>
+<tr><td style="text-align:left;padding-right:2em">Command line test</td><td class="numi">10</td><td class="numi">10</td><td class="numi">0</td><td class="numi">0</td><td class="numi">29.1 seconds</td><td class="numi"></td><td class="numi"></td></tr>
 </table>
 <a id="summary"></a>
 <table cellspacing=0 cellpadding=0 class="passed">
 <tr><th>Class</th><th>Method</th><th># of<br/>Scenarios</th><th>Time<br/>(Msecs)</th></tr>
-<tr><th colspan="4">Command line test &#8212; failed</th></tr>
-<tr class="failedodd"><td rowspan="6">com.github.srec.play.PlayerTest<br>"Command line test"<td><a href="#m1"><b>test</b>  </a></td><td class="numi">1</td><td class="numi">15911</td></tr><tr class="failedodd"><td><a href="#m2"><b>testError</b>  </a></td><td class="numi">1</td><td class="numi">48673</td></tr><tr class="failedodd"><td><a href="#m3"><b>testIf</b>  </a></td><td class="numi">1</td><td class="numi">4220</td></tr><tr class="failedodd"><td><a href="#m4"><b>testMethod</b>  </a></td><td class="numi">1</td><td class="numi">2122</td></tr><tr class="failedodd"><td><a href="#m5"><b>testMethodDeep</b>  </a></td><td class="numi">1</td><td class="numi">2251</td></tr><tr class="failedodd"><td><a href="#m6"><b>testWhile</b>  </a></td><td class="numi">1</td><td class="numi">8211</td></tr>
 <tr><th colspan="4">Command line test &#8212; passed</th></tr>
-<tr class="passedodd"><td rowspan="2">com.github.srec.command.parser.xml.XmlParserTest<td><a href="#m7"><b>testForm</b>  </a></td><td class="numi">1</td><td class="numi">157</td></tr><tr class="passedodd"><td><a href="#m8"><b>testMethod</b>  </a></td><td class="numi">1</td><td class="numi">10</td></tr>
-<tr class="passedeven"><td rowspan="1">com.github.srec.play.PlayerTest<td><a href="#m9"><b>testCall</b>  </a></td><td class="numi">1</td><td class="numi">8615</td></tr>
-<tr class="passedodd"><td rowspan="1">com.github.srec.rec.SimpleXmlRecorderTest<br>"Command line test"<td><a href="#m10"><b>test</b>  </a></td><td class="numi">1</td><td class="numi">536</td></tr>
+<tr class="passedodd"><td rowspan="2">com.github.srec.command.parser.xml.XmlParserTest<td><a href="#m1"><b>testForm</b>  </a></td><td class="numi">1</td><td class="numi">139</td></tr><tr class="passedodd"><td><a href="#m2"><b>testMethod</b>  </a></td><td class="numi">1</td><td class="numi">9</td></tr>
+<tr class="passedeven"><td rowspan="7">com.github.srec.play.PlayerTest<td><a href="#m3"><b>test</b>  </a></td><td class="numi">1</td><td class="numi">7574</td></tr><tr class="passedeven"><td><a href="#m4"><b>testCall</b>  </a></td><td class="numi">1</td><td class="numi">804</td></tr><tr class="passedeven"><td><a href="#m5"><b>testError</b>  </a></td><td class="numi">1</td><td class="numi">15860</td></tr><tr class="passedeven"><td><a href="#m6"><b>testIf</b>  </a></td><td class="numi">1</td><td class="numi">1635</td></tr><tr class="passedeven"><td><a href="#m7"><b>testMethod</b>  </a></td><td class="numi">1</td><td class="numi">1034</td></tr><tr class="passedeven"><td><a href="#m8"><b>testMethodDeep</b>  </a></td><td class="numi">1</td><td class="numi">753</td></tr><tr class="passedeven"><td><a href="#m9"><b>testWhile</b>  </a></td><td class="numi">1</td><td class="numi">913</td></tr>
+<tr class="passedodd"><td rowspan="1">com.github.srec.rec.SimpleXmlRecorderTest<br>"Command line test"<td><a href="#m10"><b>test</b>  </a></td><td class="numi">1</td><td class="numi">359</td></tr>
 </table>
 <h1>Command line test</h1>
-<a id="m1"></a><h2>com.github.srec.play.PlayerTest:test</h2>
-<div style="padding-left:3em">
-<p>expected:&lt;0&gt; but was:&lt;1&gt;</p>
-org.testng.Assert.fail(Assert.java:87)
-<br/>at org.testng.Assert.failNotEquals(Assert.java:441)
-<br/>at org.testng.Assert.assertEquals(Assert.java:111)
-<br/>at org.testng.Assert.assertEquals(Assert.java:326)
-<br/>at org.testng.Assert.assertEquals(Assert.java:336)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-<br/>at com.github.srec.play.PlayerTest.test(PlayerTest.java:19)
-<br/>30 lines not shown
-</div>
+<a id="m1"></a><h2>com.github.srec.command.parser.xml.XmlParserTest:testForm</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m2"></a><h2>com.github.srec.play.PlayerTest:testError</h2>
-<div style="padding-left:3em">
-<p>expected:&lt;19&gt; but was:&lt;18&gt;</p>
-org.testng.Assert.fail(Assert.java:87)
-<br/>at org.testng.Assert.failNotEquals(Assert.java:441)
-<br/>at org.testng.Assert.assertEquals(Assert.java:111)
-<br/>at org.testng.Assert.assertEquals(Assert.java:326)
-<br/>at org.testng.Assert.assertEquals(Assert.java:336)
-<br/>at com.github.srec.play.PlayerTest.testError(PlayerTest.java:26)
-<br/>30 lines not shown
-</div>
+<a id="m2"></a><h2>com.github.srec.command.parser.xml.XmlParserTest:testMethod</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m3"></a><h2>com.github.srec.play.PlayerTest:testIf</h2>
-<div style="padding-left:3em">
-<p>org.netbeans.jemmy.JemmyException: Exception in Mouse click to get focus</p>
-com.github.srec.command.jemmy.JemmyEventCommand.internalCallMethod(JemmyEventCommand.java:32)
-<br/>at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
-<br/>at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
-<br/>at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
-<br/>at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
-<br/>at com.github.srec.play.Player.play(Player.java:156)
-<br/>at com.github.srec.command.method.MethodScriptCommand.internalCallMethod(MethodScriptCommand.java:52)
-<br/>at com.github.srec.command.method.MethodCommand.callMethod(MethodCommand.java:80)
-<br/>at com.github.srec.command.method.MethodCallCommand.getValue(MethodCallCommand.java:35)
-<br/>at com.github.srec.command.method.MethodCallCommand.run(MethodCallCommand.java:27)
-<br/>at com.github.srec.command.base.IfCommand.run(IfCommand.java:52)
-<br/>at com.github.srec.play.Player.play(Player.java:156)
-<br/>at com.github.srec.play.Player.play(Player.java:145)
-<br/>at com.github.srec.play.Player.play(Player.java:119)
-<br/>at com.github.srec.play.Player.play(Player.java:85)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:55)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-<br/>at com.github.srec.play.PlayerTest.testIf(PlayerTest.java:39)
-<br/>30 lines not shown
-<p>Caused by Exception in Mouse click to get focus</p>
-org.netbeans.jemmy.QueueTool.invokeAndWait(QueueTool.java:428)
-<br/>at org.netbeans.jemmy.QueueTool.invokeSmoothly(QueueTool.java:358)
-<br/>at org.netbeans.jemmy.drivers.focus.MouseFocusDriver.giveFocus(MouseFocusDriver.java:74)
-<br/>at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.changeCaretPosition(TextKeyboardDriver.java:75)
-<br/>at org.netbeans.jemmy.drivers.text.TextKeyboardDriver.typeText(TextKeyboardDriver.java:101)
-<br/>at org.netbeans.jemmy.operators.JTextComponentOperator$4.launch(JTextComponentOperator.java:532)
-<br/>at org.netbeans.jemmy.ActionProducer.launchAction(ActionProducer.java:336)
-<br/>at org.netbeans.jemmy.ActionProducer.run(ActionProducer.java:295)
-<br/>1 lines not shown
-</div>
+<a id="m3"></a><h2>com.github.srec.play.PlayerTest:test</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m4"></a><h2>com.github.srec.play.PlayerTest:testMethod</h2>
-<div style="padding-left:3em">
-<p>expected:&lt;0&gt; but was:&lt;1&gt;</p>
-org.testng.Assert.fail(Assert.java:87)
-<br/>at org.testng.Assert.failNotEquals(Assert.java:441)
-<br/>at org.testng.Assert.assertEquals(Assert.java:111)
-<br/>at org.testng.Assert.assertEquals(Assert.java:326)
-<br/>at org.testng.Assert.assertEquals(Assert.java:336)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-<br/>at com.github.srec.play.PlayerTest.testMethod(PlayerTest.java:31)
-<br/>30 lines not shown
-</div>
+<a id="m4"></a><h2>com.github.srec.play.PlayerTest:testCall</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m5"></a><h2>com.github.srec.play.PlayerTest:testMethodDeep</h2>
-<div style="padding-left:3em">
-<p>expected:&lt;0&gt; but was:&lt;1&gt;</p>
-org.testng.Assert.fail(Assert.java:87)
-<br/>at org.testng.Assert.failNotEquals(Assert.java:441)
-<br/>at org.testng.Assert.assertEquals(Assert.java:111)
-<br/>at org.testng.Assert.assertEquals(Assert.java:326)
-<br/>at org.testng.Assert.assertEquals(Assert.java:336)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-<br/>at com.github.srec.play.PlayerTest.testMethodDeep(PlayerTest.java:35)
-<br/>30 lines not shown
-</div>
+<a id="m5"></a><h2>com.github.srec.play.PlayerTest:testError</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m6"></a><h2>com.github.srec.play.PlayerTest:testWhile</h2>
-<div style="padding-left:3em">
-<p>expected:&lt;0&gt; but was:&lt;2&gt;</p>
-org.testng.Assert.fail(Assert.java:87)
-<br/>at org.testng.Assert.failNotEquals(Assert.java:441)
-<br/>at org.testng.Assert.assertEquals(Assert.java:111)
-<br/>at org.testng.Assert.assertEquals(Assert.java:326)
-<br/>at org.testng.Assert.assertEquals(Assert.java:336)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:60)
-<br/>at com.github.srec.testng.AbstractSRecTestNGTest.runTest(AbstractSRecTestNGTest.java:95)
-<br/>at com.github.srec.play.PlayerTest.testWhile(PlayerTest.java:43)
-<br/>30 lines not shown
-</div>
+<a id="m6"></a><h2>com.github.srec.play.PlayerTest:testIf</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m7"></a><h2>com.github.srec.command.parser.xml.XmlParserTest:testForm</h2>
+<a id="m7"></a><h2>com.github.srec.play.PlayerTest:testMethod</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m8"></a><h2>com.github.srec.command.parser.xml.XmlParserTest:testMethod</h2>
+<a id="m8"></a><h2>com.github.srec.play.PlayerTest:testMethodDeep</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
-<a id="m9"></a><h2>com.github.srec.play.PlayerTest:testCall</h2>
+<a id="m9"></a><h2>com.github.srec.play.PlayerTest:testWhile</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>
 <a id="m10"></a><h2>com.github.srec.rec.SimpleXmlRecorderTest:test</h2>
 <p class="totop"><a href="#summary">back to summary</a></p>

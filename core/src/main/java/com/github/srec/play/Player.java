@@ -47,7 +47,7 @@ public class Player {
             commandInterval = Integer.parseInt(intervalString);
         }
 
-        //Overrides properties file if using the command line param
+        //Overrides properties file if using the command line param   
         commandInterval = getIntProperty("com.github.srec.commandInterval", commandInterval);
 
         parser = ParserFactory.create();
