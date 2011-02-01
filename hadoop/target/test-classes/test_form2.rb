@@ -1,7 +1,0 @@
-window_activate "TestForm"
-select "calculationCB", "Future Value"
-select "calculationCB", "Present Value"
-type "initialValueTF", "99999"
-type_special "initialValueTF", "Tab"
-click "text=Cancel"
-close "TestForm"
