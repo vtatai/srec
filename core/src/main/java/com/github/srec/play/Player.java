@@ -11,10 +11,20 @@ import com.github.srec.command.parser.Parser;
 import com.github.srec.command.parser.ParserFactory;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.util.PropertiesReader;
+
 import org.apache.log4j.Logger;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.github.srec.util.Utils.closeWindows;
 import static com.github.srec.util.Utils.runSwingMain;
@@ -22,12 +32,12 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Class which plays srec scripts / commands.
- *  
+ * 
  * @author Victor Tatai
  */
 public class Player {
     private static final Logger log =  Logger.getLogger(Player.class);
-    private List<PlayerError> errors = new ArrayList<PlayerError>();
+    private final List<PlayerError> errors = new ArrayList<PlayerError>();
     private long commandInterval = 50;
     private Parser parser;
 
@@ -40,6 +50,16 @@ public class Player {
      */
     private String[] classToRunArgs;
 
+    private final boolean singleInstanceMode;
+
+    public Player(boolean singleInstanceMode) {
+        this.singleInstanceMode = singleInstanceMode;
+    }
+
+    public Player() {
+        this(false);
+    }
+
     public Player init() {
         JemmyDSL.init();
         String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
@@ -47,7 +67,7 @@ public class Player {
             commandInterval = Integer.parseInt(intervalString);
         }
 
-        //Overrides properties file if using the command line param   
+        //Overrides properties file if using the command line param
         commandInterval = getIntProperty("com.github.srec.commandInterval", commandInterval);
 
         parser = ParserFactory.create();
@@ -135,15 +155,22 @@ public class Player {
         if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
         Set<String> testCasesSet = testCases == null || testCases.length == 0 ? null : new HashSet<String>(Arrays.asList(testCases));
+        boolean appStarted = false;
         for (TestCase testCase : suite.getTestCases()) {
             if (testCasesSet != null && !testCasesSet.contains(testCase.getName())) continue;
-            if (classToRun != null) runSwingMain(classToRun, classToRunArgs);
+            if ((!appStarted || !singleInstanceMode) && classToRun != null) {
+                runSwingMain(classToRun, classToRunArgs);
+                appStarted = true;
+            }
             log.debug("Launching test case: " + testCase.getName());
             ExecutionContext testCaseEC = testCase.getExecutionContext();
             testCaseEC.setPlayer(this);
             testCaseEC.setTestCase(testCase);
             play(testCaseEC);
-            if (classToRun != null) closeWindows();
+            if ((appStarted && !singleInstanceMode) && classToRun != null) {
+                closeWindows();
+                appStarted = false;
+            }
         }
         return this;
     }
@@ -154,10 +181,10 @@ public class Player {
             log.debug("Running line: " + getLine(command) + ", command: " + command);
             try {
                 Command.CommandFlow flow = command.run(context);
-                if (flow == Command.CommandFlow.NEXT) {} 
+                if (flow == Command.CommandFlow.NEXT) {}
                 else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
                 else throw new PlayerException("Flow management instruction " + flow + " from command "
-                            + command.getName() + " not supported");
+                                               + command.getName() + " not supported");
             } catch (CommandExecutionException e) {
                 handleError(context.getTestSuite(), context.getTestCase(), command, e);
                 break;
@@ -209,7 +236,7 @@ public class Player {
     public static void main(final String[] args) throws IOException {
         runSwingMain(args[0], null);
 
-        Player player = new Player().init();
+        Player player = new Player(false).init();
         player.play(new File(args[1]));
         player.printErrors();
         closeWindows();

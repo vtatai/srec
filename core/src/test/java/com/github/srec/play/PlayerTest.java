@@ -1,6 +1,7 @@
 package com.github.srec.play;
 
 import com.github.srec.testng.AbstractSRecTestNGTest;
+
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     private static final String TEST_SCRIPT_DIR = "src/test/resources/";
 
     public PlayerTest() {
-        super(TEST_SCRIPT_DIR, "com.github.srec.ui.TestForm", new String[0]);
+        super(TEST_SCRIPT_DIR, "com.github.srec.ui.TestForm", new String[0], false);
     }
 
     public void test() throws IOException {

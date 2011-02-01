@@ -31,15 +31,18 @@ public abstract class AbstractSRecTestNGTest {
     protected String scriptDir;
     protected String className;
     protected String[] params;
+    private final boolean singleInstanceMode;
 
-    public AbstractSRecTestNGTest(String scriptDir) {
+    public AbstractSRecTestNGTest(String scriptDir, boolean singleInstanceMode) {
         this.scriptDir = scriptDir;
+        this.singleInstanceMode = singleInstanceMode;
     }
 
-    protected AbstractSRecTestNGTest(String scriptDir, String className, String[] params) {
+    protected AbstractSRecTestNGTest(String scriptDir, String className, String[] params, boolean singleInstanceMode) {
         this.scriptDir = scriptDir;
         this.className = className;
         this.params = params;
+        this.singleInstanceMode = singleInstanceMode;
     }
 
     /**
@@ -52,9 +55,9 @@ public abstract class AbstractSRecTestNGTest {
      */
     protected Player runTest(String script, boolean failOnError, String... testCases) {
         try {
-            Player p = new Player()
-                    .init()
-                    .play(new File(scriptDir + File.separator + script), testCases, className, params);
+            Player p = new Player(singleInstanceMode)
+            .init()
+            .play(new File(scriptDir + File.separator + script), testCases, className, params);
             p.printErrors();
             if (failOnError) {
                 assertEquals(p.getErrors().size(), 0);
