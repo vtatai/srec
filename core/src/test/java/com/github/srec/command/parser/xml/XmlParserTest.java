@@ -19,6 +19,7 @@ import com.github.srec.command.TestCase;
 import com.github.srec.command.TestSuite;
 import com.github.srec.command.method.MethodScriptCommand;
 import com.github.srec.command.value.Type;
+
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class XmlParserTest {
         assertEquals(p.getErrors().size(), 0);
         assertEquals(suite.getTestCases().size(), 1);
         TestCase tc = suite.getTestCases().get(0);
-        assertEquals(tc.getExecutionContext().getCommands().size(), 38);
+        assertEquals(tc.getExecutionContext().getCommands().size(), 39);
     }
 
     public void testMethod() {

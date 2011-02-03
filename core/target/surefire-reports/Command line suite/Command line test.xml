@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Command line test" failures="0" tests="10" time="29.096" errors="0">
+<testsuite name="Command line test" failures="0" tests="10" time="27.154" errors="0">
   <properties/>
-  <testcase name="testForm" time="0.139" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
-  <testcase name="testMethod" time="0.0090" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
-  <testcase name="test" time="7.574" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testCall" time="0.804" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testError" time="15.86" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testIf" time="1.635" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testMethod" time="1.034" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testMethodDeep" time="0.753" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="testWhile" time="0.913" classname="com.github.srec.play.PlayerTest"/>
-  <testcase name="test" time="0.359" classname="com.github.srec.rec.SimpleXmlRecorderTest"/>
+  <testcase name="testForm" time="0.089" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="testMethod" time="0.0070" classname="com.github.srec.command.parser.xml.XmlParserTest"/>
+  <testcase name="test" time="6.722" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testCall" time="0.634" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testError" time="15.671" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testIf" time="1.36" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethod" time="0.928" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testMethodDeep" time="0.645" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="testWhile" time="0.85" classname="com.github.srec.play.PlayerTest"/>
+  <testcase name="test" time="0.24" classname="com.github.srec.rec.SimpleXmlRecorderTest"/>
 </testsuite>
