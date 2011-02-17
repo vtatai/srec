@@ -11,7 +11,7 @@ import org.netbeans.jemmy.JemmyException;
 
 import java.util.Map;
 
-import static com.github.srec.jemmy.JemmyDSL.waitEnabled;
+import static com.github.srec.jemmy.JemmyDSL.waitChecked;
 
 /**
  * @author Victor Tatai
@@ -25,6 +25,6 @@ public class AssertCheckedCommand extends JemmyEventCommand {
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        waitEnabled(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("checked")));
+        waitChecked(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("checked")));
     }
 }

@@ -40,6 +40,10 @@ module SRec
     JemmyDSL.wait_enabled(locator, enabled)
   end
 
+  def assert_checked(locator, enabled = true)
+    JemmyDSL.wait_checked(locator, enabled)
+  end
+
   def close(title)
     JemmyDSL.frame(title).close
   end
