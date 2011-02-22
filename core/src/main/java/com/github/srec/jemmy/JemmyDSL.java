@@ -295,17 +295,18 @@ public class JemmyDSL {
         throw new JemmyDSLException("Invalid locator " + strs[0] + "=" + strs[1]);
     }
 
-    private static java.awt.Component findComponent(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
+    private static List<java.awt.Component> findComponents(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
+        List<java.awt.Component> list = new ArrayList<java.awt.Component>();
         for (java.awt.Component component : container.getComponents()) {
             if (componentClass.isAssignableFrom(component.getClass())) {
-                return component;
+                list.add(component);
             }
             if (component instanceof java.awt.Container) {
-                java.awt.Component comp = findComponent((java.awt.Container) component, componentClass);
-                if (comp != null) return comp;
+                List<java.awt.Component> children = findComponents((java.awt.Container) component, componentClass);
+                list.addAll(children);
             }
         }
-        return null;
+        return list;
     }
 
     private static JComponentOperator convertFind(java.awt.Component comp) {
@@ -344,7 +345,7 @@ public class JemmyDSL {
      * @return The component found
      */
     @SuppressWarnings({"unchecked"})
-    public static Component findByComponentType(String id, String containerId, String componentType) {
+    public static Component findByComponentType(String id, String containerId, String componentType, int index) {
         java.awt.Container container;
         if (isBlank(containerId)) {
             container = (java.awt.Container) currentWindow().getComponent().getSource();
@@ -356,13 +357,28 @@ public class JemmyDSL {
                 container = (java.awt.Container) currentWindow().getComponent().getSource();
             }
         }
-        java.awt.Component component = findComponent(container, translateFindType(componentType));
+        List<java.awt.Component> list = findComponents(container, translateFindType(componentType));
+        if (logger.isDebugEnabled()) {
+            logger.debug("findComponents returned list :");
+            for (java.awt.Component c : list) {
+                logger.debug(" " + c.getName());
+            }
+            logger.debug(" index = " + index);
+        }
+        if (index < 0 || index >= list.size()) {
+            return null;
+        }
+        java.awt.Component component = list.get(index);
         if (component == null) {
             componentMap.putComponent(id, null);
+            logger.debug("findByComponentType returned null");
             return null;
         }
         JComponentOperator operator = convertFind(component);
         componentMap.putComponent(id, operator);
+        if (logger.isDebugEnabled()) {
+            logger.debug("findByComponentType returned " + component);
+        }
         return convertFind(operator);
     }
 
@@ -371,6 +387,18 @@ public class JemmyDSL {
         if (operator == null) throw new JemmyDSLException("Could not find component for clicking " + locator);
         operator.clickMouse(operator.getCenterXForClick(), operator.getCenterYForClick(), count, InputEvent.BUTTON1_MASK,
                             convertModifiers(modifiers));
+    }
+
+    public static void typeSpecial(String locator, String keyString) {
+        final JComponentOperator operator = find(locator, JComponentOperator.class);
+
+        if (operator == null) throw new JemmyDSLException("Could not find component for typing key " + locator);
+        int key = convertKey(keyString);
+        // TODO: find a better way to guarantee focus on the target typing component
+        // The solution proposed here tries to guarantee that the textField has the focus
+        // to make the test as closes as the human interactions as possible.
+        operator.requestFocus();
+        operator.pushKey(key);
     }
 
     private static int convertModifiers(String modifiers) {
@@ -558,6 +586,15 @@ public class JemmyDSL {
         waiter.waitAction(op.getSource());
     }
 
+    private static int convertKey(String keyString) {
+        if ("Tab".equalsIgnoreCase(keyString)) return KeyEvent.VK_TAB;
+        else if ("Enter".equalsIgnoreCase(keyString)) return KeyEvent.VK_ENTER;
+        else if ("End".equalsIgnoreCase(keyString)) return KeyEvent.VK_END;
+        else if ("Backspace".equalsIgnoreCase(keyString)) return KeyEvent.VK_BACK_SPACE;
+        else if ("Delete".equalsIgnoreCase(keyString)) return KeyEvent.VK_DELETE;
+        else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
+    }
+
     public static abstract class Component {
         public abstract ComponentOperator getComponent();
 
@@ -712,22 +749,6 @@ public class JemmyDSL {
             return this;
         }
 
-        public TextField typeSpecial(String keyString) {
-            int key;
-            if ("Tab".equalsIgnoreCase(keyString)) key = KeyEvent.VK_TAB;
-            else if ("Enter".equalsIgnoreCase(keyString)) key = KeyEvent.VK_ENTER;
-            else if ("End".equalsIgnoreCase(keyString)) key = KeyEvent.VK_END;
-            else if ("Backspace".equalsIgnoreCase(keyString)) key = KeyEvent.VK_BACK_SPACE;
-            else if ("Delete".equalsIgnoreCase(keyString)) key = KeyEvent.VK_DELETE;
-            else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
-            // TODO: find a better way to guarantee focus on the target typing component
-            // The solution proposed here tries to guarantee that the textField has the focus
-            // to make the test as closes as the human interactions as possible.
-            component.requestFocus();
-            type(key);
-            return this;
-        }
-
         public String text() {
             return component.getText();
         }
@@ -813,17 +834,10 @@ public class JemmyDSL {
         }
 
         public void select(int index) {
-
-            // hack:begin
-            // TODO: find a better way to avoid timeouts when this method is invoked twice in a row
-            // The solution proposed here may not work in all cases because changing the focus to the next
-            // component may trigger other undesired event handlers
-            if (component.hasFocus()) {component.transferFocus();}
-            // hack:end
-
             clickDropDown();
             component.setSelectedIndex(index);
             component.waitItemSelected(index);
+            component.hidePopup();
         }
 
         private void clickDropDown() {
