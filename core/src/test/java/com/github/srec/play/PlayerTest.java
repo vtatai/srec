@@ -47,4 +47,8 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testCall() throws IOException {
         runTest("call.xml");
     }
+
+    public void testComboListAboveComponent() throws IOException {
+        runTest("test_combo_list_above_component.xml");
+    }
 }

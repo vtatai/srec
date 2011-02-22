@@ -91,6 +91,7 @@ public class TestForm {
 
         calculationCB.addItem("Current Value");
         calculationCB.addItem("Future Value");
+        calculationCB.addItem("Wrong Value");
 
         JMenuBar menuBar = new JMenuBar();
 
