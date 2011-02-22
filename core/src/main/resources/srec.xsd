@@ -533,6 +533,7 @@
                 <xs:attribute type="xs:string" name="id" use="required"/>
                 <xs:attribute type="xs:string" name="findComponentType" use="required"/>
                 <xs:attribute type="xs:string" name="containerId" use="optional"/>
+                <xs:attribute type="xs:integer" name="index" use="optional"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
