@@ -15,6 +15,7 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
+import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 
@@ -31,11 +32,13 @@ import static com.github.srec.jemmy.JemmyDSL.findByComponentType;
 @SRecCommand
 public class FindByTypeCommand extends JemmyEventCommand {
     public FindByTypeCommand() {
-        super("find_by_type", param("id", Type.STRING), param("containerId", Type.STRING, true, null), param("findComponentType", Type.STRING));
+        super("find_by_type", param("id", Type.STRING), param("containerId", Type.STRING, true, null),
+                param("findComponentType", Type.STRING), param("index", Type.NUMBER, true, new NumberValue("0")));
     }
 
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
-        findByComponentType(asString("id", params, ctx), asString("containerId", params, ctx), asString("findComponentType", params, ctx));
+        findByComponentType(asString("id", params, ctx), asString("containerId", params, ctx),
+                asString("findComponentType", params, ctx), asBigDecimal("index", params).intValue());
     }
 }
