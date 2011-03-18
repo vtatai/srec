@@ -592,6 +592,7 @@ public class JemmyDSL {
         else if ("End".equalsIgnoreCase(keyString)) return KeyEvent.VK_END;
         else if ("Backspace".equalsIgnoreCase(keyString)) return KeyEvent.VK_BACK_SPACE;
         else if ("Delete".equalsIgnoreCase(keyString)) return KeyEvent.VK_DELETE;
+        else if ("Down".equalsIgnoreCase(keyString)) return KeyEvent.VK_DOWN;
         else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
     }
 
