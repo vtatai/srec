@@ -34,7 +34,7 @@ public class ClickCommand extends JemmyEventCommand {
                     asString(MODIFIERS, params, ctx));
         } else {
             textField(coerceToString(params.get(LOCATOR), ctx)).clickCharPosition(asBigDecimal(TEXT_COLUMN, params).intValue(), 
-                    asString(MODIFIERS, params, ctx));
+                    asString(MODIFIERS, params, ctx), asBigDecimal(COUNT, params).intValue());
         }
     }
 }

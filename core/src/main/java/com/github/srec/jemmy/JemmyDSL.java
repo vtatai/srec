@@ -775,10 +775,10 @@ public class JemmyDSL {
             return this;
         }
 
-        public TextField clickCharPosition(int pos, String modifiers) {
+        public TextField clickCharPosition(int pos, String modifiers, int count) {
             FontMetrics fm = component.getFontMetrics(component.getFont());
             component.clickMouse(fm.stringWidth(component.getText().substring(0, pos)) + component.getInsets().left,
-                                 component.getCenterYForClick(), 1, KeyEvent.BUTTON1_MASK, convertModifiers(modifiers));
+                                 component.getCenterYForClick(), count, KeyEvent.BUTTON1_MASK, convertModifiers(modifiers));
             return this;
         }
     }

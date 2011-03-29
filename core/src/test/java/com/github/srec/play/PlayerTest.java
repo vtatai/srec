@@ -55,4 +55,9 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testFindByTypeIndex() throws IOException {
         runTest("test_find_by_type_index.xml");
     }
+
+
+    public void testClickCountOnTextField() throws IOException {
+        runTest("test_click_count_on_text_field.xml");
+    }
 }
