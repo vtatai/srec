@@ -58,7 +58,7 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
+    <!-- distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
             <name>Nexus Release Repository</name>
@@ -70,7 +70,21 @@
             <url>http://oss.sonatype.org/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
+    </distributionManagement -->
+
+    <distributionManagement>
+        <repository>
+            <id>artifactory</id>
+            <name>artifactory</name>
+            <url>http://tec.matera.com:8081/artifactory/matera-migracao-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>artifactory</id>
+            <name>artifactory</name>
+            <url>http://tec.matera.com:8081/artifactory/matera-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
+
 
     <build>
         <defaultGoal>install</defaultGoal>
