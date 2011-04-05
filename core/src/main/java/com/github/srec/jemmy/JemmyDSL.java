@@ -298,7 +298,7 @@ public class JemmyDSL {
     private static List<java.awt.Component> findComponents(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
         List<java.awt.Component> list = new ArrayList<java.awt.Component>();
         for (java.awt.Component component : container.getComponents()) {
-            if (componentClass.isAssignableFrom(component.getClass())) {
+            if (component.isVisible() && componentClass.isAssignableFrom(component.getClass())) {
                 list.add(component);
             }
             if (component instanceof java.awt.Container) {
