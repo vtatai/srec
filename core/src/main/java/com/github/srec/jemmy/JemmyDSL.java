@@ -110,12 +110,12 @@ public class JemmyDSL {
     private static Properties props = new Properties();
 
     static {
-        props.put("ComponentOperator.WaitComponentEnabledTimeout", "5000");
-        props.put("ComponentOperator.WaitComponentTimeout", "5000");
+        props.put("ComponentOperator.WaitComponentEnabledTimeout", "15000");
+        props.put("ComponentOperator.WaitComponentTimeout", "15000");
         props.put("ComponentOperator.WaitStateTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "10000");
-        props.put("JComboBoxOperator.WaitListTimeout", "30000");
+        props.put("JComboBoxOperator.WaitListTimeout", "60000");
         props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
         props.put("JSliderOperator.WholeScrollTimeout", "10000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
@@ -329,6 +329,7 @@ public class JemmyDSL {
         if (comp instanceof JTable) return new JTableOperator((JTable) comp);
         if (comp instanceof JMenuBar) return new JMenuBarOperator((JMenuBar) comp);
         if (comp instanceof JScrollBar) return new JScrollBarOperator((JScrollBar) comp);
+        if (comp instanceof JInternalFrame) return new JInternalFrameOperator((JInternalFrame) comp);
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
@@ -342,6 +343,8 @@ public class JemmyDSL {
         if (comp instanceof JTableOperator) return new Table((JTableOperator) comp);
         if (comp instanceof JMenuBarOperator) return new MenuBar((JMenuBarOperator) comp);
         if (comp instanceof JScrollBarOperator) return new ScrollBar((JScrollBarOperator) comp);
+        // not really sure this is the right thing to do, but constructor here expects a component and not an operator:
+        if (comp instanceof JInternalFrameOperator) return new InternalFrame((JInternalFrame) ((JInternalFrameOperator) comp).getSource());
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
