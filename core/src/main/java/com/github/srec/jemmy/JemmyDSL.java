@@ -295,6 +295,16 @@ public class JemmyDSL {
         throw new JemmyDSLException("Invalid locator " + strs[0] + "=" + strs[1]);
     }
 
+    /**
+     * Returns a list of all visible components which are instances of the given class.
+     * If one needs a find that returns an invisible component should add a parameter here.
+     * But the default behavior must be returning only visible components as it is the most common
+     * operation and required for compatibility with scripts converted from jfcunit. see #15790.
+     * 
+     * @param container
+     * @param componentClass
+     * @return
+     */
     private static List<java.awt.Component> findComponents(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
         List<java.awt.Component> list = new ArrayList<java.awt.Component>();
         for (java.awt.Component component : container.getComponents()) {
@@ -600,6 +610,7 @@ public class JemmyDSL {
         else if ("End".equalsIgnoreCase(keyString)) return KeyEvent.VK_END;
         else if ("F4".equalsIgnoreCase(keyString)) return KeyEvent.VK_F4;
         else if ("F5".equalsIgnoreCase(keyString)) return KeyEvent.VK_F5;
+        else if ("Space".equalsIgnoreCase(keyString)) return KeyEvent.VK_SPACE;
         else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
     }
 
