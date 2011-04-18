@@ -402,7 +402,7 @@ public class JemmyDSL {
                             convertModifiers(modifiers));
     }
 
-    public static void typeSpecial(String locator, String keyString) {
+    public static void typeSpecial(String locator, String keyString, String modifiers) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
 
         if (operator == null) throw new JemmyDSLException("Could not find component for typing key " + locator);
@@ -411,7 +411,7 @@ public class JemmyDSL {
         // The solution proposed here tries to guarantee that the textField has the focus
         // to make the test as closes as the human interactions as possible.
         operator.requestFocus();
-        operator.pushKey(key);
+        operator.pushKey(key, convertModifiers(modifiers));
     }
 
     private static int convertModifiers(String modifiers) {

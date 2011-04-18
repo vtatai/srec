@@ -30,12 +30,13 @@ import static com.github.srec.jemmy.JemmyDSL.typeSpecial;;
 @SRecCommand
 public class TypeSpecialCommand extends JemmyEventCommand {
     public TypeSpecialCommand() {
-        super("type_special", params(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("type_special", param(LOCATOR, Type.STRING), param("text", Type.STRING),
+                param("modifiers", Type.STRING, true, null));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         String keyString = coerceToString(params.get("text"), ctx);
-        typeSpecial(coerceToString(params.get(LOCATOR), ctx), keyString);
+        typeSpecial(coerceToString(params.get(LOCATOR), ctx), keyString, coerceToString(params.get("modifiers"), ctx));
     }
 }
