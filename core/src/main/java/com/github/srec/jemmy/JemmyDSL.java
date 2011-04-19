@@ -712,8 +712,6 @@ public class JemmyDSL {
 
         public Dialog activate() {
             component.activate();
-            component.toFront();
-            component.requestFocus();
             currentWindow = this;
             return this;
         }
