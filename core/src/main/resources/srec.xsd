@@ -42,6 +42,7 @@
             <xs:element type="assert_comboboxType" name="assert_combobox"/>
             <xs:element type="clickType" name="click" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="assert_enabledType" name="assert_enabled"/>
+            <xs:element type="assert_has_focusType" name="assert_has_focus"/>
             <xs:element type="assert_checkedType" name="assert_checked"/>
             <xs:element type="slideType" name="slide"/>
             <xs:element type="assert_sliderType" name="assert_slider"/>
@@ -89,6 +90,16 @@
                         Optional parameter, default is true
                     </xs:documentation></xs:annotation>
                 </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_hasFocusType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a component is the focus owner
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

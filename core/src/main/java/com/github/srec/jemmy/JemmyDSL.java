@@ -551,6 +551,11 @@ public class JemmyDSL {
         }
     }
 
+    public static void waitHasFocus(String locator) {
+        JComponentOperator op = find(locator, JComponentOperator.class);
+        op.waitHasFocus();
+    }
+
     public static void waitChecked(String locator, boolean checked) {
         JCheckBoxOperator op = find(locator, JCheckBoxOperator.class);
         try {
