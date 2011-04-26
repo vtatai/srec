@@ -109,7 +109,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.0-beta-1</version>
+                <version>1.0</version>
                 <executions>
                     <execution>
                         <id>enforce-java</id>
@@ -124,6 +124,11 @@
                                 <requireMavenVersion>
                                     <version>2.2.1</version>
                                 </requireMavenVersion>
+                                <requireProperty>
+                                    <property>file.encoding</property>
+                                    <regex>UTF-8</regex>
+                                    <regexMessage>file.encoding must be UTF-8 to run this build. Current value is ${file.encoding}</regexMessage>
+                                </requireProperty>                                
                             </rules>
                         </configuration>
                     </execution>
