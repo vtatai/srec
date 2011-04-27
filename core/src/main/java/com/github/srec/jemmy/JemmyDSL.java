@@ -7,6 +7,7 @@ import com.github.srec.util.Utils;
 
 import org.apache.log4j.Logger;
 import org.netbeans.jemmy.ComponentChooser;
+import org.netbeans.jemmy.ComponentSearcher;
 import org.netbeans.jemmy.JemmyException;
 import org.netbeans.jemmy.JemmyProperties;
 import org.netbeans.jemmy.TestOut;
@@ -29,6 +30,7 @@ import org.netbeans.jemmy.operators.JMenuItemOperator;
 import org.netbeans.jemmy.operators.JMenuOperator;
 import org.netbeans.jemmy.operators.JRadioButtonOperator;
 import org.netbeans.jemmy.operators.JScrollBarOperator;
+import org.netbeans.jemmy.operators.JScrollPaneOperator;
 import org.netbeans.jemmy.operators.JSliderOperator;
 import org.netbeans.jemmy.operators.JTabbedPaneOperator;
 import org.netbeans.jemmy.operators.JTableHeaderOperator;
@@ -41,6 +43,8 @@ import org.netbeans.jemmy.operators.Operator;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
 import java.awt.FontMetrics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
@@ -64,6 +68,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -328,7 +333,7 @@ public class JemmyDSL {
         if (comp instanceof JRadioButton) return new JRadioButtonOperator((JRadioButton) comp);
         if (comp instanceof JButton) return new JButtonOperator((JButton) comp);
         if (comp instanceof AbstractButton) return new AbstractButtonOperator((AbstractButton) comp);
-        if (comp instanceof JTable) return new JTableOperator((JTable) comp);
+        if (comp instanceof JTable) return new TableOperator((JTable) comp);
         if (comp instanceof JMenuBar) return new JMenuBarOperator((JMenuBar) comp);
         if (comp instanceof JScrollBar) return new JScrollBarOperator((JScrollBar) comp);
         if (comp instanceof JInternalFrame) return new JInternalFrameOperator((JInternalFrame) comp);
@@ -980,6 +985,33 @@ public class JemmyDSL {
         public JTableOperator getComponent() {
             return component;
         }
+    }
+
+    public static class TableOperator extends JTableOperator {
+        public TableOperator(JTable b) {
+            super(b);
+        }
+        /**
+         * Overridden to prevent trying to scroll to the row header
+         * (which can't be done as the row header is located totally to the left of the scroll bar).
+         */
+        @Override
+        public void scrollToCell(int row, int column) {
+            // try to find JScrollPane under.
+            JScrollPane scroll = (JScrollPane)getContainer(new JScrollPaneOperator.
+                                                           JScrollPaneFinder(ComponentSearcher.
+                                                                             getTrueChooser("JScrollPane")));
+            if (scroll == null) {
+                return;
+            }
+
+            // if source is the row header table, do nothing
+            if (getSource() == scroll.getRowHeader().getView()) {
+                return;
+            }
+
+            super.scrollToCell(row, column);
+        }        
     }
 
     public static class Row {
