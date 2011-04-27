@@ -36,6 +36,7 @@ import org.netbeans.jemmy.operators.JTableOperator;
 import org.netbeans.jemmy.operators.JTextAreaOperator;
 import org.netbeans.jemmy.operators.JTextComponentOperator;
 import org.netbeans.jemmy.operators.JTextFieldOperator;
+import org.netbeans.jemmy.operators.JToggleButtonOperator;
 import org.netbeans.jemmy.operators.Operator;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
@@ -66,6 +67,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.JTextComponent;
 
@@ -557,7 +559,7 @@ public class JemmyDSL {
     }
 
     public static void waitChecked(String locator, boolean checked) {
-        JCheckBoxOperator op = find(locator, JCheckBoxOperator.class);
+        JToggleButtonOperator op = find(locator, JToggleButtonOperator.class);
         try {
             waitComponentChecked(op, checked);
         } catch (InterruptedException e) {
@@ -585,10 +587,10 @@ public class JemmyDSL {
         waiter.waitAction(op.getSource());
     }
 
-    private static void waitComponentChecked(final JCheckBoxOperator op, final boolean checked) throws InterruptedException {
+    private static void waitComponentChecked(final JToggleButtonOperator op, final boolean checked) throws InterruptedException {
         Waiter waiter = new Waiter(new Waitable() {
             public Object actionProduced(Object obj) {
-                if (((JCheckBox) obj).isSelected() != checked) {
+                if (((JToggleButton) obj).isSelected() != checked) {
                     return null;
                 } else {
                     return obj;
