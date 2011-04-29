@@ -1,6 +1,7 @@
 package com.github.srec.jemmy;
 
 import com.github.srec.UnsupportedFeatureException;
+import com.github.srec.command.exception.AssertionFailedException;
 import com.github.srec.util.AWTTreeScanner;
 import com.github.srec.util.ScannerMatcher;
 import com.github.srec.util.Utils;
@@ -42,6 +43,7 @@ import org.netbeans.jemmy.operators.JToggleButtonOperator;
 import org.netbeans.jemmy.operators.Operator;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
+import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -63,6 +65,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -520,6 +523,12 @@ public class JemmyDSL {
         return (JComponent) op.getSource();
     }
 
+    public static Dialog getDialogById(String id) {
+        ComponentOperator op = componentMap.getComponent(id);
+        if (!(op instanceof JDialogOperator)) return null;
+        return new Dialog((JDialog) op.getSource());
+    }
+
     public static Label label(String locator) {
         return new Label(find(locator, JLabelOperator.class));
     }
@@ -736,6 +745,37 @@ public class JemmyDSL {
         @Override
         public boolean isActive() {
             return component.isActive();
+        }
+
+        public void assertText(String text) {
+            final String t = text;
+            if (text == null) text = "";
+            java.awt.Component c = component.findSubComponent(new ComponentChooser() {
+                
+                @Override
+                public String getDescription() {
+                    return null;
+                }
+                
+                @Override
+                public boolean checkComponent(java.awt.Component comp) {
+                    if (!comp.isVisible()) return false;
+
+                    if (comp instanceof JTextField) {
+                        String compText = ((JTextField) comp).getText();
+                        if (compText == null) compText = "";
+                        return t.equals(compText);
+                    } else if (comp instanceof JLabel) {
+                        String compText = ((JLabel) comp).getText();
+                        if (compText == null) compText = "";
+                        return t.equals(compText);
+                    }
+                    return false;
+                }
+            });
+            if (c == null) {
+                throw new AssertionFailedException("assert_dialog: could not find component with text " + text);
+            }
         }
     }
 
