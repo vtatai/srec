@@ -28,4 +28,12 @@
         </call>
         <assert locator="initialValueTF" text="100"/>
     </test_case>
+    <test_case name="call_keep_scope">
+        <window_activate locator="TestForm"/>
+        <call method="type_initialValueTF">
+            <call_parameter name="text" value="100"/>
+        </call>
+        <find locator="initialValueTF" id="text_field" findComponentType="text_field"/>
+        <assert_not_null varName="text_field"/>
+    </test_case>
 </suite>

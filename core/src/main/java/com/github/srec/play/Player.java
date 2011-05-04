@@ -9,6 +9,7 @@ import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
 import com.github.srec.command.parser.ParserFactory;
+import com.github.srec.jemmy.ComponentMap;
 import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.util.PropertiesReader;
 
@@ -176,26 +177,31 @@ public class Player {
     }
 
     public Command.CommandFlow play(ExecutionContext context) {
+        ComponentMap formerComponentMap = JemmyDSL.getComponentMap();
         JemmyDSL.setComponentMap(new ComponentMapSymbolsAdapter(context.getSymbols()));
-        for (Command command : context.getCommands()) {
-            log.debug("Running line: " + getLine(command) + ", command: " + command);
-            try {
-                Command.CommandFlow flow = command.run(context);
-                if (flow == Command.CommandFlow.NEXT) {}
-                else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
-                else throw new PlayerException("Flow management instruction " + flow + " from command "
-                                               + command.getName() + " not supported");
-            } catch (CommandExecutionException e) {
-                handleError(context.getTestSuite(), context.getTestCase(), command, e);
-                break;
+        try {
+            for (Command command : context.getCommands()) {
+                log.debug("Running line: " + getLine(command) + ", command: " + command);
+                try {
+                    Command.CommandFlow flow = command.run(context);
+                    if (flow == Command.CommandFlow.NEXT) {}
+                    else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
+                    else throw new PlayerException("Flow management instruction " + flow + " from command "
+                                                   + command.getName() + " not supported");
+                } catch (CommandExecutionException e) {
+                    handleError(context.getTestSuite(), context.getTestCase(), command, e);
+                    break;
+                }
+                try {
+                    Thread.sleep(commandInterval);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
-            try {
-                Thread.sleep(commandInterval);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            return Command.CommandFlow.NEXT;
+        } finally {
+            JemmyDSL.setComponentMap(formerComponentMap);
         }
-        return Command.CommandFlow.NEXT;
     }
 
     private String getLine(Command command) {
