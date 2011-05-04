@@ -15,6 +15,8 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
+import com.github.srec.command.method.MethodParameter;
+import com.github.srec.command.value.BooleanValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import com.github.srec.jemmy.JemmyDSL.Frame;
@@ -34,7 +36,9 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @SRecCommand
 public class FindFrameCommand extends JemmyEventCommand {
     public FindFrameCommand() {
-        super("find_frame", params("title", Type.STRING, "id", Type.STRING, "required", Type.BOOLEAN));
+        super("find_frame",  new MethodParameter[] {new MethodParameter("title", Type.STRING),
+                new MethodParameter("id", Type.STRING),
+                new MethodParameter("required", Type.BOOLEAN, true, new BooleanValue(false))});
     }
 
     @Override
