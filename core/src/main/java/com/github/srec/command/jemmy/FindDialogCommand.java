@@ -35,7 +35,7 @@ public class FindDialogCommand extends JemmyEventCommand {
     public FindDialogCommand() {
         super("find_dialog",  new MethodParameter[] {new MethodParameter("title", Type.STRING),
                 new MethodParameter("id", Type.STRING),
-                new MethodParameter("required", Type.BOOLEAN, true, new BooleanValue(false))});
+                new MethodParameter("required", Type.BOOLEAN, true, new BooleanValue(true))});
     }
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {

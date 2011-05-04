@@ -557,7 +557,7 @@
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="title" use="required"/>
                 <xs:attribute type="xs:string" name="id" use="required"/>
-                <xs:attribute type="xs:string" name="required" default="false"/>
+                <xs:attribute type="xs:string" name="required" default="true"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -569,7 +569,7 @@
             <xs:extension base="xs:string">
                 <xs:attribute type="xs:string" name="title" use="required"/>
                 <xs:attribute type="xs:string" name="id" use="required"/>
-                <xs:attribute type="xs:string" name="required" default="false"/>
+                <xs:attribute type="xs:string" name="required" default="true"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
