@@ -4,8 +4,6 @@ import com.github.srec.testng.AbstractSRecTestNGTest;
 
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 import static org.testng.Assert.assertEquals;
 
 @Test
@@ -16,11 +14,11 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         super(TEST_SCRIPT_DIR, "com.github.srec.ui.TestForm", new String[0], false);
     }
 
-    public void test() throws IOException {
+    public void test() {
         runTest("test_form.xml");
     }
 
-    public void testError() throws IOException {
+    public void testError() {
         Player p = runTest("test_form_error.xml", false);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
@@ -28,36 +26,44 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         assertEquals(p.getErrors().get(1).getLineNumber(), 27);
     }
 
-    public void testMethod() throws IOException {
+    public void testFindDialog() {
+        runTest("test_find_dialog.xml");
+    }
+
+    public void testFindFrame() {
+        runTest("test_find_frame.xml");
+    }
+
+    public void testMethod() {
         runTest("test_form_method_call.xml");
     }
 
-    public void testMethodDeep() throws IOException {
+    public void testMethodDeep() {
         runTest("test_form_method_deep.xml");
     }
 
-    public void testIf() throws IOException {
+    public void testIf() {
         runTest("if.xml");
     }
 
-    public void testWhile() throws IOException {
+    public void testWhile() {
         runTest("while.xml");
     }
 
-    public void testCall() throws IOException {
+    public void testCall() {
         runTest("call.xml");
     }
 
-    public void testComboListAboveComponent() throws IOException {
+    public void testComboListAboveComponent() {
         runTest("test_combo_list_above_component.xml");
     }
 
-    public void testFindByTypeIndex() throws IOException {
+    public void testFindByTypeIndex() {
         runTest("test_find_by_type_index.xml");
     }
 
 
-    public void testClickCountOnTextField() throws IOException {
+    public void testClickCountOnTextField() {
         runTest("test_click_count_on_text_field.xml");
     }
 }
