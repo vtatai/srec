@@ -17,6 +17,9 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
+import com.github.srec.jemmy.JemmyDSL.Frame;
+
+import org.netbeans.jemmy.TimeoutExpiredException;
 
 import java.util.Map;
 
@@ -31,13 +34,24 @@ import static com.github.srec.jemmy.JemmyDSL.frame;
 @SRecCommand
 public class FindFrameCommand extends JemmyEventCommand {
     public FindFrameCommand() {
-        super("find_frame", params("title", Type.STRING, "id", Type.STRING));
+        super("find_frame", params("title", Type.STRING, "id", Type.STRING, "required", Type.BOOLEAN));
     }
 
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
         String title = coerceToString(params.get("title"), ctx);
         String id = coerceToString(params.get("id"), ctx);
-        frame(title).activate().store(id);
+        Boolean required = coerceToBoolean(params.get("required"));
+        if (required == null) {
+            required = true;
+        }
+        try {
+            Frame frame = frame(title);
+            frame.activate().store(id);
+        } catch (TimeoutExpiredException e) {
+            if (required) {
+                throw e;
+            }
+        }
     }
 }
