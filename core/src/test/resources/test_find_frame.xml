@@ -16,6 +16,7 @@
     <test_case name="1">
         <window_activate locator="TestForm"/>
         <find_frame title="DoesNotExist" required="false" id="Frame1"/>
+        <find_frame title="DoesNotExist" required="true" id="Frame1"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>
