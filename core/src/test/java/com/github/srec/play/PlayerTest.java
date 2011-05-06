@@ -27,11 +27,15 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     }
 
     public void testFindDialog() {
-        runTest("test_find_dialog.xml");
+        Player p = runTest("test_find_dialog.xml", false);
+        assertEquals(p.getErrors().size(), 1);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
     }
 
     public void testFindFrame() {
-        runTest("test_find_frame.xml");
+        Player p = runTest("test_find_frame.xml", false);
+        assertEquals(p.getErrors().size(), 1);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
     }
 
     public void testMethod() {

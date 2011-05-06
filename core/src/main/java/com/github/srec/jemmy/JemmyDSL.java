@@ -43,10 +43,7 @@ import org.netbeans.jemmy.operators.JToggleButtonOperator;
 import org.netbeans.jemmy.operators.Operator;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
-import java.awt.Component;
 import java.awt.FontMetrics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
@@ -95,7 +92,7 @@ public class JemmyDSL {
         button(JButtonOperator.class, JButton.class),
         radio_button(JRadioButtonOperator.class, JRadioButton.class),
         check_box(JCheckBoxOperator.class, JCheckBox.class),
-        table(JTableOperator.class, JTable.class),
+        table(TableOperator.class, JTable.class),
         menu_bar(JMenuBarOperator.class, JMenuBar.class),
         dialog(JDialogOperator.class, JDialog.class);
 
@@ -336,7 +333,9 @@ public class JemmyDSL {
         if (comp instanceof JRadioButton) return new JRadioButtonOperator((JRadioButton) comp);
         if (comp instanceof JButton) return new JButtonOperator((JButton) comp);
         if (comp instanceof AbstractButton) return new AbstractButtonOperator((AbstractButton) comp);
-        if (comp instanceof JTable) return new TableOperator((JTable) comp);
+        if (comp instanceof JTable) {
+            return new TableOperator((JTable) comp);
+        }
         if (comp instanceof JMenuBar) return new JMenuBarOperator((JMenuBar) comp);
         if (comp instanceof JScrollBar) return new JScrollBarOperator((JScrollBar) comp);
         if (comp instanceof JInternalFrame) return new JInternalFrameOperator((JInternalFrame) comp);
@@ -751,12 +750,12 @@ public class JemmyDSL {
             final String t = text;
             if (text == null) text = "";
             java.awt.Component c = component.findSubComponent(new ComponentChooser() {
-                
+
                 @Override
                 public String getDescription() {
                     return null;
                 }
-                
+
                 @Override
                 public boolean checkComponent(java.awt.Component comp) {
                     if (!comp.isVisible()) return false;
@@ -1028,6 +1027,68 @@ public class JemmyDSL {
     }
 
     public static class TableOperator extends JTableOperator {
+
+        public static class XJTableByCellFinder extends JTableByCellFinder
+        {
+
+            private final String label;
+            private final int row;
+            private final int column;
+            private final StringComparator comparator;
+
+            @Override
+            public boolean checkComponent(java.awt.Component comp) {
+                if (!"".equals(label)) {
+                    return super.checkComponent(comp);
+                } else if(comp instanceof JTable) {
+                    if(((JTable)comp).getRowCount() > row && ((JTable)comp).getColumnCount() > column) {
+                        int r = row;
+                        if(r == -1) {
+                            int[] rows = ((JTable)comp).getSelectedRows();
+                            if(rows.length != 0) {
+                                r = rows[0];
+                            } else {
+                                return(false);
+                            }
+                        }
+                        int c = column;
+                        if(c == -1) {
+                            int[] columns = ((JTable)comp).getSelectedColumns();
+                            if(columns.length != 0) {
+                                c = columns[0];
+                            } else {
+                                return(false);
+                            }
+                        }
+                        Object value = ((JTable)comp).getValueAt(r, c);
+                        if(value == null) {
+                            value = "";
+                        }
+                        return(comparator.equals(value.toString(),
+                                                 label));
+                    }
+                }
+
+
+
+                return(false);
+            }
+
+            public XJTableByCellFinder(String lb, int r, int c, StringComparator comparator) {
+                super(lb,r,c,comparator);
+                this.label = lb;
+                this.row = r;
+                this.column = c;
+                this.comparator = comparator;
+            }
+
+            public XJTableByCellFinder(String lb, int r, int c) {
+                this(lb, r, c, Operator.getDefaultStringComparator());
+            }
+
+
+        }
+
         public TableOperator(JTable b) {
             super(b);
         }
@@ -1051,7 +1112,16 @@ public class JemmyDSL {
             }
 
             super.scrollToCell(row, column);
-        }        
+        }
+
+        /**
+         * Overridden method to allow searching for empty strings
+         */
+        @Override
+        public void waitCell(String cellText, int row, int column) {
+            waitState(new XJTableByCellFinder(cellText, row, column, getComparator()));
+        }
+
     }
 
     public static class Row {
