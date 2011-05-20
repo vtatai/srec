@@ -124,11 +124,6 @@
                                 <requireMavenVersion>
                                     <version>2.2.1</version>
                                 </requireMavenVersion>
-                                <requireProperty>
-                                    <property>file.encoding</property>
-                                    <regex>UTF-8</regex>
-                                    <regexMessage>file.encoding must be UTF-8 to run this build. Current value is ${file.encoding}</regexMessage>
-                                </requireProperty>                                
                             </rules>
                         </configuration>
                     </execution>
