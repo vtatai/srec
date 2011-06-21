@@ -76,12 +76,12 @@
         <repository>
             <id>artifactory</id>
             <name>artifactory</name>
-            <url>http://tec.matera.com:8081/artifactory/matera-migracao-releases</url>
+            <url>http://nexus.matera.com:8088/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>artifactory</id>
             <name>artifactory</name>
-            <url>http://tec.matera.com:8081/artifactory/matera-snapshots</url>
+            <url>http://nexus.matera.com:8088/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
