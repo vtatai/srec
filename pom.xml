@@ -74,13 +74,13 @@
 
     <distributionManagement>
         <repository>
-            <id>artifactory</id>
-            <name>artifactory</name>
+        	<id>nexus-releases</id>
+        	<name>nexus-releases</name>
             <url>http://nexus.matera.com:8088/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>artifactory</id>
-            <name>artifactory</name>
+        	<id>nexus-snapshots</id>
+        	<name>nexus-snapshots</name>
             <url>http://nexus.matera.com:8088/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
