@@ -63,7 +63,7 @@
             <plugin>
                 <groupId>cuke4duke</groupId>
                 <artifactId>cuke4duke-maven-plugin</artifactId>
-                <version>0.3.0.beta.2</version>
+                <version>0.4.4</version>
                 <configuration>
                     <jvmArgs>
                         <jvmArg>-Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.PicoFactory</jvmArg>
