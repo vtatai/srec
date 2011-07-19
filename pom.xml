@@ -5,6 +5,7 @@
 	<packaging>pom</packaging>
 	<version><!-- GLOBAL VERSION-->0.3.8-SNAPSHOT<!-- GLOBAL VERSION--></version>
 	<name>srec</name>
+	
 	<description>srec is a Java Swing record / replay tool</description>
 	<url>http://github.com/</url>
 	<modules>
