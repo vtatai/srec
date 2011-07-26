@@ -15,6 +15,7 @@ package com.github.srec.testng;
 
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.play.Player;
+import com.github.srec.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +74,8 @@ public abstract class AbstractSRecTestNGTest {
         } catch (IOException e) {
             e.printStackTrace();
             fail(e.getMessage());
+        } finally {
+            Utils.closeWindows();
         }
         return null;
     }
