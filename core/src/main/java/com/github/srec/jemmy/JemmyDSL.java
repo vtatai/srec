@@ -122,7 +122,7 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaitStateTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "10000");
-        props.put("JComboBoxOperator.WaitListTimeout", "60000");
+        props.put("JComboBoxOperator.WaitListTimeout", "10000");
         props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
         props.put("JSliderOperator.WholeScrollTimeout", "10000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
