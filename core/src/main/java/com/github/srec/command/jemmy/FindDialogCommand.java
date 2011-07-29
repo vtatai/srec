@@ -11,10 +11,14 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
+import com.github.srec.command.base.CommandSymbol;
+import com.github.srec.command.base.VarCommand;
 import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.BooleanValue;
+import com.github.srec.command.value.NilValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
+import com.github.srec.jemmy.JemmyDSL;
 import com.github.srec.jemmy.JemmyDSL.Dialog;
 
 import org.netbeans.jemmy.TimeoutExpiredException;
@@ -51,6 +55,9 @@ public class FindDialogCommand extends JemmyEventCommand {
         } catch (TimeoutExpiredException e) {
             if (required) {
                 throw e;
+            } else {
+                VarCommand var = new VarCommand(id, NilValue.getInstance());
+                ctx.addSymbol(var);
             }
         }
     }

@@ -29,13 +29,13 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testFindDialog() {
         Player p = runTest("test_find_dialog.xml", false);
         assertEquals(p.getErrors().size(), 1);
-        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
 
     public void testFindFrame() {
         Player p = runTest("test_find_frame.xml", false);
         assertEquals(p.getErrors().size(), 1);
-        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
 
     public void testMethod() {

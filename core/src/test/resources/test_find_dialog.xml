@@ -16,6 +16,11 @@
     <test_case name="1">
         <window_activate locator="TestForm"/>
         <find_dialog title="DoesNotExist" required="false" id="Dialog1"/>
+        <if expression = "Dialog1 != null">
+        <then>
+            <click locator="text=Yes"/>
+        </then>
+        </if>
         <find_dialog title="DoesNotExist" required="true" id="Dialog1"/>
         <close locator="TestForm"/>
     </test_case>
