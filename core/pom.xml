@@ -33,7 +33,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.antlr</groupId>
+            <groupId>antlr</groupId>
             <artifactId>antlr</artifactId>
         </dependency>
         <dependency>
