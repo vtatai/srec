@@ -33,12 +33,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>antlr</groupId>
-            <artifactId>antlr</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.antlr</groupId>
-            <artifactId>gunit</artifactId>
+            <artifactId>antlr</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fifesoft</groupId>
