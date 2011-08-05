@@ -291,6 +291,11 @@
 				<artifactId>antlr</artifactId>
 				<version>3.2</version>
 			</dependency>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>gunit</artifactId>
+                <version>3.2</version>
+            </dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
