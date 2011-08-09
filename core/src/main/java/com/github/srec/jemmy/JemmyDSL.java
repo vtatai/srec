@@ -117,7 +117,7 @@ public class JemmyDSL {
     private static Properties props = new Properties();
 
     static {
-        props.put("ComponentOperator.WaitComponentEnabledTimeout", "30000");
+        props.put("ComponentOperator.WaitComponentEnabledTimeout", "15000");
         props.put("ComponentOperator.WaitComponentTimeout", "15000");
         props.put("ComponentOperator.WaitStateTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
@@ -157,7 +157,6 @@ public class JemmyDSL {
         return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.ROBOT_MODEL_MASK;
     }
 
-    @SuppressWarnings({"UnusedDeclaration"})
     public static ComponentMap getComponentMap() {
         return componentMap;
     }
