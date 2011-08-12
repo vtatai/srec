@@ -1267,27 +1267,19 @@ public class JemmyDSL {
         }
 
         public MenuBar clickMenu(int... indexes) {
-            System.out.println("======================");
-            System.out.println("Clicking menu . Indexes: " + Arrays.toString(indexes));
             if (indexes.length == 0) return this;
             String[] texts = new String[indexes.length];
-            System.out.println("Calling component.getMenu for " + indexes[0]);
             JMenu menu = component.getMenu(indexes[0]);
-            System.out.println("Got " + menu);
             texts[0] = menu.getText();
             for (int i = 1; i < indexes.length; i++) {
                 int index = indexes[i];
                 assert menu != null;
                 if (i == indexes.length - 1) {
-                    System.out.println("Calling component.getMenuComponent for " + indexes[i]);
                     JMenuItem item = (JMenuItem) menu.getMenuComponent(index);
-                    System.out.println("Got " + item);
-;                    texts[i] = item.getText();
+                    texts[i] = item.getText();
                     menu = null;
                 } else {
-                    System.out.println("Calling component.getMenuComponent for " + indexes[i]);
                     menu = (JMenu) menu.getMenuComponent(index);
-                    System.out.println("Got " + menu);
                     texts[i] = menu.getText();
                 }
             }
@@ -1305,7 +1297,6 @@ public class JemmyDSL {
                 System.out.println("Callig showMenuItem for " + text);
                 new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[] {text});
             }
-            System.out.println("Callig clickMouse for " + texts[texts.length - 1]);
             new JMenuItemOperator(currentWindow().getComponent(), texts[texts.length - 1]).clickMouse();
             return this;
         }
