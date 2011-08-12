@@ -1267,27 +1267,27 @@ public class JemmyDSL {
         }
 
         public MenuBar clickMenu(int... indexes) {
-            logger.info("======================");
-            logger.info("Clicking menu . Indexes: " + Arrays.toString(indexes));
+            System.out.println("======================");
+            System.out.println("Clicking menu . Indexes: " + Arrays.toString(indexes));
             if (indexes.length == 0) return this;
             String[] texts = new String[indexes.length];
-            logger.info("Calling component.getMenu for " + indexes[0]);
+            System.out.println("Calling component.getMenu for " + indexes[0]);
             JMenu menu = component.getMenu(indexes[0]);
-            logger.info("Got " + menu);
+            System.out.println("Got " + menu);
             texts[0] = menu.getText();
             for (int i = 1; i < indexes.length; i++) {
                 int index = indexes[i];
                 assert menu != null;
                 if (i == indexes.length - 1) {
-                    logger.info("Calling component.getMenuComponent for " + indexes[i]);
+                    System.out.println("Calling component.getMenuComponent for " + indexes[i]);
                     JMenuItem item = (JMenuItem) menu.getMenuComponent(index);
-                    logger.info("Got " + item);
+                    System.out.println("Got " + item);
 ;                    texts[i] = item.getText();
                     menu = null;
                 } else {
-                    logger.info("Calling component.getMenuComponent for " + indexes[i]);
+                    System.out.println("Calling component.getMenuComponent for " + indexes[i]);
                     menu = (JMenu) menu.getMenuComponent(index);
-                    logger.info("Got " + menu);
+                    System.out.println("Got " + menu);
                     texts[i] = menu.getText();
                 }
             }
@@ -1296,16 +1296,16 @@ public class JemmyDSL {
         }
 
         public MenuBar clickMenu(String... texts) {
-            logger.info("Clicking menu . Texts: " + Arrays.toString(texts));
+            System.out.println("Clicking menu . Texts: " + Arrays.toString(texts));
 
             if (texts.length == 0) return this;
             component.showMenuItem(texts[0]);
             for (int i = 1; i < texts.length; i++) {
                 String text = texts[i];
-                logger.info("Callig showMenuItem for " + text);
+                System.out.println("Callig showMenuItem for " + text);
                 new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[] {text});
             }
-            logger.info("Callig clickMouse for " + texts[texts.length - 1]);
+            System.out.println("Callig clickMouse for " + texts[texts.length - 1]);
             new JMenuItemOperator(currentWindow().getComponent(), texts[texts.length - 1]).clickMouse();
             return this;
         }
