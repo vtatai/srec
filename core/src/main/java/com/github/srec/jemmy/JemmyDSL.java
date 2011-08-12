@@ -80,26 +80,25 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * A DSL wrapper for Jemmy operators.
- *
+ * 
  * @author Victor Tatai
  */
 public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
 
     public enum ComponentType {
-        text_field(JTextFieldOperator.class, JTextField.class),
-        combo_box(JComboBoxOperator.class, JComboBox.class),
-        button(JButtonOperator.class, JButton.class),
-        radio_button(JRadioButtonOperator.class, JRadioButton.class),
-        check_box(JCheckBoxOperator.class, JCheckBox.class),
-        table(TableOperator.class, JTable.class),
-        menu_bar(JMenuBarOperator.class, JMenuBar.class),
-        dialog(JDialogOperator.class, JDialog.class);
+        text_field(JTextFieldOperator.class, JTextField.class), combo_box(JComboBoxOperator.class,
+                JComboBox.class), button(JButtonOperator.class, JButton.class), radio_button(
+                JRadioButtonOperator.class, JRadioButton.class), check_box(JCheckBoxOperator.class,
+                JCheckBox.class), table(TableOperator.class, JTable.class), menu_bar(
+                JMenuBarOperator.class, JMenuBar.class), dialog(JDialogOperator.class,
+                JDialog.class);
 
         private final Class<? extends ComponentOperator> operatorClass;
         private final Class<? extends java.awt.Component> awtClass;
 
-        ComponentType(Class<? extends ComponentOperator> operatorClass, Class<? extends java.awt.Component> awtClass) {
+        ComponentType(Class<? extends ComponentOperator> operatorClass,
+                      Class<? extends java.awt.Component> awtClass) {
             this.operatorClass = operatorClass;
             this.awtClass = awtClass;
         }
@@ -182,7 +181,8 @@ public class JemmyDSL {
         } else if (!currentWindow.isActive()) {
             currentWindow = findActiveWindow();
         }
-        if (currentWindow == null) throw new JemmyDSLException("Cannot find a currently active window");
+        if (currentWindow == null)
+            throw new JemmyDSLException("Cannot find a currently active window");
         logger.info("Using as current container: " + currentWindow.getComponent());
         return currentWindow;
     }
@@ -190,8 +190,10 @@ public class JemmyDSL {
     private static Window findActiveWindow() {
         java.awt.Window[] windows = JFrame.getWindows();
         for (java.awt.Window w : windows) {
-            if (ignored.contains(w)) continue;
-            if (!w.isActive()) continue;
+            if (ignored.contains(w))
+                continue;
+            if (!w.isActive())
+                continue;
             if (w instanceof JFrame) {
                 return new Frame((JFrame) w);
             } else if (w instanceof JDialog) {
@@ -239,9 +241,10 @@ public class JemmyDSL {
     }
 
     /**
-     * Finds a component and stores it under the given id. The component can later be used on other commands using the
-     * locator "id=ID_ASSIGNED". This method searches both VISIBLE and INVISIBLE components.
-     *
+     * Finds a component and stores it under the given id. The component can later be used on other
+     * commands using the locator "id=ID_ASSIGNED". This method searches both VISIBLE and INVISIBLE
+     * components.
+     * 
      * @param locator The locator (accepted are name (default), title, text, label)
      * @param id The id
      * @param componentType The component type
@@ -249,7 +252,8 @@ public class JemmyDSL {
      */
     @SuppressWarnings({"unchecked"})
     public static Component find(String locator, String id, String componentType) {
-        java.awt.Component component = findComponent(locator, currentWindow().getComponent().getSource());
+        java.awt.Component component = findComponent(locator, currentWindow().getComponent()
+            .getSource());
         if (component == null) {
             componentMap.putComponent(id, null);
             return null;
@@ -266,7 +270,8 @@ public class JemmyDSL {
     @SuppressWarnings({"unchecked"})
     private static Class<? extends java.awt.Component> translateFindType(String findType) {
         for (ComponentType componentType : ComponentType.values()) {
-            if (findType.equals(componentType.name())) return componentType.getAwtClass();
+            if (findType.equals(componentType.name()))
+                return componentType.getAwtClass();
         }
         try {
             return (Class<? extends java.awt.Component>) Class.forName(findType);
@@ -278,7 +283,8 @@ public class JemmyDSL {
     private static java.awt.Component findComponent(String locator, java.awt.Component component) {
         assert locator != null;
         String[] strs = parseLocator(locator);
-        if (strs.length != 2) throw new JemmyDSLException("Invalid locator " + locator);
+        if (strs.length != 2)
+            throw new JemmyDSLException("Invalid locator " + locator);
         if (strs[0].equals("id")) {
             return componentMap.getComponent(strs[1]).getSource();
         } else {
@@ -289,36 +295,41 @@ public class JemmyDSL {
     private static String[] parseLocator(String locator) {
         int i = locator.indexOf("=");
         if (i == -1) {
-            return new String[] { "name", locator.substring(i + 1).trim()};
+            return new String[]{"name", locator.substring(i + 1).trim()};
         }
-        return new String[] { locator.substring(0, i).trim(), locator.substring(i + 1).trim()};
+        return new String[]{locator.substring(0, i).trim(), locator.substring(i + 1).trim()};
     }
 
     private static ScannerMatcher compileMatcher(String[] strs) {
-        if (strs[0].equals("name")) return new AWTTreeScanner.NameScannerMatcher(strs[1]);
-        if (strs[0].equals("title")) return new AWTTreeScanner.TitleScannerMatcher(strs[1]);
-        if (strs[0].equals("text")) return new AWTTreeScanner.TextScannerMatcher(strs[1]);
+        if (strs[0].equals("name"))
+            return new AWTTreeScanner.NameScannerMatcher(strs[1]);
+        if (strs[0].equals("title"))
+            return new AWTTreeScanner.TitleScannerMatcher(strs[1]);
+        if (strs[0].equals("text"))
+            return new AWTTreeScanner.TextScannerMatcher(strs[1]);
         throw new JemmyDSLException("Invalid locator " + strs[0] + "=" + strs[1]);
     }
 
     /**
-     * Returns a list of all visible components which are instances of the given class.
-     * If one needs a find that returns an invisible component should add a parameter here.
-     * But the default behavior must be returning only visible components as it is the most common
-     * operation and required for compatibility with scripts converted from jfcunit. see #15790.
+     * Returns a list of all visible components which are instances of the given class. If one needs
+     * a find that returns an invisible component should add a parameter here. But the default
+     * behavior must be returning only visible components as it is the most common operation and
+     * required for compatibility with scripts converted from jfcunit. see #15790.
      * 
      * @param container
      * @param componentClass
      * @return
      */
-    private static List<java.awt.Component> findComponents(java.awt.Container container, Class<? extends java.awt.Component> componentClass) {
+    private static List<java.awt.Component> findComponents(java.awt.Container container,
+                                                           Class<? extends java.awt.Component> componentClass) {
         List<java.awt.Component> list = new ArrayList<java.awt.Component>();
         for (java.awt.Component component : container.getComponents()) {
             if (component.isVisible() && componentClass.isAssignableFrom(component.getClass())) {
                 list.add(component);
             }
             if (component instanceof java.awt.Container) {
-                List<java.awt.Component> children = findComponents((java.awt.Container) component, componentClass);
+                List<java.awt.Component> children = findComponents((java.awt.Container) component,
+                                                                   componentClass);
                 list.addAll(children);
             }
         }
@@ -326,47 +337,70 @@ public class JemmyDSL {
     }
 
     private static JComponentOperator convertFind(java.awt.Component comp) {
-        if (comp instanceof JComboBox) return new JComboBoxOperator((JComboBox) comp);
-        if (comp instanceof JTextComponent) return new JTextFieldOperator((JTextField) comp);
-        if (comp instanceof JCheckBox) return new JCheckBoxOperator((JCheckBox) comp);
-        if (comp instanceof JRadioButton) return new JRadioButtonOperator((JRadioButton) comp);
-        if (comp instanceof JButton) return new JButtonOperator((JButton) comp);
-        if (comp instanceof AbstractButton) return new AbstractButtonOperator((AbstractButton) comp);
+        if (comp instanceof JComboBox)
+            return new JComboBoxOperator((JComboBox) comp);
+        if (comp instanceof JTextComponent)
+            return new JTextFieldOperator((JTextField) comp);
+        if (comp instanceof JCheckBox)
+            return new JCheckBoxOperator((JCheckBox) comp);
+        if (comp instanceof JRadioButton)
+            return new JRadioButtonOperator((JRadioButton) comp);
+        if (comp instanceof JButton)
+            return new JButtonOperator((JButton) comp);
+        if (comp instanceof AbstractButton)
+            return new AbstractButtonOperator((AbstractButton) comp);
         if (comp instanceof JTable) {
             return new TableOperator((JTable) comp);
         }
-        if (comp instanceof JMenuBar) return new JMenuBarOperator((JMenuBar) comp);
-        if (comp instanceof JScrollBar) return new JScrollBarOperator((JScrollBar) comp);
-        if (comp instanceof JInternalFrame) return new JInternalFrameOperator((JInternalFrame) comp);
+        if (comp instanceof JMenuBar)
+            return new JMenuBarOperator((JMenuBar) comp);
+        if (comp instanceof JScrollBar)
+            return new JScrollBarOperator((JScrollBar) comp);
+        if (comp instanceof JInternalFrame)
+            return new JInternalFrameOperator((JInternalFrame) comp);
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
     private static Component convertFind(JComponentOperator comp) {
-        if (comp instanceof JComboBoxOperator) return new ComboBox((JComboBoxOperator) comp);
-        if (comp instanceof JTextComponentOperator) return new TextField((JTextFieldOperator) comp);
-        if (comp instanceof JCheckBoxOperator) return new CheckBox((JCheckBoxOperator) comp);
-        if (comp instanceof JRadioButtonOperator) return new RadioButton((JRadioButtonOperator) comp);
-        if (comp instanceof JButtonOperator) return new Button((JButtonOperator) comp);
-        if (comp instanceof AbstractButtonOperator) return new GenericButton((AbstractButtonOperator) comp);
-        if (comp instanceof JTableOperator) return new Table((JTableOperator) comp);
-        if (comp instanceof JMenuBarOperator) return new MenuBar((JMenuBarOperator) comp);
-        if (comp instanceof JScrollBarOperator) return new ScrollBar((JScrollBarOperator) comp);
-        // not really sure this is the right thing to do, but constructor here expects a component and not an operator:
-        if (comp instanceof JInternalFrameOperator) return new InternalFrame((JInternalFrame) ((JInternalFrameOperator) comp).getSource());
+        if (comp instanceof JComboBoxOperator)
+            return new ComboBox((JComboBoxOperator) comp);
+        if (comp instanceof JTextComponentOperator)
+            return new TextField((JTextFieldOperator) comp);
+        if (comp instanceof JCheckBoxOperator)
+            return new CheckBox((JCheckBoxOperator) comp);
+        if (comp instanceof JRadioButtonOperator)
+            return new RadioButton((JRadioButtonOperator) comp);
+        if (comp instanceof JButtonOperator)
+            return new Button((JButtonOperator) comp);
+        if (comp instanceof AbstractButtonOperator)
+            return new GenericButton((AbstractButtonOperator) comp);
+        if (comp instanceof JTableOperator)
+            return new Table((JTableOperator) comp);
+        if (comp instanceof JMenuBarOperator)
+            return new MenuBar((JMenuBarOperator) comp);
+        if (comp instanceof JScrollBarOperator)
+            return new ScrollBar((JScrollBarOperator) comp);
+        // not really sure this is the right thing to do, but constructor here expects a component
+        // and not an operator:
+        if (comp instanceof JInternalFrameOperator)
+            return new InternalFrame((JInternalFrame) ((JInternalFrameOperator) comp).getSource());
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
     /**
-     * Finds the first component with the given component type and stores it under the given id. The component can later
-     * be used on other commands using the locator "id=ID_ASSIGNED". This method searches both VISIBLE and INVISIBLE
-     * components.
-     *
+     * Finds the first component with the given component type and stores it under the given id. The
+     * component can later be used on other commands using the locator "id=ID_ASSIGNED". This method
+     * searches both VISIBLE and INVISIBLE components.
+     * 
      * @param id The id
      * @param componentType The component type
      * @return The component found
      */
     @SuppressWarnings({"unchecked"})
-    public static Component findByComponentType(String id, String containerId, String componentType, int index) {
+    public static Component findByComponentType(String id,
+                                                String containerId,
+                                                String componentType,
+                                                int index) {
         java.awt.Container container;
         if (isBlank(containerId)) {
             container = (java.awt.Container) currentWindow().getComponent().getSource();
@@ -405,15 +439,20 @@ public class JemmyDSL {
 
     public static void click(String locator, int count, String modifiers) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
-        if (operator == null) throw new JemmyDSLException("Could not find component for clicking " + locator);
-        operator.clickMouse(operator.getCenterXForClick(), operator.getCenterYForClick(), count, InputEvent.BUTTON1_MASK,
+        if (operator == null)
+            throw new JemmyDSLException("Could not find component for clicking " + locator);
+        operator.clickMouse(operator.getCenterXForClick(),
+                            operator.getCenterYForClick(),
+                            count,
+                            InputEvent.BUTTON1_MASK,
                             convertModifiers(modifiers));
     }
 
     public static void typeSpecial(String locator, String keyString, String modifiers) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
 
-        if (operator == null) throw new JemmyDSLException("Could not find component for typing key " + locator);
+        if (operator == null)
+            throw new JemmyDSLException("Could not find component for typing key " + locator);
         int key = convertKey(keyString);
         // TODO: find a better way to guarantee focus on the target typing component
         // The solution proposed here tries to guarantee that the textField has the focus
@@ -423,7 +462,8 @@ public class JemmyDSL {
     }
 
     private static int convertModifiers(String modifiers) {
-        if (isBlank(modifiers)) return 0;
+        if (isBlank(modifiers))
+            return 0;
         String[] mods = modifiers.split("[ |\\+|,]+");
         int flags = 0;
         for (String mod : mods) {
@@ -445,37 +485,56 @@ public class JemmyDSL {
         Map<String, String> locatorMap = Utils.parseLocator(locator);
         X component;
         if (locatorMap.containsKey("name")) {
-            component = newInstance(clazz, currentWindow().getComponent(), new NameComponentChooser(locator));
+            component = newInstance(clazz,
+                                    currentWindow().getComponent(),
+                                    new NameComponentChooser(locator));
         } else if (locatorMap.containsKey("label")) {
-            JLabelOperator jlabel = new JLabelOperator(currentWindow().getComponent(), locatorMap.get("label"));
+            JLabelOperator jlabel = new JLabelOperator(currentWindow().getComponent(),
+                    locatorMap.get("label"));
             if (!(jlabel.getLabelFor() instanceof JTextField)) {
-                throw new JemmyDSLException("Associated component for " + locator + " is not a JTextComponent");
+                throw new JemmyDSLException("Associated component for " + locator
+                        + " is not a JTextComponent");
             }
             component = newInstance(clazz, JTextField.class, (JTextField) jlabel.getLabelFor());
         } else if (locatorMap.containsKey("text")) {
             if (JTextComponentOperator.class.isAssignableFrom(clazz)) {
-                component = newInstance(clazz, currentWindow().getComponent(), new JTextComponentOperator.JTextComponentByTextFinder(locatorMap.get("text")));
+                component = newInstance(clazz,
+                                        currentWindow().getComponent(),
+                                        new JTextComponentOperator.JTextComponentByTextFinder(
+                                                locatorMap.get("text")));
             } else if (AbstractButtonOperator.class.isAssignableFrom(clazz)) {
-                component = newInstance(clazz, currentWindow().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
+                component = newInstance(clazz,
+                                        currentWindow().getComponent(),
+                                        new AbstractButtonOperator.AbstractButtonByLabelFinder(
+                                                locatorMap.get("text")));
             } else if (JComponentOperator.class.isAssignableFrom(clazz)) {
                 // Hack, we assume that what was really meant was AbstractButtonOperator
-                component = newInstance(clazz, currentWindow().getComponent(), new AbstractButtonOperator.AbstractButtonByLabelFinder(locatorMap.get("text")));
+                component = newInstance(clazz,
+                                        currentWindow().getComponent(),
+                                        new AbstractButtonOperator.AbstractButtonByLabelFinder(
+                                                locatorMap.get("text")));
             } else {
-                throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
+                throw new JemmyDSLException(
+                        "Unsupported component type for location by text locator: " + locator);
             }
         } else if (locatorMap.containsKey("id")) {
             ComponentOperator operator = componentMap.getComponent(locatorMap.get("id"));
-            if (operator == null) return null;
+            if (operator == null)
+                return null;
             if (!clazz.isAssignableFrom(operator.getClass())) {
                 throw new JemmyDSLException("Cannot convert component with " + locator + " from "
-                                            + operator.getClass().getName() + " to " + clazz.getName());
+                        + operator.getClass().getName() + " to " + clazz.getName());
             }
             component = (X) operator;
         } else if (locatorMap.containsKey("title")) {
             if (JInternalFrameOperator.class.isAssignableFrom(clazz)) {
-                component = newInstance(clazz, currentWindow().getComponent(), new JInternalFrameOperator.JInternalFrameByTitleFinder(locatorMap.get("title")));
+                component = newInstance(clazz,
+                                        currentWindow().getComponent(),
+                                        new JInternalFrameOperator.JInternalFrameByTitleFinder(
+                                                locatorMap.get("title")));
             } else {
-                throw new JemmyDSLException("Unsupported component type for location by text locator: " + locator);
+                throw new JemmyDSLException(
+                        "Unsupported component type for location by text locator: " + locator);
             }
         } else {
             throw new JemmyDSLException("Unsupported locator: " + locator);
@@ -483,25 +542,30 @@ public class JemmyDSL {
         return component;
     }
 
-    private static <X extends JComponentOperator> X newInstance(Class<X> clazz, ContainerOperator parent,
+    private static <X extends JComponentOperator> X newInstance(Class<X> clazz,
+                                                                ContainerOperator parent,
                                                                 ComponentChooser chooser) {
         try {
             Constructor<X> c = clazz.getConstructor(ContainerOperator.class, ComponentChooser.class);
             return c.newInstance(parent, chooser);
         } catch (Exception e) {
             // Check to see if the nested exception was caused by a regular Jemmy exception
-            if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
+            if (e.getCause() != null && e.getCause() instanceof JemmyException)
+                throw (JemmyException) e.getCause();
             throw new JemmyDSLException(e);
         }
     }
 
-    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz, Class<Y> componentClass, JComponent component) {
+    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz,
+                                                                   Class<Y> componentClass,
+                                                                   JComponent component) {
         try {
             Constructor<X> c = findConstructor(clazz, componentClass);
             return c.newInstance(component);
         } catch (Exception e) {
             // Check to see if the nested exception was caused by a regular Jemmy exception
-            if (e.getCause() != null && e.getCause() instanceof JemmyException) throw (JemmyException) e.getCause();
+            if (e.getCause() != null && e.getCause() instanceof JemmyException)
+                throw (JemmyException) e.getCause();
             throw new JemmyDSLException(e);
         }
     }
@@ -511,9 +575,11 @@ public class JemmyDSL {
         Constructor<X>[] cs = (Constructor<X>[]) clazz.getConstructors();
         for (Constructor<X> c : cs) {
             final Class<?>[] types = c.getParameterTypes();
-            if (types.length == 1 && types[0].isAssignableFrom(componentClass)) return c;
+            if (types.length == 1 && types[0].isAssignableFrom(componentClass))
+                return c;
         }
-        throw new JemmyDSLException("Could not find suitable constructor in class " + clazz.getCanonicalName());
+        throw new JemmyDSLException("Could not find suitable constructor in class "
+                + clazz.getCanonicalName());
     }
 
     public static JComponent getSwingComponentById(String id) {
@@ -523,7 +589,8 @@ public class JemmyDSL {
 
     public static Dialog getDialogById(String id) {
         ComponentOperator op = componentMap.getComponent(id);
-        if (!(op instanceof JDialogOperator)) return null;
+        if (!(op instanceof JDialogOperator))
+            return null;
         return new Dialog((JDialog) op.getSource());
     }
 
@@ -545,7 +612,7 @@ public class JemmyDSL {
 
     /**
      * Gets the menu bar for the last activated frame.
-     *
+     * 
      * @return The menu bar
      */
     public static MenuBar menuBar() {
@@ -579,8 +646,8 @@ public class JemmyDSL {
         }
     }
 
-
-    private static void waitComponentDisabled(final ComponentOperator op) throws InterruptedException {
+    private static void waitComponentDisabled(final ComponentOperator op)
+        throws InterruptedException {
         Waiter waiter = new Waiter(new Waitable() {
             public Object actionProduced(Object obj) {
                 if (((java.awt.Component) obj).isEnabled()) {
@@ -595,11 +662,13 @@ public class JemmyDSL {
             }
         });
         waiter.setOutput(op.getOutput());
-        waiter.setTimeoutsToCloneOf(op.getTimeouts(), "ComponentOperator.WaitComponentEnabledTimeout");
+        waiter.setTimeoutsToCloneOf(op.getTimeouts(),
+                                    "ComponentOperator.WaitComponentEnabledTimeout");
         waiter.waitAction(op.getSource());
     }
 
-    private static void waitComponentChecked(final JToggleButtonOperator op, final boolean checked) throws InterruptedException {
+    private static void waitComponentChecked(final JToggleButtonOperator op, final boolean checked)
+        throws InterruptedException {
         Waiter waiter = new Waiter(new Waitable() {
             public Object actionProduced(Object obj) {
                 if (((JToggleButton) obj).isSelected() != checked) {
@@ -614,26 +683,43 @@ public class JemmyDSL {
             }
         });
         waiter.setOutput(op.getOutput());
-        waiter.setTimeoutsToCloneOf(op.getTimeouts(), "ComponentOperator.WaitComponentEnabledTimeout");
+        waiter.setTimeoutsToCloneOf(op.getTimeouts(),
+                                    "ComponentOperator.WaitComponentEnabledTimeout");
         waiter.waitAction(op.getSource());
     }
 
     private static int convertKey(String keyString) {
-        if ("Tab".equalsIgnoreCase(keyString)) return KeyEvent.VK_TAB;
-        else if ("Enter".equalsIgnoreCase(keyString)) return KeyEvent.VK_ENTER;
-        else if ("End".equalsIgnoreCase(keyString)) return KeyEvent.VK_END;
-        else if ("Backspace".equalsIgnoreCase(keyString)) return KeyEvent.VK_BACK_SPACE;
-        else if ("Delete".equalsIgnoreCase(keyString)) return KeyEvent.VK_DELETE;
-        else if ("Up".equalsIgnoreCase(keyString)) return KeyEvent.VK_UP;
-        else if ("Down".equalsIgnoreCase(keyString)) return KeyEvent.VK_DOWN;
-        else if ("Right".equalsIgnoreCase(keyString)) return KeyEvent.VK_RIGHT;
-        else if ("Left".equalsIgnoreCase(keyString)) return KeyEvent.VK_LEFT;
-        else if ("Home".equalsIgnoreCase(keyString)) return KeyEvent.VK_HOME;
-        else if ("End".equalsIgnoreCase(keyString)) return KeyEvent.VK_END;
-        else if ("F4".equalsIgnoreCase(keyString)) return KeyEvent.VK_F4;
-        else if ("F5".equalsIgnoreCase(keyString)) return KeyEvent.VK_F5;
-        else if ("Space".equalsIgnoreCase(keyString)) return KeyEvent.VK_SPACE;
-        else throw new UnsupportedFeatureException("Type special for " + keyString + " not supported");
+        if ("Tab".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_TAB;
+        else if ("Enter".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_ENTER;
+        else if ("End".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_END;
+        else if ("Backspace".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_BACK_SPACE;
+        else if ("Delete".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_DELETE;
+        else if ("Up".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_UP;
+        else if ("Down".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_DOWN;
+        else if ("Right".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_RIGHT;
+        else if ("Left".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_LEFT;
+        else if ("Home".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_HOME;
+        else if ("End".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_END;
+        else if ("F4".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_F4;
+        else if ("F5".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_F5;
+        else if ("Space".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_SPACE;
+        else
+            throw new UnsupportedFeatureException("Type special for " + keyString
+                    + " not supported");
     }
 
     public static abstract class Component {
@@ -747,7 +833,8 @@ public class JemmyDSL {
 
         public void assertText(String text) {
             final String t = text;
-            if (text == null) text = "";
+            if (text == null)
+                text = "";
             java.awt.Component c = component.findSubComponent(new ComponentChooser() {
 
                 @Override
@@ -757,22 +844,26 @@ public class JemmyDSL {
 
                 @Override
                 public boolean checkComponent(java.awt.Component comp) {
-                    if (!comp.isVisible()) return false;
+                    if (!comp.isVisible())
+                        return false;
 
                     if (comp instanceof JTextField) {
                         String compText = ((JTextField) comp).getText();
-                        if (compText == null) compText = "";
+                        if (compText == null)
+                            compText = "";
                         return t.equals(compText);
                     } else if (comp instanceof JLabel) {
                         String compText = ((JLabel) comp).getText();
-                        if (compText == null) compText = "";
+                        if (compText == null)
+                            compText = "";
                         return t.equals(compText);
                     }
                     return false;
                 }
             });
             if (c == null) {
-                throw new AssertionFailedException("assert_dialog: could not find component with text " + text);
+                throw new AssertionFailedException(
+                        "assert_dialog: could not find component with text " + text);
             }
         }
     }
@@ -806,7 +897,8 @@ public class JemmyDSL {
         public TextField type(char key) {
             component.typeKey(key);
             if (!isRobotMode()) {
-                // This is a hack because type key in queue mode does not wait for events to be fired
+                // This is a hack because type key in queue mode does not wait for events to be
+                // fired
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -841,8 +933,12 @@ public class JemmyDSL {
 
         public TextField clickCharPosition(int pos, String modifiers, int count) {
             FontMetrics fm = component.getFontMetrics(component.getFont());
-            component.clickMouse(fm.stringWidth(component.getText().substring(0, pos)) + component.getInsets().left,
-                                 component.getCenterYForClick(), count, KeyEvent.BUTTON1_MASK, convertModifiers(modifiers));
+            component.clickMouse(fm.stringWidth(component.getText().substring(0, pos))
+                                         + component.getInsets().left,
+                                 component.getCenterYForClick(),
+                                 count,
+                                 KeyEvent.BUTTON1_MASK,
+                                 convertModifiers(modifiers));
             return this;
         }
     }
@@ -901,7 +997,8 @@ public class JemmyDSL {
             } else if (selectedItem.containsKey("index")) {
                 select(Integer.parseInt(selectedItem.get("index")));
             } else {
-                throw new IllegalParametersException("Illegal parameters " + text + " for select command");
+                throw new IllegalParametersException("Illegal parameters " + text
+                        + " for select command");
             }
         }
 
@@ -1027,8 +1124,7 @@ public class JemmyDSL {
 
     public static class TableOperator extends JTableOperator {
 
-        public static class XJTableByCellFinder extends JTableByCellFinder
-        {
+        public static class XJTableByCellFinder extends JTableByCellFinder {
 
             private final String label;
             private final int row;
@@ -1039,42 +1135,40 @@ public class JemmyDSL {
             public boolean checkComponent(java.awt.Component comp) {
                 if (!"".equals(label)) {
                     return super.checkComponent(comp);
-                } else if(comp instanceof JTable) {
-                    if(((JTable)comp).getRowCount() > row && ((JTable)comp).getColumnCount() > column) {
+                } else if (comp instanceof JTable) {
+                    if (((JTable) comp).getRowCount() > row
+                            && ((JTable) comp).getColumnCount() > column) {
                         int r = row;
-                        if(r == -1) {
-                            int[] rows = ((JTable)comp).getSelectedRows();
-                            if(rows.length != 0) {
+                        if (r == -1) {
+                            int[] rows = ((JTable) comp).getSelectedRows();
+                            if (rows.length != 0) {
                                 r = rows[0];
                             } else {
-                                return(false);
+                                return (false);
                             }
                         }
                         int c = column;
-                        if(c == -1) {
-                            int[] columns = ((JTable)comp).getSelectedColumns();
-                            if(columns.length != 0) {
+                        if (c == -1) {
+                            int[] columns = ((JTable) comp).getSelectedColumns();
+                            if (columns.length != 0) {
                                 c = columns[0];
                             } else {
-                                return(false);
+                                return (false);
                             }
                         }
-                        Object value = ((JTable)comp).getValueAt(r, c);
-                        if(value == null) {
+                        Object value = ((JTable) comp).getValueAt(r, c);
+                        if (value == null) {
                             value = "";
                         }
-                        return(comparator.equals(value.toString(),
-                                                 label));
+                        return (comparator.equals(value.toString(), label));
                     }
                 }
 
-
-
-                return(false);
+                return (false);
             }
 
             public XJTableByCellFinder(String lb, int r, int c, StringComparator comparator) {
-                super(lb,r,c,comparator);
+                super(lb, r, c, comparator);
                 this.label = lb;
                 this.row = r;
                 this.column = c;
@@ -1085,22 +1179,20 @@ public class JemmyDSL {
                 this(lb, r, c, Operator.getDefaultStringComparator());
             }
 
-
         }
 
         public TableOperator(JTable b) {
             super(b);
         }
         /**
-         * Overridden to prevent trying to scroll to the row header
-         * (which can't be done as the row header is located totally to the left of the scroll bar).
+         * Overridden to prevent trying to scroll to the row header (which can't be done as the row
+         * header is located totally to the left of the scroll bar).
          */
         @Override
         public void scrollToCell(int row, int column) {
             // try to find JScrollPane under.
-            JScrollPane scroll = (JScrollPane)getContainer(new JScrollPaneOperator.
-                                                           JScrollPaneFinder(ComponentSearcher.
-                                                                             getTrueChooser("JScrollPane")));
+            JScrollPane scroll = (JScrollPane) getContainer(new JScrollPaneOperator.JScrollPaneFinder(
+                    ComponentSearcher.getTrueChooser("JScrollPane")));
             if (scroll == null) {
                 return;
             }
@@ -1179,7 +1271,10 @@ public class JemmyDSL {
             component.waitState(new ComponentChooser() {
                 @Override
                 public boolean checkComponent(java.awt.Component comp) {
-                    return ((JTableHeader) comp).getColumnModel().getColumn(col).getHeaderValue().equals(title);
+                    return ((JTableHeader) comp).getColumnModel()
+                        .getColumn(col)
+                        .getHeaderValue()
+                        .equals(title);
                 }
 
                 @Override
@@ -1267,7 +1362,8 @@ public class JemmyDSL {
         }
 
         public MenuBar clickMenu(int... indexes) {
-            if (indexes.length == 0) return this;
+            if (indexes.length == 0)
+                return this;
             String[] texts = new String[indexes.length];
             JMenu menu = component.getMenu(indexes[0]);
             texts[0] = menu.getText();
@@ -1288,14 +1384,13 @@ public class JemmyDSL {
         }
 
         public MenuBar clickMenu(String... texts) {
-            System.out.println("Clicking menu . Texts: " + Arrays.toString(texts));
-
-            if (texts.length == 0) return this;
+            if (texts.length == 0)
+                return this;
             component.showMenuItem(texts[0]);
             for (int i = 1; i < texts.length; i++) {
                 String text = texts[i];
                 System.out.println("Callig showMenuItem for " + text);
-                new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[] {text});
+                new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[]{text});
             }
             new JMenuItemOperator(currentWindow().getComponent(), texts[texts.length - 1]).clickMouse();
             return this;
@@ -1311,8 +1406,7 @@ public class JemmyDSL {
     public static class Menu extends Container {
         private JMenuOperator component;
 
-        public Menu() {
-        }
+        public Menu() {}
 
         @Override
         public JMenuOperator getComponent() {
