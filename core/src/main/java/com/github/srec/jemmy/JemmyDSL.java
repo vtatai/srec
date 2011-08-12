@@ -1389,7 +1389,6 @@ public class JemmyDSL {
             component.showMenuItem(texts[0]);
             for (int i = 1; i < texts.length; i++) {
                 String text = texts[i];
-                System.out.println("Callig showMenuItem for " + text);
                 new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[]{text});
             }
             new JMenuItemOperator(currentWindow().getComponent(), texts[texts.length - 1]).clickMouse();
