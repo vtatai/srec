@@ -3,7 +3,7 @@
 	<groupId>com.github.srec</groupId>
 	<artifactId>srec</artifactId>
 	<packaging>pom</packaging>
-	<version><!-- GLOBAL VERSION-->0.3.8<!-- GLOBAL VERSION--></version>
+	<version><!-- GLOBAL VERSION-->0.3.9-SNAPSHOT<!-- GLOBAL VERSION--></version>
 	<name>srec</name>
 
 	<description>srec is a Java Swing record / replay tool</description>
