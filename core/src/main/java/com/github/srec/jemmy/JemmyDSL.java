@@ -717,6 +717,8 @@ public class JemmyDSL {
             return KeyEvent.VK_F5;
         else if ("Space".equalsIgnoreCase(keyString))
             return KeyEvent.VK_SPACE;
+		else if ("F7".equalsIgnoreCase(keyString))
+            return KeyEvent.VK_F7;
         else
             throw new UnsupportedFeatureException("Type special for " + keyString
                     + " not supported");
