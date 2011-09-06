@@ -449,7 +449,7 @@ public class JemmyDSL {
     }
 
     public static void typeSpecial(String locator, String keyString, String modifiers) {
-        final JComponentOperator operator = find(locator, JComponentOperator.class);
+        final ContainerOperator<?> operator = find(locator, ContainerOperator.class);
 
         if (operator == null)
             throw new JemmyDSLException("Could not find component for typing key " + locator);
@@ -481,7 +481,7 @@ public class JemmyDSL {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
+    public static <X extends ContainerOperator<?>> X find(String locator, Class<X> clazz) {
         Map<String, String> locatorMap = Utils.parseLocator(locator);
         X component;
         if (locatorMap.containsKey("name")) {
@@ -542,7 +542,7 @@ public class JemmyDSL {
         return component;
     }
 
-    private static <X extends JComponentOperator> X newInstance(Class<X> clazz,
+    private static <X extends ContainerOperator<?>> X newInstance(Class<X> clazz,
                                                                 ContainerOperator parent,
                                                                 ComponentChooser chooser) {
         try {
@@ -556,7 +556,7 @@ public class JemmyDSL {
         }
     }
 
-    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz,
+    private static <X extends ContainerOperator<?>, Y> X newInstance(Class<X> clazz,
                                                                    Class<Y> componentClass,
                                                                    JComponent component) {
         try {
@@ -717,7 +717,7 @@ public class JemmyDSL {
             return KeyEvent.VK_F5;
         else if ("Space".equalsIgnoreCase(keyString))
             return KeyEvent.VK_SPACE;
-		else if ("F7".equalsIgnoreCase(keyString))
+        else if ("F7".equalsIgnoreCase(keyString))
             return KeyEvent.VK_F7;
         else
             throw new UnsupportedFeatureException("Type special for " + keyString
