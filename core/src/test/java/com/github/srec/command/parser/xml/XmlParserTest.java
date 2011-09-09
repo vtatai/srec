@@ -39,7 +39,7 @@ public class XmlParserTest {
         assertEquals(p.getErrors().size(), 0);
         assertEquals(suite.getTestCases().size(), 1);
         TestCase tc = suite.getTestCases().get(0);
-        assertEquals(tc.getExecutionContext().getCommands().size(), 39);
+        assertEquals(tc.getExecutionContext().getCommands().size(), 44);
     }
 
     public void testMethod() {

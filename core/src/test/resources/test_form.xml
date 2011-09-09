@@ -37,14 +37,19 @@
 
         <tab locator="tabbedPane" text="Text"/>
         <type locator="passwordField" text="HELLO NURSE!"/>
+        <assert_not_empty locator="passwordField"/>
         <assert locator="passwordField" text="HELLO NURSE!"/>
         <type locator="formattedTextField" text="HELLO NURSE!"/>
+        <assert_not_empty locator="formattedTextField"/>
         <assert locator="formattedTextField" text="HELLO NURSE!"/>
         <type locator="textArea" text="HELLO NURSE!"/>
+        <assert_not_empty locator="textArea"/>
         <assert locator="textArea" text="HELLO NURSE!"/>
         <type locator="textPane" text="HELLO NURSE!"/>
+        <assert_not_empty locator="textPane"/>
         <assert locator="textPane" text="HELLO NURSE!"/>
         <type locator="editorPane" text="HELLO NURSE!"/>
+        <assert_not_empty locator="editorPane"/>
         <assert locator="editorPane" text="HELLO NURSE!"/>
 
         <tab locator="tabbedPane" text="Table"/>

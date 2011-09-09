@@ -942,8 +942,7 @@ public class JemmyDSL {
         }
         
         public TextField assertNotEmpty() {
-            JTextComponent textField = (JTextComponent) component.getSource();
-            String text = textField.getText();
+            String text = component.getText();
             
             if (text == null || text.length() == 0) {
                 text = "Some text, but there's nothing";
@@ -999,8 +998,7 @@ public class JemmyDSL {
         }
         
         public TextArea assertNotEmpty() {
-            JTextComponent textField = (JTextComponent) component.getSource();
-            String text = textField.getText();
+            String text = component.getText();
             
             if (text == null || text.length() == 0) {
                 text = "Some text, but there's nothing";
