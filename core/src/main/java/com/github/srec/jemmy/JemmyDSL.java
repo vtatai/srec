@@ -71,6 +71,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.table.JTableHeader;
@@ -87,12 +88,15 @@ public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
 
     public enum ComponentType {
-        text_field(JTextFieldOperator.class, JTextField.class), combo_box(JComboBoxOperator.class,
-                JComboBox.class), button(JButtonOperator.class, JButton.class), radio_button(
-                JRadioButtonOperator.class, JRadioButton.class), check_box(JCheckBoxOperator.class,
-                JCheckBox.class), table(TableOperator.class, JTable.class), menu_bar(
-                JMenuBarOperator.class, JMenuBar.class), dialog(JDialogOperator.class,
-                JDialog.class);
+        text_field(JTextFieldOperator.class, JTextField.class), 
+        combo_box(JComboBoxOperator.class, JComboBox.class), 
+        button(JButtonOperator.class, JButton.class), 
+        radio_button(JRadioButtonOperator.class, JRadioButton.class), 
+        check_box(JCheckBoxOperator.class, JCheckBox.class), 
+        table(TableOperator.class, JTable.class), 
+        menu_bar(JMenuBarOperator.class, JMenuBar.class), 
+        dialog(JDialogOperator.class, JDialog.class),
+        text_area(JTextAreaOperator.class, JTextArea.class);
 
         private final Class<? extends ComponentOperator> operatorClass;
         private final Class<? extends java.awt.Component> awtClass;
@@ -121,7 +125,7 @@ public class JemmyDSL {
         props.put("ComponentOperator.WaitStateTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "10000");
-        props.put("JComboBoxOperator.WaitListTimeout", "30000");
+        props.put("JComboBoxOperator.WaitListTimeout", "10000");
         props.put("JScrollBarOperator.WholeScrollTimeout", "10000");
         props.put("JSliderOperator.WholeScrollTimeout", "10000");
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
@@ -339,6 +343,8 @@ public class JemmyDSL {
     private static JComponentOperator convertFind(java.awt.Component comp) {
         if (comp instanceof JComboBox)
             return new JComboBoxOperator((JComboBox) comp);
+        if (comp instanceof JTextArea)
+            return new JTextAreaOperator((JTextArea) comp);
         if (comp instanceof JTextComponent)
             return new JTextFieldOperator((JTextField) comp);
         if (comp instanceof JCheckBox)
@@ -364,6 +370,8 @@ public class JemmyDSL {
     private static Component convertFind(JComponentOperator comp) {
         if (comp instanceof JComboBoxOperator)
             return new ComboBox((JComboBoxOperator) comp);
+        if (comp instanceof JTextAreaOperator)
+            return new TextArea((JTextAreaOperator) comp);
         if (comp instanceof JTextComponentOperator)
             return new TextField((JTextFieldOperator) comp);
         if (comp instanceof JCheckBoxOperator)
@@ -449,7 +457,7 @@ public class JemmyDSL {
     }
 
     public static void typeSpecial(String locator, String keyString, String modifiers) {
-        final ContainerOperator<?> operator = find(locator, ContainerOperator.class);
+        final JComponentOperator operator = find(locator, JComponentOperator.class);
 
         if (operator == null)
             throw new JemmyDSLException("Could not find component for typing key " + locator);
@@ -481,7 +489,7 @@ public class JemmyDSL {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static <X extends ContainerOperator<?>> X find(String locator, Class<X> clazz) {
+    public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
         Map<String, String> locatorMap = Utils.parseLocator(locator);
         X component;
         if (locatorMap.containsKey("name")) {
@@ -542,7 +550,7 @@ public class JemmyDSL {
         return component;
     }
 
-    private static <X extends ContainerOperator<?>> X newInstance(Class<X> clazz,
+    private static <X extends JComponentOperator> X newInstance(Class<X> clazz,
                                                                 ContainerOperator parent,
                                                                 ComponentChooser chooser) {
         try {
@@ -556,7 +564,7 @@ public class JemmyDSL {
         }
     }
 
-    private static <X extends ContainerOperator<?>, Y> X newInstance(Class<X> clazz,
+    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz,
                                                                    Class<Y> componentClass,
                                                                    JComponent component) {
         try {
