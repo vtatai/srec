@@ -157,7 +157,7 @@ public class JemmyDSL {
     }
 
     public static boolean isRobotMode() {
-        return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.SMOOTH_ROBOT_MODEL_MASK;
+        return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.ROBOT_MODEL_MASK;
     }
 
     public static ComponentMap getComponentMap() {
@@ -457,7 +457,7 @@ public class JemmyDSL {
     }
 
     public static void typeSpecial(String locator, String keyString, String modifiers) {
-        final JComponentOperator operator = find(locator, JComponentOperator.class);
+        final ContainerOperator operator = find(locator, ContainerOperator.class);
 
         if (operator == null)
             throw new JemmyDSLException("Could not find component for typing key " + locator);
@@ -489,7 +489,7 @@ public class JemmyDSL {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static <X extends JComponentOperator> X find(String locator, Class<X> clazz) {
+    public static <X extends ContainerOperator> X find(String locator, Class<X> clazz) {
         Map<String, String> locatorMap = Utils.parseLocator(locator);
         X component;
         if (locatorMap.containsKey("name")) {
@@ -550,7 +550,7 @@ public class JemmyDSL {
         return component;
     }
 
-    private static <X extends JComponentOperator> X newInstance(Class<X> clazz,
+    private static <X extends ContainerOperator> X newInstance(Class<X> clazz,
                                                                 ContainerOperator parent,
                                                                 ComponentChooser chooser) {
         try {
@@ -564,7 +564,7 @@ public class JemmyDSL {
         }
     }
 
-    private static <X extends JComponentOperator, Y> X newInstance(Class<X> clazz,
+    private static <X extends ContainerOperator, Y> X newInstance(Class<X> clazz,
                                                                    Class<Y> componentClass,
                                                                    JComponent component) {
         try {
@@ -940,6 +940,17 @@ public class JemmyDSL {
             component.waitText("");
             return this;
         }
+        
+        public TextField assertNotEmpty() {
+            JTextComponent textField = (JTextComponent) component.getSource();
+            String text = textField.getText();
+            
+            if (text == null || text.length() == 0) {
+                text = "Some text, but there's nothing";
+            }
+            component.waitText(text);
+            return this;
+        }
 
         public TextField clickCharPosition(int pos, String modifiers, int count) {
             FontMetrics fm = component.getFontMetrics(component.getFont());
@@ -984,6 +995,17 @@ public class JemmyDSL {
 
         public TextArea assertEmpty() {
             component.waitText("");
+            return this;
+        }
+        
+        public TextArea assertNotEmpty() {
+            JTextComponent textField = (JTextComponent) component.getSource();
+            String text = textField.getText();
+            
+            if (text == null || text.length() == 0) {
+                text = "Some text, but there's nothing";
+            }
+            component.waitText(text);
             return this;
         }
     }
