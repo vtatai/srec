@@ -71,7 +71,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         runTest("test_click_count_on_text_field.xml");
     }
     
-//    public void testSpecialChars() {
-//        runTest("test_specialchars.xml");
-//    }
+    public void testSpecialChars() {
+        runTest("test_specialchars.xml");
+    }
 }

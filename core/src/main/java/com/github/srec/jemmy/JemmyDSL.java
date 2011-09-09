@@ -145,7 +145,7 @@ public class JemmyDSL {
         currentWindow = null;
         JemmyDSL.ignored = Arrays.asList(ignored);
         JemmyProperties.setCurrentOutput(new TestOut(System.in, (PrintStream) null, null));
-        robotMode();
+        dispatchingMode();
     }
 
     public static void robotMode() {
