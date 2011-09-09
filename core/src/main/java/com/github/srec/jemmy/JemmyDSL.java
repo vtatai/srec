@@ -157,7 +157,7 @@ public class JemmyDSL {
     }
 
     public static boolean isRobotMode() {
-        return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.ROBOT_MODEL_MASK;
+        return JemmyProperties.getCurrentDispatchingModel() == JemmyProperties.SMOOTH_ROBOT_MODEL_MASK;
     }
 
     public static ComponentMap getComponentMap() {
