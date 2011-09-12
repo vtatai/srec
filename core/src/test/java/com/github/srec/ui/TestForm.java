@@ -146,7 +146,7 @@ public class TestForm {
                 {"Sharon", "Zakhour",
                         "Speed reading", new Integer(20), new Boolean(true)},
                 {"Philip", "Milne",
-                        "Pool", new Integer(10), new Boolean(false)}
+                        "Pool", "", new Boolean(false)}
         };
 
         table = new JTable(data, columnNames);

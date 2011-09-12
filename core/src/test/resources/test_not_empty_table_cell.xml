@@ -1,0 +1,42 @@
+<suite name="test_not_empty_table" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="1">
+        <window_activate locator="TestForm"/>
+
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu indexes="1,0,1"/>
+
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>Show"/>
+
+        <select locator="calculationCB" item="Future Value"/>
+        <type locator="initialValueTF" text="100"/>
+        <type_special locator="initialValueTF" text="Tab"/>
+        <assert locator="initialValueTF" text="100"/>
+        <select locator="calculationCB" index="1"/>
+        <select locator="calculationCB" index="0"/>
+        <click locator="text=Ok"/>
+        <click locator="cb1"/>
+        <assert_checked locator="cb1" checked="true"/>
+        <assert_enabled locator="textField2" enabled="true"/>
+        <slide locator="slider" value="10"/>
+        <assert_slider locator="slider" value="10"/>
+
+        <tab locator="tabbedPane" text="Table"/>
+        <assert_cell_not_empty table="table" row="0" column="0"/>
+        <assert_cell_not_empty table="table" row="0" column="1"/>
+        <assert_cell_not_empty table="table" row="1" column="0"/>
+        <assert_cell_not_empty table="table" row="1" column="1"/>
+
+        <row_select table="table" first="0" last="0"/>
+        
+        <assert_cell_not_empty table="table" row="0" column="0"/>
+        <assert_cell_not_empty table="table" row="0" column="1"/>
+        <assert_cell_not_empty table="table" row="1" column="0"/>
+        <assert_cell_not_empty table="table" row="1" column="1"/>
+        
+        <assert_cell_not_empty table="table" row="4" column="3"/>
+
+        <close locator="TestForm"/>
+    </test_case>
+</suite>

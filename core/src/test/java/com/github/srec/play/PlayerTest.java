@@ -1,5 +1,7 @@
 package com.github.srec.play;
 
+import java.util.List;
+
 import com.github.srec.testng.AbstractSRecTestNGTest;
 
 import org.testng.annotations.Test;
@@ -73,5 +75,21 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     
     public void testSpecialChars() {
         runTest("test_specialchars.xml");
+    }
+    
+    public void testNotEmptyAndEmptyTableCell() {
+    	Player player = runTest("test_not_empty_table_cell.xml", false);
+    	
+    	List<PlayerError> errors = player.getErrors();
+    	assertEquals(errors.size(), 1);
+    		
+    	PlayerError error = errors.get(0);
+    	assertEquals(error.getLineNumber(), 38);
+    	assertEquals(error.getTestSuite(), "test_not_empty_table");
+    	assertEquals(error.getTestCase(), "1");
+    	assertEquals(error.getOriginatingException().getCause().getMessage(), 
+    			"Wait \"JTable with text \"Some text, but there's nothing\" " +
+    			"in (4, 3) cell\" state to be reached " +
+    			"(ComponentOperator.WaitStateTimeout)");
     }
 }
