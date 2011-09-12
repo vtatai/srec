@@ -1264,6 +1264,22 @@ public class JemmyDSL {
             return this;
         }
 
+        /**
+         * Asserts that a table's cell is not empty, nor null.
+         * 
+         * @param col Column index of the table, starting at 0.
+         * @return Cell's row that is asserted to not be empty.
+         */
+        public Row assertNotEmptyColumn(int col) {
+        	String value = (String) component.getValueAt(index, col);
+
+        	if (value == null || value.length() == 0) {
+        		value = "Some text, but there's nothing";
+        	}
+
+        	return assertColumn(col, value);
+        }
+
         public Row select() {
             component.setRowSelectionInterval(index, index);
             return this;
