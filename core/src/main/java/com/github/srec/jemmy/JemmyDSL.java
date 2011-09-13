@@ -17,7 +17,7 @@ import org.netbeans.jemmy.Waitable;
 import org.netbeans.jemmy.Waiter;
 import org.netbeans.jemmy.operators.AbstractButtonOperator;
 import org.netbeans.jemmy.operators.ComponentOperator;
-import org.netbeans.jemmy.operators.ContainerOperator; 
+import org.netbeans.jemmy.operators.ContainerOperator;
 import org.netbeans.jemmy.operators.JButtonOperator;
 import org.netbeans.jemmy.operators.JCheckBoxOperator;
 import org.netbeans.jemmy.operators.JComboBoxOperator;
@@ -75,6 +75,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.JTextComponent;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
