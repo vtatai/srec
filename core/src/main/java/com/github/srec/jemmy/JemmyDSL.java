@@ -1335,6 +1335,32 @@ public class JemmyDSL {
             });
             return this;
         }
+		
+		/**
+         * Clicks in a column's table header. <p/>
+         * 
+         * @param columnIndex Column' index. It's zero based. 
+         * @param count Number of clicks
+         */
+        public void click(int columnIndex, int count) {
+            TableColumnModel columnModel = 
+                    component.getTable().getColumnModel();
+            int columnCenterX = 0;
+            
+            for (int i=0; i<columnIndex; i++) {
+                columnCenterX += columnModel.getColumn(i).getWidth();
+            }
+            
+            // get the X value for the center of the column
+            columnCenterX += (columnModel.getColumn(columnIndex)
+                    .getWidth() / 2);
+            
+            component.clickMouse(columnCenterX, 
+                                 component.getCenterYForClick(), 
+                                 count, 
+                                 InputEvent.BUTTON1_MASK, 
+                                 convertModifiers(null));
+        }
     }
 
     public static class Label {

@@ -486,11 +486,11 @@
     </xs:complexType>
     <xs:complexType name="click_headerType">
         <xs:annotation><xs:documentation>
-            Command which clicks a table header column that has the given text
+            Command which clicks in a column's table header
         </xs:documentation></xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute type="xs:string" name="table" use="required"/>
+                <xs:attribute type="xs:string" name="locator" use="required"/>
                 <xs:attribute type="xs:string" name="column" use="required"/>
                 <xs:attribute type="xs:string" name="count" use="optional"/>
             </xs:extension>

@@ -92,4 +92,8 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     			"in (4, 3) cell\" state to be reached " +
     			"(ComponentOperator.WaitStateTimeout)");
     }
+	
+	public void testClickHeader() {
+        runTest("test_click_header.xml");
+    }
 }
