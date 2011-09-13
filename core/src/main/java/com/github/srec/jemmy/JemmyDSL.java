@@ -1346,14 +1346,25 @@ public class JemmyDSL {
         public void click(int columnIndex, int count) {
             TableColumnModel columnModel = 
                     component.getTable().getColumnModel();
+
             int columnCenterX = 0;
+            int counter = 0;
+            int convertedColIndex = 0;
             
-            for (int i=0; i<columnIndex; i++) {
-                columnCenterX += columnModel.getColumn(i).getWidth();
+            while (counter < columnIndex) {
+                int columnWidth = columnModel.getColumn(convertedColIndex)
+                        .getWidth();
+                
+                if (columnWidth > 0) {
+                    columnCenterX += columnWidth;
+                    counter++;
+                }
+                
+                convertedColIndex++;
             }
             
             // get the X value for the center of the column
-            columnCenterX += (columnModel.getColumn(columnIndex)
+            columnCenterX += (columnModel.getColumn(convertedColIndex)
                     .getWidth() / 2);
             
             component.clickMouse(columnCenterX, 
