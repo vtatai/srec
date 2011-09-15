@@ -9,12 +9,12 @@ package com.github.srec;
 public class SRecException extends RuntimeException {
 	
 	/**
-	 * Constructs a new SRec exception with null as its detail message.
+	 * Constructs a new SRec exception with null as its detail message. <p/>
 	 */
     public SRecException() {}
 
     /**
-     * Constructs a new SRec exception with the specified detail message.<p/>
+     * Constructs a new SRec exception with the specified detail message. <p/>
      * 
      * @param message the detail message.
      */
