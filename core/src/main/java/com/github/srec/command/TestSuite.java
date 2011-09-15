@@ -10,36 +10,63 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
  * the specific language governing permissions and limitations under the License.
  */
-
 package com.github.srec.command;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Represents a set of related test cases for a specific component or 
+ * system.
+ * 
  * @author Victor Tatai
  */
 public class TestSuite {
     private String name;
     private List<TestCase> testCases = new ArrayList<TestCase>();
 
+    /**
+     * Creates a test suite with the given name. <p/>
+     * 
+     * @param name the name of the suite.
+     */
     public TestSuite(String name) {
         this.name = name;
     }
 
-    public List<TestCase> getTestCases() {
-        return testCases;
+    /**
+     * Returns all test cases of the suite. <p/>
+     * 
+     * @return test cases.
+     */
+    public List<TestCase> getTestCases() { 
+    	return testCases;
     }
-
+    
+    /**
+     * Sets test cases for the suite. <p/>
+     * 
+     * @param testCases test cases.
+     */
     public void setTestCases(List<TestCase> testCases) {
-        this.testCases = testCases;
+    	this.testCases = testCases;
     }
 
-    public void addTestCase(TestCase testCase) {
-        testCases.add(testCase);
+    /**
+     * Adds a test case to the suite. <p/>
+     * 
+     * @param testCase
+     */
+    public void addTestCase(TestCase testCase) { 
+    	testCases.add(testCase);
     }
 
+    /**
+     * Returns the name of the suite. <p/>
+     * 
+     * @return the name of the suite.
+     */
     public String getName() {
-        return name;
+    	return name;
     }
 }
