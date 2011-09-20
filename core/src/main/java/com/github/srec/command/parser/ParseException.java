@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This exception signals that parse errors have been reached unexpectedly   
+ * while parsing.
+ * 
  * @author Victor Tatai
  */
 public class ParseException extends SRecException {
