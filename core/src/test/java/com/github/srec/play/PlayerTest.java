@@ -96,4 +96,10 @@ public class PlayerTest extends AbstractSRecTestNGTest {
 	public void testClickHeader() {
         runTest("test_click_header.xml");
     }
+    
+    public void testAssertDialog() {
+    	Player p = runTest("test_assert_dialog.xml", false);
+        assertEquals(p.getErrors().size(), 1);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 17);
+    }
 }

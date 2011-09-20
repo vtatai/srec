@@ -1,0 +1,21 @@
+<suite name="test_assert_dialog" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="1">
+        <window_activate locator="TestForm"/>
+
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>Show"/>
+
+        <find locator="dialogBtn" id="btn" findComponentType="button"/>
+        
+        <click locator="id=btn"/>
+        
+        <find_dialog title="Test Dialog" id="dlg"/>
+        <assert_dialog id="dlg" text="Test Label 1"/>
+        <assert_dialog id="dlg" text="Test TextField 2"/>
+        
+        <assert_dialog id="dlg" text="No text"/>
+        
+        <close locator="TestForm"/>
+    </test_case>
+</suite>
