@@ -21,21 +21,28 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     }
 
     public void testError() {
-        Player p = runTest("test_form_error.xml", false);
+        Player p = runTest("test_form_error.xml", false, false);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
         assertEquals(p.getErrors().get(0).getLineNumber(), 19);
         assertEquals(p.getErrors().get(1).getLineNumber(), 27);
     }
+    
+    public void testErrorFailFast() {
+        Player p = runTest("test_form_error.xml", false, true);
+        p.printErrors();
+        assertEquals(p.getErrors().size(), 1);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
+    }
 
     public void testFindDialog() {
-        Player p = runTest("test_find_dialog.xml", false);
+        Player p = runTest("test_find_dialog.xml", false, false);
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
 
     public void testFindFrame() {
-        Player p = runTest("test_find_frame.xml", false);
+        Player p = runTest("test_find_frame.xml", false, false);
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
@@ -78,7 +85,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     }
     
     public void testNotEmptyAndEmptyTableCell() {
-    	Player player = runTest("test_not_empty_table_cell.xml", false);
+    	Player player = runTest("test_not_empty_table_cell.xml", false, false);
     	
     	List<PlayerError> errors = player.getErrors();
     	assertEquals(errors.size(), 1);

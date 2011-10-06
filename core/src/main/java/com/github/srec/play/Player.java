@@ -5,6 +5,7 @@ import com.github.srec.command.ExecutionContextFactory;
 import com.github.srec.command.TestCase;
 import com.github.srec.command.TestSuite;
 import com.github.srec.command.base.Command;
+import com.github.srec.command.base.Command.CommandFlow;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
@@ -37,7 +38,7 @@ import static org.apache.commons.lang.StringUtils.isBlank;
  * @author Victor Tatai
  */
 public class Player {
-    private static final Logger log =  Logger.getLogger(Player.class);
+    private static final Logger log = Logger.getLogger(Player.class);
     private final List<PlayerError> errors = new ArrayList<PlayerError>();
     private long commandInterval = 50;
     private Parser parser;
@@ -52,6 +53,8 @@ public class Player {
     private String[] classToRunArgs;
 
     private final boolean singleInstanceMode;
+    private boolean failFast;
+    private boolean failed;
 
     public Player(boolean singleInstanceMode) {
         this.singleInstanceMode = singleInstanceMode;
@@ -61,23 +64,29 @@ public class Player {
         this(false);
     }
 
-    public Player init() {
+    public Player init(boolean failFast) {
         JemmyDSL.init();
-        String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
+        String intervalString = PropertiesReader.getProperties()
+            .getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
         if (!isBlank(intervalString)) {
             commandInterval = Integer.parseInt(intervalString);
         }
 
-        //Overrides properties file if using the command line param
+        // Overrides properties file if using the command line param
         commandInterval = getIntProperty("com.github.srec.commandInterval", commandInterval);
 
         parser = ParserFactory.create();
+        this.failFast = failFast;
         return this;
     }
 
-    public static long getIntProperty(String key, long defaultValue){
+    public Player init() {
+        return init(true);
+    }
+
+    public static long getIntProperty(String key, long defaultValue) {
         String s = System.getProperty(key);
-        if (isBlank(s) || s.startsWith("${")){
+        if (isBlank(s) || s.startsWith("${")) {
             return defaultValue;
         } else {
             try {
@@ -92,15 +101,17 @@ public class Player {
 
     /**
      * Plays a script.
-     *
+     * 
      * @param file The script file name
      * @param testCases The test case to run, use null to run all
-     * @param className The class name of the application under test, null to not launch - notice that the application is restarted for each TC
+     * @param className The class name of the application under test, null to not launch - notice
+     *            that the application is restarted for each TC
      * @param args The arguments to pass to the class above
      * @return The created player
      * @throws IOException The exception
      */
-    public Player play(File file, String[] testCases, String className, String[] args) throws IOException {
+    public Player play(File file, String[] testCases, String className, String[] args)
+        throws IOException {
         classToRun = className;
         classToRunArgs = args;
         play(file, testCases);
@@ -112,7 +123,8 @@ public class Player {
     }
 
     public Player play(File file, String[] testCases) throws IOException {
-        if (file == null) return null;
+        if (file == null)
+            return null;
         if (file.isDirectory()) {
             log.info("Playing files inside dir: " + file.getCanonicalPath());
             // Run all scripts inside a directory
@@ -143,22 +155,27 @@ public class Player {
 
     /**
      * Plays a script.
-     *
+     * 
      * @param is The input stream from where to read the script
      * @param file The originating file, may be null
-     * @param testCases The names of the test cases to play, if null or empty all test cases are played
+     * @param testCases The names of the test cases to play, if null or empty all test cases are
+     *            played
      * @return The player
      * @throws IOException in case there is an error reading the file
      */
     public Player play(InputStream is, File file, String[] testCases) throws IOException {
-        ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
+        ExecutionContext context = ExecutionContextFactory.getInstance()
+            .create(null, null, file, file.getParentFile().getCanonicalPath());
         TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
-        if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
+        if (parser.getErrors().size() > 0)
+            throw new ParseException(parser.getErrors());
         log.debug("Launching test suite: " + suite.getName());
-        Set<String> testCasesSet = testCases == null || testCases.length == 0 ? null : new HashSet<String>(Arrays.asList(testCases));
+        Set<String> testCasesSet = testCases == null || testCases.length == 0 ? null
+                : new HashSet<String>(Arrays.asList(testCases));
         boolean appStarted = false;
         for (TestCase testCase : suite.getTestCases()) {
-            if (testCasesSet != null && !testCasesSet.contains(testCase.getName())) continue;
+            if (testCasesSet != null && !testCasesSet.contains(testCase.getName()))
+                continue;
             if ((!appStarted || !singleInstanceMode) && classToRun != null) {
                 runSwingMain(classToRun, classToRunArgs);
                 appStarted = true;
@@ -177,6 +194,9 @@ public class Player {
     }
 
     public Command.CommandFlow play(ExecutionContext context) {
+        if (failed && failFast) {
+            return CommandFlow.EXIT;
+        }
         ComponentMap formerComponentMap = JemmyDSL.getComponentMap();
         JemmyDSL.setComponentMap(new ComponentMapSymbolsAdapter(context.getSymbols()));
         try {
@@ -184,10 +204,15 @@ public class Player {
                 log.debug("Running line: " + getLine(command) + ", command: " + command);
                 try {
                     Command.CommandFlow flow = command.run(context);
-                    if (flow == Command.CommandFlow.NEXT) {}
-                    else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
-                    else throw new PlayerException("Flow management instruction " + flow + " from command "
-                                                   + command.getName() + " not supported");
+                    switch (flow) {
+                        case NEXT :
+                            break;
+                        case EXIT :
+                            return Command.CommandFlow.EXIT;
+                        default :
+                            throw new PlayerException("Flow management instruction " + flow
+                                    + " from command " + command.getName() + " not supported");
+                    }
                 } catch (CommandExecutionException e) {
                     handleError(context.getTestSuite(), context.getTestCase(), command, e);
                     break;
@@ -205,17 +230,22 @@ public class Player {
     }
 
     private String getLine(Command command) {
-        if (command.getLocation() == null) return "<NO LINE>";
+        if (command.getLocation() == null)
+            return "<NO LINE>";
         return "" + command.getLocation().getLineNumber();
     }
 
-    private void handleError(TestSuite testSuite, TestCase testCase, Command command, CommandExecutionException e) {
+    private void handleError(TestSuite testSuite,
+                             TestCase testCase,
+                             Command command,
+                             CommandExecutionException e) {
         PlayerError error = new PlayerError(testSuite == null ? "" : testSuite.getName(),
                 testCase == null ? "" : testCase.getName(), command.getLocation(), e);
         System.err.println("Error on line " + command.getLocation().getLineNumber() + ":");
         System.err.println(command.getLocation().getLine());
         errors.add(error);
-        log.debug("Error in script play", e);
+        failed = true;
+        log.warn("Error in script play", e);
     }
 
     public List<PlayerError> getErrors() {

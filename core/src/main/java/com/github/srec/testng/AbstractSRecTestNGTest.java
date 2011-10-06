@@ -46,6 +46,9 @@ public abstract class AbstractSRecTestNGTest {
         this.singleInstanceMode = singleInstanceMode;
     }
 
+    protected Player runTest(String script, boolean failOnError, String... testCases) {
+        return runTest(script, failOnError, true, testCases);
+    }
     /**
      * Runs an entire suite or a single test case.
      *
@@ -54,10 +57,10 @@ public abstract class AbstractSRecTestNGTest {
      * @param failOnError true if an error should result in a test failure
      * @return The errors
      */
-    protected Player runTest(String script, boolean failOnError, String... testCases) {
+    protected Player runTest(String script, boolean failOnError, boolean failFast, String... testCases) {
         try {
             Player p = new Player(singleInstanceMode)
-            .init()
+            .init(failFast)
             .play(new File(scriptDir + File.separator + script), testCases, className, params);
             p.printErrors();
             if (failOnError) {
