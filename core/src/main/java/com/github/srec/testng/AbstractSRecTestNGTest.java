@@ -19,6 +19,8 @@ import com.github.srec.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
@@ -46,9 +48,6 @@ public abstract class AbstractSRecTestNGTest {
         this.singleInstanceMode = singleInstanceMode;
     }
 
-    protected Player runTest(String script, boolean failOnError, String... testCases) {
-        return runTest(script, failOnError, true, testCases);
-    }
     /**
      * Runs an entire suite or a single test case.
      *
@@ -57,11 +56,12 @@ public abstract class AbstractSRecTestNGTest {
      * @param failOnError true if an error should result in a test failure
      * @return The errors
      */
-    protected Player runTest(String script, boolean failOnError, boolean failFast, String... testCases) {
+    protected Player runTest(String script, boolean failOnError, String... testCases) {
         try {
             Player p = new Player(singleInstanceMode)
-            .init(failFast)
-            .play(new File(scriptDir + File.separator + script), testCases, className, params);
+            .init()
+            .play(new File(scriptDir + File.separator + script), testCases, 
+                  className, params, getProperties());
             p.printErrors();
             if (failOnError) {
                 assertEquals(p.getErrors().size(), 0);
@@ -102,5 +102,9 @@ public abstract class AbstractSRecTestNGTest {
      */
     protected Player runTest(String script) {
         return runTest(script, true);
+    }
+    
+    protected Map<String, Object> getProperties() {
+        return new HashMap<String, Object>();
     }
 }

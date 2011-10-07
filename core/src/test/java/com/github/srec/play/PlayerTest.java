@@ -1,9 +1,13 @@
 package com.github.srec.play;
 
+import java.awt.Color;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.srec.testng.AbstractSRecTestNGTest;
 
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -21,28 +25,21 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     }
 
     public void testError() {
-        Player p = runTest("test_form_error.xml", false, false);
+        Player p = runTest("test_form_error.xml", false);
         p.printErrors();
         assertEquals(p.getErrors().size(), 2);
         assertEquals(p.getErrors().get(0).getLineNumber(), 19);
         assertEquals(p.getErrors().get(1).getLineNumber(), 27);
     }
-    
-    public void testErrorFailFast() {
-        Player p = runTest("test_form_error.xml", false, true);
-        p.printErrors();
-        assertEquals(p.getErrors().size(), 1);
-        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
-    }
 
     public void testFindDialog() {
-        Player p = runTest("test_find_dialog.xml", false, false);
+        Player p = runTest("test_find_dialog.xml", false);
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
 
     public void testFindFrame() {
-        Player p = runTest("test_find_frame.xml", false, false);
+        Player p = runTest("test_find_frame.xml", false);
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 24);
     }
@@ -85,7 +82,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     }
     
     public void testNotEmptyAndEmptyTableCell() {
-    	Player player = runTest("test_not_empty_table_cell.xml", false, false);
+    	Player player = runTest("test_not_empty_table_cell.xml", false);
     	
     	List<PlayerError> errors = player.getErrors();
     	assertEquals(errors.size(), 1);
@@ -108,5 +105,17 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     	Player p = runTest("test_assert_dialog.xml", false);
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 17);
+    }
+    
+    @Override
+    protected Map<String, Object> getProperties() {
+    	Map<String, Object> properties = new HashMap<String, Object>();
+    	properties.put("MAX_VALUE", 100);
+    	properties.put("FOREGROUND_COLOR", Color.BLUE);
+        return properties;
+    }
+    
+    public void testAssertField() {
+    	runTest("test_assert_field_property.xml");
     }
 }

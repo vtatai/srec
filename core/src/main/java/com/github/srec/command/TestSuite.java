@@ -14,6 +14,7 @@ package com.github.srec.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a set of related test cases for a specific component or 
@@ -24,6 +25,7 @@ import java.util.List;
 public class TestSuite {
     private String name;
     private List<TestCase> testCases = new ArrayList<TestCase>();
+    private Map<String, Object> properties;
 
     /**
      * Creates a test suite with the given name. <p/>
@@ -68,5 +70,13 @@ public class TestSuite {
      */
     public String getName() {
     	return name;
+    }
+    
+    public Object getProperty(String key) {
+        return properties.get(key);
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
     }
 }

@@ -285,7 +285,7 @@ public class JemmyDSL {
         }
     }
 
-    private static java.awt.Component findComponent(String locator, java.awt.Component component) {
+    public static java.awt.Component findComponent(String locator, java.awt.Component component) {
         assert locator != null;
         String[] strs = parseLocator(locator);
         if (strs.length != 2)
