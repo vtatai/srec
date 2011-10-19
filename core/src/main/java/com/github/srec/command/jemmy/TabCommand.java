@@ -15,6 +15,7 @@ package com.github.srec.command.jemmy;
 
 import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
+import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 import org.netbeans.jemmy.JemmyException;
@@ -29,11 +30,23 @@ import static com.github.srec.jemmy.JemmyDSL.tabbedPane;
 @SRecCommand
 public class TabCommand extends JemmyEventCommand {
     public TabCommand() {
-        super("tab", params(LOCATOR, Type.STRING, "text", Type.STRING));
+        super("tab", param(LOCATOR, Type.STRING), 
+        		     param("text", Type.STRING, true, null),
+        		     param("index", Type.STRING, true, null));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        tabbedPane(coerceToString(params.get(LOCATOR), ctx)).select(coerceToString(params.get("text"), ctx));
+    	String locator = coerceToString(params.get(LOCATOR), ctx);
+    	String text = coerceToString(params.get("text"), ctx);
+    	String indexStr = coerceToString(params.get("index"), ctx);
+    	
+    	if (text != null) {
+    		tabbedPane(locator).select(text);
+    	} else if (indexStr != null) {
+    		tabbedPane(locator).select(Integer.parseInt(indexStr));
+    	} else {
+    		throw new CommandExecutionException("Attribute text or index must be defined in <tab> tag.");
+    	}
     }
 }

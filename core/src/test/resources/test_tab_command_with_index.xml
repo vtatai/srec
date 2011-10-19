@@ -1,0 +1,26 @@
+<suite name="test_click_header" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="1">
+        <window_activate locator="TestForm"/>
+
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>Show"/>
+        
+        <tab locator="tabbedPane" index="0"/>
+        <click locator="text=CheckBox1"/>
+        <tab locator="tabbedPane" index="0"/>
+        <tab locator="tabbedPane" index="1"/>
+        <click locator="passwordField"/>
+        <tab locator="tabbedPane" index="2"/>
+        <click_header locator="table" column="0"/>
+        
+        <tab locator="tabbedPane" index="2"/>
+        <click_header locator="table" column="1"/>
+        <tab locator="tabbedPane" index="0"/>
+        <click locator="text=CheckBox1"/>
+        <tab locator="tabbedPane" index="1"/>
+        <click locator="passwordField"/>
+        
+        <close locator="TestForm"/>
+    </test_case>
+</suite>

@@ -1399,6 +1399,11 @@ public class JemmyDSL {
             component.selectPage(title);
             return this;
         }
+        
+        public TabbedPane select(int index) {
+            component.selectPage(index);
+            return this;
+        }
 
         @Override
         public JTabbedPaneOperator getComponent() {

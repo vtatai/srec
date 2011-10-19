@@ -118,4 +118,8 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testAssertField() {
     	runTest("test_assert_field_property.xml");
     }
+	
+	public void testTabCommandWithIndex() {
+    	runTest("test_tab_command_with_index.xml");
+    }
 }
