@@ -94,9 +94,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     	assertEquals(error.getTestSuite(), "test_not_empty_table");
     	assertEquals(error.getTestCase(), "1");
     	assertEquals(error.getOriginatingException().getCause().getMessage(), 
-    			"Wait \"JTable with text \"Some text, but there's nothing\" " +
-    			"in (4, 3) cell\" state to be reached " +
-    			"(ComponentOperator.WaitStateTimeout)");
+    	             "Table cell (4, 3) is empty.");
     }
 
 	public void testClickHeader() {

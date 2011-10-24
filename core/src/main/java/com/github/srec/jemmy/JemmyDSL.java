@@ -951,9 +951,9 @@ public class JemmyDSL {
             String text = component.getText();
             
             if (text == null || text.length() == 0) {
-                text = "Some text, but there's nothing";
+                throw new AssertionFailedException("TextField [" + component.getName() + "] is empty.");
             }
-            component.waitText(text);
+
             return this;
         }
 
@@ -1007,9 +1007,9 @@ public class JemmyDSL {
             String text = component.getText();
             
             if (text == null || text.length() == 0) {
-                text = "Some text, but there's nothing";
+                throw new AssertionFailedException("TextArea [" + component.getName() + "] is empty.");
             }
-            component.waitText(text);
+
             return this;
         }
     }
@@ -1275,10 +1275,10 @@ public class JemmyDSL {
         	String value = (String) component.getValueAt(index, col);
 
         	if (value == null || value.length() == 0) {
-        		value = "Some text, but there's nothing";
+        		throw new AssertionFailedException("Table cell (" + index + ", " + col + ") is empty.");
         	}
 
-        	return assertColumn(col, value);
+        	return this;
         }
 
         public Row select() {
