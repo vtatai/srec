@@ -23,11 +23,21 @@
         					   expectedObjectType="property"
         				       property="maximum" 
         				       expectedObject="MAX_VALUE"/>
-         
+
+		<assert_field_property locator="slider"
+        					   expectedObjectType="property"
+        				       property="enabled" 
+        				       expectedObject="TRUE_VALUE"/>
+
         <assert_field_property locator="okButton" 
         					   expectedObjectType="property"
         				       property="foreground" 
         				       expectedObject="FOREGROUND_COLOR"/>
+							   
+		<assert_field_property locator="okButton" 
+        					   expectedObjectType="property"
+        				       property="visible" 
+        				       expectedObject="TRUE_VALUE"/>
      
         <assert_field_property locator="loadBtn" 
         					   expectedObjectType="string"

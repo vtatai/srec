@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * Asserts a field property that has a java bean style getter.
+ * Asserts a field property that has a javabean-style getter.
  * The value used to compare can be configured through a test property 
  * or a string.
  */
@@ -69,11 +69,20 @@ public class AssertFieldPropertyCommand extends JemmyEventCommand {
                                                   window.getComponent().getSource());
 
         try {
-            String propertySub = "get" + property.substring(0, 1)
+            String propertyName = property.substring(0, 1)
                     .toUpperCase() + property.substring(1);
+            String propertySub = "get" + propertyName;
             Class<?> cls = object.getClass();
-            Method method = cls.getMethod(propertySub, (Class[]) null);
 
+            Method method = null;
+
+            try {
+                method = cls.getMethod(propertySub, (Class[]) null);
+            } catch (NoSuchMethodException e) {
+                propertySub = "is" + propertyName;
+                method = cls.getMethod(propertySub, (Class[]) null);  
+            }
+             
             return method.invoke(object, (Object[]) null);
         } catch (Exception e) {
             e.printStackTrace();

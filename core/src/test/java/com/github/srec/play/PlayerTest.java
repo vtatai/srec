@@ -1,6 +1,9 @@
 package com.github.srec.play;
 
+import static org.testng.Assert.assertEquals;
+
 import java.awt.Color;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +13,6 @@ import com.github.srec.testng.AbstractSRecTestNGTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
 
 @Test
 public class PlayerTest extends AbstractSRecTestNGTest {
@@ -80,7 +82,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testSpecialChars() {
         runTest("test_specialchars.xml");
     }
-    
+
     public void testNotEmptyAndEmptyTableCell() {
     	Player player = runTest("test_not_empty_table_cell.xml", false);
     	
@@ -96,11 +98,11 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     			"in (4, 3) cell\" state to be reached " +
     			"(ComponentOperator.WaitStateTimeout)");
     }
-	
+
 	public void testClickHeader() {
         runTest("test_click_header.xml");
     }
-    
+
     public void testAssertDialog() {
     	Player p = runTest("test_assert_dialog.xml", false);
         assertEquals(p.getErrors().size(), 1);
@@ -112,13 +114,15 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     	Map<String, Object> properties = new HashMap<String, Object>();
     	properties.put("MAX_VALUE", 100);
     	properties.put("FOREGROUND_COLOR", Color.BLUE);
+		properties.put("TRUE_VALUE", true);
+
         return properties;
     }
-    
+
     public void testAssertField() {
     	runTest("test_assert_field_property.xml");
     }
-	
+
 	public void testTabCommandWithIndex() {
     	runTest("test_tab_command_with_index.xml");
     }
