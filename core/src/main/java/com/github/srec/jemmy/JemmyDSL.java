@@ -26,6 +26,7 @@ import org.netbeans.jemmy.operators.JDialogOperator;
 import org.netbeans.jemmy.operators.JFrameOperator;
 import org.netbeans.jemmy.operators.JInternalFrameOperator;
 import org.netbeans.jemmy.operators.JLabelOperator;
+import org.netbeans.jemmy.operators.JListOperator;
 import org.netbeans.jemmy.operators.JMenuBarOperator;
 import org.netbeans.jemmy.operators.JMenuItemOperator;
 import org.netbeans.jemmy.operators.JMenuOperator;
@@ -63,6 +64,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -97,7 +99,8 @@ public class JemmyDSL {
         table(TableOperator.class, JTable.class), 
         menu_bar(JMenuBarOperator.class, JMenuBar.class), 
         dialog(JDialogOperator.class, JDialog.class),
-        text_area(JTextAreaOperator.class, JTextArea.class);
+        text_area(JTextAreaOperator.class, JTextArea.class),
+        scroll_pane(JScrollPaneOperator.class, JScrollPane.class);
 
         private final Class<? extends ComponentOperator> operatorClass;
         private final Class<? extends java.awt.Component> awtClass;
@@ -348,6 +351,8 @@ public class JemmyDSL {
             return new JTextAreaOperator((JTextArea) comp);
         if (comp instanceof JTextComponent)
             return new JTextFieldOperator((JTextField) comp);
+        if (comp instanceof JScrollPane)
+            return new JScrollPaneOperator((JScrollPane) comp);
         if (comp instanceof JCheckBox)
             return new JCheckBoxOperator((JCheckBox) comp);
         if (comp instanceof JRadioButton)
@@ -375,6 +380,8 @@ public class JemmyDSL {
             return new TextArea((JTextAreaOperator) comp);
         if (comp instanceof JTextComponentOperator)
             return new TextField((JTextFieldOperator) comp);
+        if (comp instanceof JScrollPaneOperator)
+            return new ScrollPane((JScrollPaneOperator) comp);
         if (comp instanceof JCheckBoxOperator)
             return new CheckBox((JCheckBoxOperator) comp);
         if (comp instanceof JRadioButtonOperator)
@@ -876,6 +883,23 @@ public class JemmyDSL {
                 throw new AssertionFailedException(
                         "assert_dialog: could not find component with text " + text);
             }
+        }
+    }
+    
+    public static class ScrollPane extends Component {
+        private final JScrollPaneOperator component;
+
+        public ScrollPane(String locator) {
+            component = find(locator, JScrollPaneOperator.class);
+        }
+
+        public ScrollPane(JScrollPaneOperator component) {
+            this.component = component;
+        }
+
+        @Override
+        public ComponentOperator getComponent() {
+            return component;
         }
     }
 
