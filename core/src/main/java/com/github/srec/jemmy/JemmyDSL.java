@@ -42,6 +42,7 @@ import org.netbeans.jemmy.operators.JTextComponentOperator;
 import org.netbeans.jemmy.operators.JTextFieldOperator;
 import org.netbeans.jemmy.operators.JToggleButtonOperator;
 import org.netbeans.jemmy.operators.Operator;
+import org.netbeans.jemmy.operators.Operator.StringComparator;
 import org.netbeans.jemmy.util.NameComponentChooser;
 
 import java.awt.FontMetrics;
@@ -89,6 +90,7 @@ import static org.apache.commons.lang.StringUtils.isBlank;
  */
 public class JemmyDSL {
     private static final Logger logger = Logger.getLogger(JemmyDSL.class);
+    private static final StringComparator comparator = new Operator.DefaultStringComparator(true,false);
 
     public enum ComponentType {
         text_field(JTextFieldOperator.class, JTextField.class), 
@@ -1500,16 +1502,21 @@ public class JemmyDSL {
             clickMenu(texts);
             return this;
         }
-
+        
         public MenuBar clickMenu(String... texts) {
             if (texts.length == 0)
                 return this;
             component.showMenuItem(texts[0]);
             for (int i = 1; i < texts.length; i++) {
                 String text = texts[i];
-                new JMenuOperator(currentWindow().getComponent(), texts[i - 1]).showMenuItem(new String[]{text});
+                JMenuOperator jmenu = new JMenuOperator(currentWindow().getComponent(), texts[i - 1]);
+                jmenu.setComparator(comparator);
+                jmenu.showMenuItem(new String[]{text});
             }
-            new JMenuItemOperator(currentWindow().getComponent(), texts[texts.length - 1]).clickMouse();
+            String text = texts[texts.length - 1];
+            ComponentChooser chooser = new JMenuItemOperator.JMenuItemByLabelFinder(text, comparator);
+            new JMenuItemOperator(currentWindow().getComponent(), chooser).clickMouse();
+            
             return this;
         }
 
