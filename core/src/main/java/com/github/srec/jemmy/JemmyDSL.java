@@ -140,8 +140,7 @@ public class JemmyDSL {
         props.put("WindowWaiter.WaitWindowTimeout", "10000");
     }
 
-    private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();
-	
+    private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();	
     private static ComponentMap componentMap = new DefaultComponentMap();
 
     public static void init(java.awt.Container... ignored) {
