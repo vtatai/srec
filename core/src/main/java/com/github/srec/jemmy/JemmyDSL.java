@@ -1336,6 +1336,11 @@ public class JemmyDSL {
             component.clickOnCell(index, col, clicks);
             return this;
         }
+        
+        public Row clickCell(int col, int clicks, String modifiers) {
+                component.clickOnCell(index, col, clicks, JTableOperator.getDefaultMouseButton(), convertModifiers(modifiers));
+            return this;
+        }
     }
 
     public static class TableHeader {
