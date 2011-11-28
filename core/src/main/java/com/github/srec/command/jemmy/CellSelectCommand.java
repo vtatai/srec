@@ -31,13 +31,13 @@ import static com.github.srec.jemmy.JemmyDSL.table;
 public class CellSelectCommand extends JemmyEventCommand {
     public CellSelectCommand() {
         super("cell_select", param("table", Type.STRING), param("row", Type.NUMBER), param("column", Type.NUMBER),
-                param("clicks", Type.NUMBER, true, new NumberValue("1")));
+                param("clicks", Type.NUMBER, true, new NumberValue("1")), param("modifiers", Type.STRING, true, null));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
         table(coerceToString(params.get("table"), ctx))
                 .row(coerceToBigDecimal(params.get("row")).intValue())
-                .clickCell(coerceToBigDecimal(params.get("column")).intValue(), asBigDecimal("clicks", params).intValue());
+                .clickCell(coerceToBigDecimal(params.get("column")).intValue(), asBigDecimal("clicks", params).intValue(), asString("modifiers", params, ctx));
     }
 }
