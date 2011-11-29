@@ -137,7 +137,7 @@ public class JemmyDSL {
         props.put("JSplitPaneOperator.WholeScrollTimeout", "10000");
         props.put("ScrollbarOperator.WholeScrollTimeout", "10000");
         props.put("Waiter.WaitingTime", "10000");
-        props.put("WindowWaiter.WaitWindowTimeout", "10000");
+        props.put("WindowWaiter.WaitWindowTimeout", "30000");
     }
 
     private static List<java.awt.Container> ignored = new ArrayList<java.awt.Container>();	
