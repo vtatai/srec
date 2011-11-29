@@ -127,7 +127,7 @@ public class JemmyDSL {
 
     static {
         props.put("ComponentOperator.WaitComponentEnabledTimeout", "15000");
-        props.put("ComponentOperator.WaitComponentTimeout", "15000");
+        props.put("ComponentOperator.WaitComponentTimeout", "30000");
         props.put("ComponentOperator.WaitStateTimeout", "10000");
         props.put("DialogWaiter.WaitDialogTimeout", "10000");
         props.put("FrameWaiter.WaitFrameTimeout", "30000");
