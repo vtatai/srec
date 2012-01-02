@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Asserts that a dialog exists and that has a subcomponent showing the text passed as a parameter.
- * 
+ *
  * @author Roberto Trentini Jr.
  */
 @SRecCommand
@@ -28,6 +28,8 @@ public class AssertDialogCommand extends JemmyEventCommand {
         String id = coerceToString(params.get("id"), ctx);
         Dialog dialog = JemmyDSL.getDialogById(id);
         if (dialog == null) throw new AssertionFailedException("assert_dialog: id " + id + " is null or does not refer to a dialog");
-        dialog.assertText(coerceToString(params.get("text"), ctx));
+        String text = coerceToString(params.get("text"), ctx);
+        System.err.println(text);
+		dialog.assertText(text);
     }
 }

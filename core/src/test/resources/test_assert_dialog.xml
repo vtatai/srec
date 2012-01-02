@@ -7,15 +7,15 @@
         <push_menu path="Menu2>Menu21>Show"/>
 
         <find locator="dialogBtn" id="btn" findComponentType="button"/>
-        
+
         <click locator="id=btn"/>
-        
+
         <find_dialog title="Test Dialog" id="dlg"/>
         <assert_dialog id="dlg" text="Test Label 1"/>
         <assert_dialog id="dlg" text="Test TextField 2"/>
-        
+
         <assert_dialog id="dlg" text="No text"/>
-        
+
         <close locator="TestForm"/>
     </test_case>
 </suite>

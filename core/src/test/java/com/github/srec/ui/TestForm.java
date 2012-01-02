@@ -78,23 +78,24 @@ public class TestForm {
             logger.debug(fc.getSelectedFile());
         }
     }
-    
+
     private void showDialog() {
         JDialog dlg = new JDialog();
         dlg.setTitle("Test Dialog");
         dlg.setName("testDialog");
-        
+
         dlg.setLayout(new FlowLayout());
         dlg.add(new JLabel("Test Label 1"));
         dlg.add(new JTextField("Test TextField 2"));
-        
+        dlg.add(new JTextField("Vlr Original: 50,00\nVlr Corrente: 50,00"));
+
         dlg.setSize(250, 90);
         dlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dlg.setLocationRelativeTo(frame);
         dlg.setVisible(true);
     }
 
-    public void init() {        
+    public void init() {
         frame = new JFrame("TestForm");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
@@ -136,7 +137,7 @@ public class TestForm {
         menu21.add(menuItem2);
         menu2.add(menu21);
         menuBar.add(menu2);
-        
+
         frame.setJMenuBar(menuBar);
 
         frame.setVisible(true);
