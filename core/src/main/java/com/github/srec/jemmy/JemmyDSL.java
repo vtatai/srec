@@ -1308,9 +1308,9 @@ public class JemmyDSL {
          * @return Cell's row that is asserted to not be empty.
          */
         public Row assertNotEmptyColumn(int col) {
-        	String value = (String) component.getValueAt(index, col);
-
-        	if (value == null || value.length() == 0) {
+        	Object value = component.getValueAt(index, col);
+ 
+            if (value == null || value.toString().length() == 0) {
         		throw new AssertionFailedException("Table cell (" + index + ", " + col + ") is empty.");
         	}
 
