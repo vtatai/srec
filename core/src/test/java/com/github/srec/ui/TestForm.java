@@ -78,24 +78,23 @@ public class TestForm {
             logger.debug(fc.getSelectedFile());
         }
     }
-
+    
     private void showDialog() {
         JDialog dlg = new JDialog();
         dlg.setTitle("Test Dialog");
         dlg.setName("testDialog");
-
+        
         dlg.setLayout(new FlowLayout());
         dlg.add(new JLabel("Test Label 1"));
         dlg.add(new JTextField("Test TextField 2"));
-        dlg.add(new JTextField("Vlr Original: 50,00\nVlr Corrente: 50,00"));
-
+        
         dlg.setSize(250, 90);
         dlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dlg.setLocationRelativeTo(frame);
         dlg.setVisible(true);
     }
 
-    public void init() {
+    public void init() {        
         frame = new JFrame("TestForm");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
@@ -137,7 +136,7 @@ public class TestForm {
         menu21.add(menuItem2);
         menu2.add(menu21);
         menuBar.add(menu2);
-
+        
         frame.setJMenuBar(menuBar);
 
         frame.setVisible(true);
@@ -274,6 +273,17 @@ public class TestForm {
         slider = new JSlider();
         slider.setName("slider");
         tab1.add(slider, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		JComboBox orderedCombo = new JComboBox(
+        		new String[]{"A", "B", "C", "D", "E", "F", "G"});
+        orderedCombo.setName("orderedCombo");
+        JComboBox unorderedCombo = new JComboBox(
+        		new String[]{"1", "2", "3", "5", "4", "6", "7"});
+        unorderedCombo.setName("unorderedCombo");
+        JList orderedList = new JList(new Integer[] {10, 20, 30});
+        orderedList.setName("orderedList");
+        tab1.add(orderedCombo, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        tab1.add(unorderedCombo, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        tab1.add(new JScrollPane(orderedList), new GridConstraints(5, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setText("Value:");
         tab1.add(label6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

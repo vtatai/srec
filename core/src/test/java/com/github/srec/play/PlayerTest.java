@@ -78,22 +78,22 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testClickCountOnTextField() {
         runTest("test_click_count_on_text_field.xml");
     }
-
+    
     public void testSpecialChars() {
         runTest("test_specialchars.xml");
     }
 
     public void testNotEmptyAndEmptyTableCell() {
     	Player player = runTest("test_not_empty_table_cell.xml", false);
-
+    	
     	List<PlayerError> errors = player.getErrors();
     	assertEquals(errors.size(), 1);
-
+    		
     	PlayerError error = errors.get(0);
     	assertEquals(error.getLineNumber(), 38);
     	assertEquals(error.getTestSuite(), "test_not_empty_table");
     	assertEquals(error.getTestCase(), "1");
-    	assertEquals(error.getOriginatingException().getCause().getMessage(),
+    	assertEquals(error.getOriginatingException().getCause().getMessage(), 
     	             "Table cell (4, 3) is empty.");
     }
 
@@ -106,13 +106,7 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         assertEquals(p.getErrors().size(), 1);
         assertEquals(p.getErrors().get(0).getLineNumber(), 17);
     }
-
-    public void testAssertDialog2() {
-    	Player p = runTest("test_assert_dialog2.xml", false);
-        assertEquals(p.getErrors().size(), 0);
-    }
-
-
+    
     @Override
     protected Map<String, Object> getProperties() {
     	Map<String, Object> properties = new HashMap<String, Object>();
@@ -130,6 +124,18 @@ public class PlayerTest extends AbstractSRecTestNGTest {
 	public void testTabCommandWithIndex() {
     	runTest("test_tab_command_with_index.xml");
     }
+	
+	public void testAssertSortedCommand() {
+        Player p = runTest("test_assert_sorted_command.xml", false);
+      	List<PlayerError> errors = p.getErrors();
 
+      	assertEquals(errors.size(), 2);
+        assertEquals(errors.get(0).getLineNumber(), 11);
+        assertEquals(errors.get(0).getOriginatingException().getCause().getMessage(), 
+   	            "Order failed at element <5> before element <4>");
 
+        assertEquals(errors.get(1).getLineNumber(), 21);
+        assertEquals(errors.get(1).getOriginatingException().getCause().getMessage(), 
+   	            "Component [slider] is a javax.swing.JSlider, and not a JList or JComboBox");
+    }
 }
