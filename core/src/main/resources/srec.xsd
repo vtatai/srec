@@ -40,6 +40,7 @@
             <xs:element type="assertType" name="assert"/>
             <xs:element type="assert_emptyType" name="assert_empty"/>
             <xs:element type="assert_notEmptyType" name="assert_not_empty"/>
+            <xs:element type="assert_sortedType" name="assert_sorted"/>
             <xs:element type="assert_comboboxType" name="assert_combobox"/>
             <xs:element type="clickType" name="click" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="click_headerType" name="click_header" maxOccurs="unbounded" minOccurs="0"/>
@@ -94,6 +95,26 @@
                         Optional parameter, default is true
                     </xs:documentation></xs:annotation>
                 </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_sortedType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a component has elements sorted.
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="assert_has_focusType">
+        <xs:annotation><xs:documentation>
+            Command which asserts that a component has focus.
+        </xs:documentation></xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="locator"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
