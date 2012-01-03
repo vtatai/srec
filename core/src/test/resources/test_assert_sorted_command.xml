@@ -1,0 +1,24 @@
+<suite name="test_assert_sorted_command" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="assert_sorted_and_unsorted">
+        <window_activate locator="TestForm"/>
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu indexes="1,0,1"/>
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>Show"/>
+        <assert_sorted locator="orderedCombo"/>
+        <assert_sorted locator="orderedList"/>
+        <assert_sorted locator="unorderedCombo"/>
+        <close locator="TestForm"/>
+    </test_case>
+    
+    <test_case name="assert_sorted_with_class_not_compatible">
+    	<window_activate locator="TestForm"/>
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu indexes="1,0,1"/>
+        <hide_internal_frame locator="title=Internal Frame"/>
+        <push_menu path="Menu2>Menu21>Show"/>
+    	<assert_sorted locator="slider"/>
+    	<close locator="TestForm"/>
+    </test_case>
+</suite>
