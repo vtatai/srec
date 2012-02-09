@@ -520,11 +520,8 @@ public class JemmyDSL {
         if (operator == null) {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
 		}
-        if (operator.isRequestFocusEnabled()) {
+        if (operator instanceof JButtonOperator && operator.isRequestFocusEnabled()) {
         	operator.requestFocus();
-        }
-        if (operator instanceof JTextFieldOperator) {
-        	((JTextFieldOperator)operator).selectAll();
         }
         operator.clickMouse(operator.getCenterXForClick(),
                             operator.getCenterYForClick(),
@@ -1022,7 +1019,6 @@ public class JemmyDSL {
                 // to make the test as closes as the human interactions as possible.
                 component.requestFocus();
                 component.setVerification(false);
-                component.selectAll();
                 component.typeText(text);
                 return this;
             } finally {
