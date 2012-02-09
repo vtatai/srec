@@ -523,6 +523,9 @@ public class JemmyDSL {
         if (operator.isRequestFocusEnabled()) {
         	operator.requestFocus();
         }
+        if (operator instanceof JTextFieldOperator) {
+        	((JTextFieldOperator)operator).selectAll();
+        }
         operator.clickMouse(operator.getCenterXForClick(),
                             operator.getCenterYForClick(),
                             count,
@@ -1019,6 +1022,7 @@ public class JemmyDSL {
                 // to make the test as closes as the human interactions as possible.
                 component.requestFocus();
                 component.setVerification(false);
+                component.selectAll();
                 component.typeText(text);
                 return this;
             } finally {
