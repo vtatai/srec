@@ -522,7 +522,6 @@ public class JemmyDSL {
 		}
         if (operator.isRequestFocusEnabled()) {
         	operator.requestFocus();
-        	operator.waitHasFocus();
         }
         operator.clickMouse(operator.getCenterXForClick(),
                             operator.getCenterYForClick(),
