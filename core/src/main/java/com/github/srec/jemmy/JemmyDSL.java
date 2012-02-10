@@ -521,9 +521,7 @@ public class JemmyDSL {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
 		}
         if (requestFocus) {
-        	if (operator instanceof JButtonOperator) {
         		operator.requestFocus();
-        }
         }
         operator.clickMouse(operator.getCenterXForClick(),
                             operator.getCenterYForClick(),
