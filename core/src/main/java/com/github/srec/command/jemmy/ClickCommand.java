@@ -28,7 +28,7 @@ public class ClickCommand extends JemmyEventCommand {
         super("click", param(LOCATOR), param(MODIFIERS, Type.STRING, true, null),
                 param(TEXT_COLUMN, Type.NUMBER, true, null),
                 param(COUNT, Type.NUMBER, true, new NumberValue("1")),
-                param(REQUEST_FOCUS, Type.BOOLEAN, true, new BooleanValue(true)));
+                param(REQUEST_FOCUS, Type.BOOLEAN, true, new BooleanValue(false)));
     }
 
     @Override
