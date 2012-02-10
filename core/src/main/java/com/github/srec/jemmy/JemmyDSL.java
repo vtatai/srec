@@ -515,12 +515,12 @@ public class JemmyDSL {
         return convertFind(operator);
     }
 
-    public static void click(String locator, int count, String modifiers) {
+    public static void click(String locator, int count, String modifiers, boolean requestFocus) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
         if (operator == null) {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
 		}
-        if (operator instanceof JButtonOperator) {
+        if (requestFocus && operator instanceof JButtonOperator && !operator.hasFocus()) {
         	operator.requestFocus();
         }
         operator.clickMouse(operator.getCenterXForClick(),
