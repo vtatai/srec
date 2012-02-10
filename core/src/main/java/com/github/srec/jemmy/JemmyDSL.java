@@ -1002,7 +1002,9 @@ public class JemmyDSL {
 
         public TextField(String locator) {
             component = find(locator, JTextComponentOperator.class);
-            component.setComparator(new Operator.DefaultStringComparator(true, true));
+            if (component != null) {
+            	component.setComparator(new Operator.DefaultStringComparator(true, true));
+            }
         }
 
         public TextField(JTextFieldOperator component) {
