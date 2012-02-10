@@ -520,6 +520,9 @@ public class JemmyDSL {
         if (operator == null) {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
 		}
+        if (operator instanceof JButtonOperator) {
+        	operator.requestFocus();
+        }
         operator.clickMouse(operator.getCenterXForClick(),
                             operator.getCenterYForClick(),
                             count,
