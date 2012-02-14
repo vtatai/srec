@@ -1,0 +1,11 @@
+<suite name="find_suite" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="test_find_1">
+        <window_activate locator="TestForm"/>
+        <find locator="initialValueTF" id="text_field" findComponentType="text_field" required="false"/>
+        <assert_not_null varName="text_field"/>
+        <find locator="initialValueTF" id="text_field2" findComponentType="text_field" required="true"/>
+        <find locator="initialValueTFx" id="text_field3" findComponentType="text_field" required="false"/>
+        <assert_null varName="text_field3"/>
+    </test_case>
+</suite>
