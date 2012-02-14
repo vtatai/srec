@@ -3,15 +3,13 @@ package com.github.srec.play;
 import static org.testng.Assert.assertEquals;
 
 import java.awt.Color;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.srec.testng.AbstractSRecTestNGTest;
-
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import com.github.srec.testng.AbstractSRecTestNGTest;
 
 
 @Test
@@ -33,6 +31,12 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         assertEquals(p.getErrors().get(0).getLineNumber(), 19);
         assertEquals(p.getErrors().get(1).getLineNumber(), 27);
     }
+
+    public void testFind() {
+        Player p = runTest("test_find.xml", false);
+        assertEquals(p.getErrors().size(), 0);
+    }
+
 
     public void testFindDialog() {
         Player p = runTest("test_find_dialog.xml", false);

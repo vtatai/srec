@@ -268,13 +268,16 @@ public class JemmyDSL {
      * @param componentType The component type
      * @return The component found
      */
-    @SuppressWarnings({"unchecked"})
-    public static Component find(String locator, String id, String componentType) {
+    public static Component find(String locator, String id, String componentType, boolean required) {
         java.awt.Component component = findComponent(locator, currentWindow().getComponent()
             .getSource());
         if (component == null) {
-            componentMap.putComponent(id, null);
-            return null;
+        	if (!required) {
+        		componentMap.putComponent(id, null);
+        		return null;
+        	} else {
+        		throw new JemmyDSLException("Component not found");
+        	}
         }
         JComponentOperator operator = convertFind(component);
         componentMap.putComponent(id, operator);
@@ -478,7 +481,8 @@ public class JemmyDSL {
     public static Component findByComponentType(String id,
                                                 String containerId,
                                                 String componentType,
-                                                int index) {
+                                                int index,
+                                                boolean required) {
         java.awt.Container container;
         if (isBlank(containerId)) {
             container = (java.awt.Container) currentWindow().getComponent().getSource();
@@ -503,9 +507,13 @@ public class JemmyDSL {
         }
         java.awt.Component component = list.get(index);
         if (component == null) {
-            componentMap.putComponent(id, null);
-            logger.debug("findByComponentType returned null");
-            return null;
+        	if (!required) {
+        		componentMap.putComponent(id, null);
+        		logger.debug("findByComponentType returned null");
+        		return null;
+        	} else {
+        		throw new JemmyDSLException("Component " + id + " not found");
+        	}
         }
         JComponentOperator operator = convertFind(component);
         componentMap.putComponent(id, operator);

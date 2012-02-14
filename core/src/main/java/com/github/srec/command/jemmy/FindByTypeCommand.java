@@ -13,15 +13,16 @@
 
 package com.github.srec.command.jemmy;
 
-import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.SRecCommand;
-import com.github.srec.command.value.NumberValue;
-import com.github.srec.command.value.Type;
-import com.github.srec.command.value.Value;
+import static com.github.srec.jemmy.JemmyDSL.findByComponentType;
 
 import java.util.Map;
 
-import static com.github.srec.jemmy.JemmyDSL.findByComponentType;
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.SRecCommand;
+import com.github.srec.command.value.BooleanValue;
+import com.github.srec.command.value.NumberValue;
+import com.github.srec.command.value.Type;
+import com.github.srec.command.value.Value;
 
 /**
  * Finds a component by its type, assigning an id to it. This id can later be used as a locator in the form "id=XXX".
@@ -33,12 +34,13 @@ import static com.github.srec.jemmy.JemmyDSL.findByComponentType;
 public class FindByTypeCommand extends JemmyEventCommand {
     public FindByTypeCommand() {
         super("find_by_type", param("id", Type.STRING), param("containerId", Type.STRING, true, null),
-                param("findComponentType", Type.STRING), param("index", Type.NUMBER, true, new NumberValue("0")));
+                param("findComponentType", Type.STRING), param("index", Type.NUMBER, true, new NumberValue("0")),
+                param("required", Type.BOOLEAN, true, new BooleanValue(true)));
     }
 
     @Override
     public void runJemmy(ExecutionContext ctx, Map<String, Value> params) {
         findByComponentType(asString("id", params, ctx), asString("containerId", params, ctx),
-                asString("findComponentType", params, ctx), asBigDecimal("index", params).intValue());
+                asString("findComponentType", params, ctx), asBigDecimal("index", params).intValue(), asBoolean("required", params));
     }
 }
