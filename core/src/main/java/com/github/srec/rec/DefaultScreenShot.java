@@ -13,19 +13,28 @@
 
 package com.github.srec.rec;
 
-import com.github.srec.util.AWTTreeScanner;
-import com.github.srec.util.PropertiesReader;
-import com.github.srec.util.ScannerMatcher;
-import org.apache.log4j.Logger;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+
+import org.apache.log4j.Logger;
+
+import com.github.srec.util.AWTTreeScanner;
+import com.github.srec.util.PropertiesReader;
+import com.github.srec.util.ScannerMatcher;
 
 /**
  * Takes a screenshot
@@ -37,35 +46,44 @@ public class DefaultScreenShot implements ScreenShot {
     private static final Logger log = Logger.getLogger(DefaultScreenShot.class);
     private static int counter = 1;
 
-    public String captureDesktop(String parent, Robot robot) {
+    @Override
+	public String captureDesktop(String subdir, Robot robot) {
         log.info("Capturing desktop screenshot");
         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-        return capture(parent, screenRect, robot);
+        return capture(subdir, screenRect, robot);
     }
 
-    public String captureFrame(String parent, Robot robot) {
+    @Override
+	public String captureFrame(String subdir, Robot robot) {
         log.info("Capturing frame screenshot");
         Rectangle screenRect = findActiveWindow().getBounds();
-        if (screenRect == null) return null;
-        return capture(parent, screenRect, robot);
+        if (screenRect == null) {
+			return null;
+		}
+        return capture(subdir, screenRect, robot);
     }
 
-    public String captureInternalFrame(String parent, Robot robot) {
+    @Override
+	public String captureInternalFrame(String subdir, Robot robot) {
         log.info("Capturing internal frame screenshot (under mouse pointer)");
         Window w = findActiveWindow();
-        if (!(w instanceof JFrame)) return null;
+        if (!(w instanceof JFrame)) {
+			return null;
+		}
         JInternalFrame iframe = findInternalFrame((JFrame) w);
-        if (iframe == null) return null;
-        return capture(parent, getScreenSize(iframe), robot);
+        if (iframe == null) {
+			return null;
+		}
+        return capture(subdir, getScreenSize(iframe), robot);
     }
 
     private JInternalFrame findInternalFrame(JFrame frame) {
         Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
         Component component = frame.findComponentAt(mouseLocation);
-        return findInternalFrameParent(component);
+        return findInternalFramesubdir(component);
     }
 
-    private JInternalFrame findInternalFrameParent(Component component) {
+    private JInternalFrame findInternalFramesubdir(Component component) {
         while (component != null && !(component instanceof JInternalFrame)) {
             component = component.getParent();
         }
@@ -74,7 +92,9 @@ public class DefaultScreenShot implements ScreenShot {
 
     private Window findActiveWindow() {
         Window[] ws = Window.getOwnerlessWindows();
-        if (ws.length == 0) return null;
+        if (ws.length == 0) {
+			return null;
+		}
         for (Window w : ws) {
             if (w.isActive()) {
                 return w;
@@ -91,20 +111,24 @@ public class DefaultScreenShot implements ScreenShot {
     }
 
     @Override
-    public String captureInternalFrame(String title, String parentFolder, Robot robot) {
+    public String captureInternalFrame(String title, String subdirFolder, Robot robot) {
         log.info("Capturing internal frame screenshot with title " + title);
         Window w = findActiveWindow();
-        if (!(w instanceof JFrame)) return null;
+        if (!(w instanceof JFrame)) {
+			return null;
+		}
         JInternalFrame iframe = findInternalFrame(title, (JFrame) w);
         if (iframe == null) {
-            log.warn("Could not locate internal frame"); 
+            log.warn("Could not locate internal frame");
             return null;
         }
-        return capture(parentFolder, getScreenSize(iframe), robot);
+        return capture(subdirFolder, getScreenSize(iframe), robot);
     }
 
     private JInternalFrame findInternalFrame(final String title, JFrame frame) {
-        if (title == null) return null;
+        if (title == null) {
+			return null;
+		}
         Component c = AWTTreeScanner.scan(frame, new ScannerMatcher() {
             @Override
             public boolean matches(Component component) {
@@ -112,16 +136,22 @@ public class DefaultScreenShot implements ScreenShot {
                         && title.equals(((JInternalFrame) component).getTitle());
             }
         });
-        if (c != null && c instanceof JInternalFrame) return (JInternalFrame) c;
+        if (c != null && c instanceof JInternalFrame) {
+			return (JInternalFrame) c;
+		}
         return null;
     }
 
-    public String capture(String parent, Rectangle screenRect, Robot robot) {
+    public String capture(String subdir, Rectangle screenRect, Robot robot) {
         BufferedImage image = robot.createScreenCapture(screenRect);
         String captureFileName = "screenshot-" + counter++ + ".png";
         String pathname = PropertiesReader.getProperties().getProperty(PropertiesReader.SCREENSHOTS_DIR);
-        if (isBlank(pathname)) pathname = "screenshots";
-        if (!isBlank(parent)) pathname += File.separator + parent;
+        if (isBlank(pathname)) {
+			pathname = "target/screenshots";
+		}
+        if (!isBlank(subdir)) {
+			pathname = pathname + File.separator + subdir;
+		}
         createScreenshotDirectory(pathname);
         String finalFileName = pathname + File.separator + captureFileName;
         try {
@@ -134,6 +164,8 @@ public class DefaultScreenShot implements ScreenShot {
 
     private void createScreenshotDirectory(String pathname) {
         File screenshotDirectory = new File(pathname);
-        if (!screenshotDirectory.exists()) screenshotDirectory.mkdir();
+        if (!screenshotDirectory.exists()) {
+			screenshotDirectory.mkdirs();
+		}
     }
 }

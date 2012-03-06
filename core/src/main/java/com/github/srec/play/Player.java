@@ -1,20 +1,11 @@
 package com.github.srec.play;
 
-import com.github.srec.command.ExecutionContext;
-import com.github.srec.command.ExecutionContextFactory;
-import com.github.srec.command.TestCase;
-import com.github.srec.command.TestSuite;
-import com.github.srec.command.base.Command;
-import com.github.srec.command.exception.CommandExecutionException;
-import com.github.srec.command.parser.ParseException;
-import com.github.srec.command.parser.Parser;
-import com.github.srec.command.parser.ParserFactory;
-import com.github.srec.jemmy.ComponentMap;
-import com.github.srec.jemmy.JemmyDSL;
-import com.github.srec.util.PropertiesReader;
+import static com.github.srec.util.Utils.closeWindows;
+import static com.github.srec.util.Utils.runSwingMain;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
-import org.apache.log4j.Logger;
-
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -28,13 +19,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.github.srec.util.Utils.closeWindows;
-import static com.github.srec.util.Utils.runSwingMain;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import org.apache.log4j.Logger;
+
+import com.github.srec.command.ExecutionContext;
+import com.github.srec.command.ExecutionContextFactory;
+import com.github.srec.command.TestCase;
+import com.github.srec.command.TestSuite;
+import com.github.srec.command.base.Command;
+import com.github.srec.command.exception.CommandExecutionException;
+import com.github.srec.command.parser.ParseException;
+import com.github.srec.command.parser.Parser;
+import com.github.srec.command.parser.ParserFactory;
+import com.github.srec.jemmy.ComponentMap;
+import com.github.srec.jemmy.JemmyDSL;
+import com.github.srec.rec.DefaultScreenShot;
+import com.github.srec.rec.ScreenShot;
+import com.github.srec.util.PropertiesReader;
 
 /**
  * Class which plays srec scripts / commands.
- * 
+ *
  * @author Victor Tatai
  */
 public class Player {
@@ -98,8 +102,8 @@ public class Player {
      * @param testCases The test case to run, use null to run all
      * @param className The class name of the application under test, null to not launch - notice that the application is restarted for each TC
      * @param args The arguments to pass to the class above
-     * @param properties 
-     * 
+     * @param properties
+     *
      * @return The created player
      * @throws IOException The exception
      */
@@ -116,7 +120,9 @@ public class Player {
     }
 
     public Player play(File file, String[] testCases, Map<String, Object> properties) throws IOException {
-        if (file == null) return null;
+        if (file == null) {
+			return null;
+		}
         if (file.isDirectory()) {
             log.info("Playing files inside dir: " + file.getCanonicalPath());
             // Run all scripts inside a directory
@@ -158,12 +164,16 @@ public class Player {
         ExecutionContext context = ExecutionContextFactory.getInstance().create(null, null, file, file.getParentFile().getCanonicalPath());
         TestSuite suite = parser.parse(context, is, file.getCanonicalPath());
         suite.setProperties(properties);
-        if (parser.getErrors().size() > 0) throw new ParseException(parser.getErrors());
+        if (parser.getErrors().size() > 0) {
+			throw new ParseException(parser.getErrors());
+		}
         log.debug("Launching test suite: " + suite.getName());
         Set<String> testCasesSet = testCases == null || testCases.length == 0 ? null : new HashSet<String>(Arrays.asList(testCases));
         boolean appStarted = false;
         for (TestCase testCase : suite.getTestCases()) {
-            if (testCasesSet != null && !testCasesSet.contains(testCase.getName())) continue;
+            if (testCasesSet != null && !testCasesSet.contains(testCase.getName())) {
+				continue;
+			}
             if ((!appStarted || !singleInstanceMode) && classToRun != null) {
                 runSwingMain(classToRun, classToRunArgs);
                 appStarted = true;
@@ -190,9 +200,12 @@ public class Player {
                 try {
                     Command.CommandFlow flow = command.run(context);
                     if (flow == Command.CommandFlow.NEXT) {}
-                    else if (flow == Command.CommandFlow.EXIT) return Command.CommandFlow.EXIT;
-                    else throw new PlayerException("Flow management instruction " + flow + " from command "
-                                                   + command.getName() + " not supported");
+                    else if (flow == Command.CommandFlow.EXIT) {
+						return Command.CommandFlow.EXIT;
+					} else {
+						throw new PlayerException("Flow management instruction " + flow + " from command "
+						                               + command.getName() + " not supported");
+					}
                 } catch (CommandExecutionException e) {
                     handleError(context.getTestSuite(), context.getTestCase(), command, e);
                     break;
@@ -210,7 +223,9 @@ public class Player {
     }
 
     private String getLine(Command command) {
-        if (command.getLocation() == null) return "<NO LINE>";
+        if (command.getLocation() == null) {
+			return "<NO LINE>";
+		}
         return "" + command.getLocation().getLineNumber();
     }
 
@@ -221,6 +236,14 @@ public class Player {
         System.err.println(command.getLocation().getLine());
         errors.add(error);
         log.debug("Error in script play", e);
+        ScreenShot shot = new DefaultScreenShot();
+        Robot robot;
+		try {
+			robot = new Robot();
+	        shot.captureDesktop(testSuite.getName() + "/" + testCase.getName(), robot);
+		} catch (AWTException e1) {
+			e1.printStackTrace();
+		}
     }
 
     public List<PlayerError> getErrors() {
