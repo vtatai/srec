@@ -13,21 +13,21 @@
 
 package com.github.srec.testng;
 
-import com.github.srec.command.parser.ParseException;
-import com.github.srec.play.Player;
-import com.github.srec.util.Utils;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import com.github.srec.command.parser.ParseException;
+import com.github.srec.play.Player;
+import com.github.srec.util.Utils;
 
 /**
  * An abstract classe to be used when writing TestNG tests.
- * 
+ *
  * @author Victor Tatai
  */
 public abstract class AbstractSRecTestNGTest {
@@ -56,11 +56,11 @@ public abstract class AbstractSRecTestNGTest {
      * @param failOnError true if an error should result in a test failure
      * @return The errors
      */
-    protected Player runTest(String script, boolean failOnError, String... testCases) {
+    protected Player runTest(String script, boolean failOnError, boolean failFast, String... testCases) {
         try {
             Player p = new Player(singleInstanceMode)
-            .init()
-            .play(new File(scriptDir + File.separator + script), testCases, 
+            .init(failFast)
+            .play(new File(scriptDir + File.separator + script), testCases,
                   className, params, getProperties());
             p.printErrors();
             if (failOnError) {
@@ -91,7 +91,7 @@ public abstract class AbstractSRecTestNGTest {
      * @return The errors
      */
     protected Player runTest(String script, String... testCases) {
-        return runTest(script, true, testCases);
+        return runTest(script, true, true, testCases);
     }
 
     /**
@@ -101,9 +101,9 @@ public abstract class AbstractSRecTestNGTest {
      * @return The player errors
      */
     protected Player runTest(String script) {
-        return runTest(script, true);
+        return runTest(script, true, true);
     }
-    
+
     protected Map<String, Object> getProperties() {
         return new HashMap<String, Object>();
     }

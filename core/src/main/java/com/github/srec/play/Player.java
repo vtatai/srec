@@ -26,6 +26,7 @@ import com.github.srec.command.ExecutionContextFactory;
 import com.github.srec.command.TestCase;
 import com.github.srec.command.TestSuite;
 import com.github.srec.command.base.Command;
+import com.github.srec.command.base.Command.CommandFlow;
 import com.github.srec.command.exception.CommandExecutionException;
 import com.github.srec.command.parser.ParseException;
 import com.github.srec.command.parser.Parser;
@@ -57,6 +58,8 @@ public class Player {
     private String[] classToRunArgs;
 
     private final boolean singleInstanceMode;
+    private boolean failFast;
+    private boolean failed;
 
     public Player(boolean singleInstanceMode) {
         this.singleInstanceMode = singleInstanceMode;
@@ -66,19 +69,26 @@ public class Player {
         this(false);
     }
 
-    public Player init() {
+    public Player init(boolean failFast) {
         JemmyDSL.init();
-        String intervalString = PropertiesReader.getProperties().getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
+        String intervalString = PropertiesReader.getProperties()
+            .getProperty(PropertiesReader.PLAYER_COMMAND_INTERVAL);
         if (!isBlank(intervalString)) {
             commandInterval = Integer.parseInt(intervalString);
         }
 
-        //Overrides properties file if using the command line param
+        // Overrides properties file if using the command line param
         commandInterval = getIntProperty("com.github.srec.commandInterval", commandInterval);
 
         parser = ParserFactory.create();
+        this.failFast = failFast;
         return this;
     }
+
+    public Player init() {
+        return init(true);
+    }
+
 
     public static long getIntProperty(String key, long defaultValue){
         String s = System.getProperty(key);
@@ -192,7 +202,10 @@ public class Player {
     }
 
     public Command.CommandFlow play(ExecutionContext context) {
-        ComponentMap formerComponentMap = JemmyDSL.getComponentMap();
+        if (failed && failFast) {
+            return CommandFlow.EXIT;
+        }
+    	ComponentMap formerComponentMap = JemmyDSL.getComponentMap();
         JemmyDSL.setComponentMap(new ComponentMapSymbolsAdapter(context.getSymbols()));
         try {
             for (Command command : context.getCommands()) {
@@ -240,6 +253,7 @@ public class Player {
         System.err.println(command.getLocation().getLine());
         errors.add(error);
         log.debug("Error in script play", e);
+        failed = true;
         ScreenShot shot = new DefaultScreenShot();
         Robot robot;
 		try {
