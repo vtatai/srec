@@ -209,6 +209,10 @@ public class Player {
                 } catch (CommandExecutionException e) {
                     handleError(context.getTestSuite(), context.getTestCase(), command, e);
                     break;
+                } catch (Exception e) {
+                	CommandExecutionException e1 = new CommandExecutionException(e);
+                    handleError(context.getTestSuite(), context.getTestCase(), command, e1);
+                    break;
                 }
                 try {
                     Thread.sleep(commandInterval);
@@ -245,6 +249,8 @@ public class Player {
 			e1.printStackTrace();
 		}
     }
+
+
 
     public List<PlayerError> getErrors() {
         return errors;
