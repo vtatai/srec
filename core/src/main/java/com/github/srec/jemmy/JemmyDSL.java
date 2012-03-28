@@ -1648,8 +1648,8 @@ public class JemmyDSL {
             component.showMenuItem(texts[0]);
             for (int i = 1; i < texts.length; i++) {
                 String text = texts[i];
-                JMenuOperator jmenu = new JMenuOperator(currentWindow().getComponent(), texts[i - 1]);
-                jmenu.setComparator(comparator);
+                ComponentChooser chooser = new JMenuOperator.JMenuByLabelFinder(texts[i - 1], comparator);
+                JMenuOperator jmenu = new JMenuOperator(currentWindow().getComponent(), chooser);        
                 jmenu.showMenuItem(new String[]{text});
             }
             String text = texts[texts.length - 1];
