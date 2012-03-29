@@ -35,6 +35,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.JTextComponent;
@@ -74,9 +75,12 @@ import org.netbeans.jemmy.operators.JTextAreaOperator;
 import org.netbeans.jemmy.operators.JTextComponentOperator;
 import org.netbeans.jemmy.operators.JTextFieldOperator;
 import org.netbeans.jemmy.operators.JToggleButtonOperator;
+import org.netbeans.jemmy.operators.JTreeOperator;
 import org.netbeans.jemmy.operators.Operator;
 import org.netbeans.jemmy.operators.Operator.StringComparator;
 import org.netbeans.jemmy.util.NameComponentChooser;
+
+import antlr.debug.misc.JTreeASTPanel;
 
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.exception.AssertionFailedException;
@@ -107,7 +111,8 @@ public class JemmyDSL {
         menu_bar(JMenuBarOperator.class, JMenuBar.class),
         dialog(JDialogOperator.class, JDialog.class),
         text_area(JTextAreaOperator.class, JTextArea.class),
-        scroll_pane(JScrollPaneOperator.class, JScrollPane.class);
+        scroll_pane(JScrollPaneOperator.class, JScrollPane.class),
+        tree(JTreeOperator.class, JTree.class);
 
         private final Class<? extends ComponentOperator> operatorClass;
         private final Class<? extends java.awt.Component> awtClass;
@@ -381,6 +386,9 @@ public class JemmyDSL {
         if (comp instanceof JTextArea) {
 			return new JTextAreaOperator((JTextArea) comp);
 		}
+        if (comp instanceof JTree) {
+            return new JTreeOperator((JTree) comp);
+        }
         if (comp instanceof JTextComponent) {
 			return new JTextFieldOperator((JTextField) comp);
 		}
@@ -433,6 +441,9 @@ public class JemmyDSL {
         if (comp instanceof JTextAreaOperator) {
 			return new TextArea((JTextAreaOperator) comp);
 		}
+        if (comp instanceof JTreeOperator) {
+            return new Tree((JTreeOperator) comp);
+        }
         if (comp instanceof JTextComponentOperator) {
 			return new TextField((JTextFieldOperator) comp);
 		}
@@ -1222,6 +1233,23 @@ public class JemmyDSL {
         @Override
         public JButtonOperator getComponent() {
             return (JButtonOperator) component;
+        }
+    }
+    
+    public static class Tree extends Component {
+        private final JTreeOperator component;
+        
+        public Tree(String locator) {
+            component = find(locator, JTreeOperator.class);
+        }
+
+        public Tree(JTreeOperator component) {
+            this.component = component;
+        }
+
+        @Override
+        public JTreeOperator getComponent() {
+            return (JTreeOperator) component;
         }
     }
 
