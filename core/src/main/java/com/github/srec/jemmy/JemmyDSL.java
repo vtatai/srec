@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -39,6 +40,8 @@ import javax.swing.JTree;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.JTextComponent;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
 import org.netbeans.jemmy.ComponentChooser;
@@ -261,6 +264,10 @@ public class JemmyDSL {
 
     public static Table table(String locator) {
         return new Table(locator);
+    }
+
+    public static Tree tree(String locator) {
+        return new Tree(locator);
     }
 
     /**
@@ -1237,19 +1244,63 @@ public class JemmyDSL {
     }
     
     public static class Tree extends Component {
-        private final JTreeOperator component;
-        
+        private final JTreeOperator operator;
+        private JTree component;
+
         public Tree(String locator) {
-            component = find(locator, JTreeOperator.class);
+            operator = find(locator, JTreeOperator.class);
+            component = (JTree) findComponent(locator, currentWindow()
+                    .getComponent().getSource());
         }
 
         public Tree(JTreeOperator component) {
-            this.component = component;
+            this.operator = component;
         }
 
         @Override
         public JTreeOperator getComponent() {
-            return (JTreeOperator) component;
+            return operator;
+        }
+
+        public void click(int count, String node) {
+            TreePath path = findNode(component, node);
+
+            if (path != null) {
+                operator.clickOnPath(path, count);
+            } else {
+                throw new JemmyDSLException("JTree node with label [" + node +
+                        " wasn't found.");
+            }
+        }
+
+        public TreePath findNode(JTree tree, String nodeLabel) {
+            TreeNode root = (TreeNode) tree.getModel().getRoot();
+            return findNode(tree, new TreePath(root), nodeLabel);
+        }
+
+        @SuppressWarnings("rawtypes")
+		private static TreePath findNode(JTree tree, TreePath parent,
+                String nodeLabel) {
+            TreeNode node = (TreeNode)parent.getLastPathComponent();
+            Object o = node.toString();
+
+            if (o.equals(nodeLabel)) {
+                return parent;
+            } else {
+                if (node.getChildCount() >= 0) {
+                    for (Enumeration e = node.children(); e.hasMoreElements();) {
+                        TreeNode n = (TreeNode)e.nextElement();
+                        TreePath path = parent.pathByAddingChild(n);
+                        TreePath result = findNode(tree, path, nodeLabel);
+
+                        if (result != null) {
+                            return result;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 

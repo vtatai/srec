@@ -528,6 +528,11 @@
                         Click count, default is one
                     </xs:documentation></xs:annotation>
                 </xs:attribute>
+                <xs:attribute type="xs:string" name="node" use="optional">
+                    <xs:annotation><xs:documentation>
+                       Node label to click in JTree components.
+                    </xs:documentation></xs:annotation>
+                </xs:attribute>
                 <xs:attribute type="xs:string" name="textColumn" use="optional">
                     <xs:annotation><xs:documentation>
                         When clicking on a text field, which char should be clicked
