@@ -501,15 +501,21 @@ public class JemmyDSL {
                                                 String componentType,
                                                 int index,
                                                 boolean required) {
-        java.awt.Container container;
+        java.awt.Container container = null;
         if (isBlank(containerId)) {
             container = (java.awt.Container) currentWindow().getComponent().getSource();
         } else {
             ComponentOperator op = componentMap.getComponent(containerId);
+
             if (op != null && op.getSource() instanceof java.awt.Container) {
                 container = (java.awt.Container) op.getSource();
             } else {
-                container = (java.awt.Container) currentWindow().getComponent().getSource();
+                container = (java.awt.Container) findComponent(containerId,
+                        currentWindow().getComponent().getSource());
+
+                if (container == null) {
+                    container = (java.awt.Container) currentWindow().getComponent().getSource();
+                }
             }
         }
         List<java.awt.Component> list = findComponents(container, translateFindType(componentType));
@@ -1518,7 +1524,9 @@ public class JemmyDSL {
         }
 
         public Row clickCell(int col, int clicks, String modifiers) {
-                component.clickOnCell(index, col, clicks, JTableOperator.getDefaultMouseButton(), convertModifiers(modifiers));
+            component.clickOnCell(index, col, clicks, JTableOperator.getDefaultMouseButton(),
+                    convertModifiers(modifiers));
+
             return this;
         }
     }
