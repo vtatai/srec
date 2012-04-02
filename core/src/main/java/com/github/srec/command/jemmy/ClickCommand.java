@@ -2,6 +2,7 @@ package com.github.srec.command.jemmy;
 
 import static com.github.srec.jemmy.JemmyDSL.click;
 import static com.github.srec.jemmy.JemmyDSL.textField;
+import static com.github.srec.jemmy.JemmyDSL.tree;
 
 import java.util.Map;
 
@@ -23,17 +24,23 @@ public class ClickCommand extends JemmyEventCommand {
     public static final String TEXT_COLUMN = "textColumn";
     public static final String MODIFIERS = "modifiers";
     public static final String REQUEST_FOCUS = "requestFocus";
+    public static final String NODE = "node";
 
     public ClickCommand() {
         super("click", param(LOCATOR), param(MODIFIERS, Type.STRING, true, null),
                 param(TEXT_COLUMN, Type.NUMBER, true, null),
                 param(COUNT, Type.NUMBER, true, new NumberValue("1")),
+                param(NODE, Type.STRING, true, null),
                 param(REQUEST_FOCUS, Type.BOOLEAN, true, new BooleanValue(false)));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        if (params.get(TEXT_COLUMN) == null)  {
+        if (params.get(NODE) != null) {
+            tree(coerceToString(params.get(LOCATOR), ctx))
+                    .click(asBigDecimal(COUNT, params).intValue(),
+                            asString(NODE, params, ctx));
+        } else if (params.get(TEXT_COLUMN) == null)  {
             click(coerceToString(params.get(LOCATOR), ctx), asBigDecimal(COUNT, params).intValue(),
                     asString(MODIFIERS, params, ctx), asBoolean(REQUEST_FOCUS, params));
         } else {

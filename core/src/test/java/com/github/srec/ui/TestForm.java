@@ -354,6 +354,7 @@ public class TestForm {
         scrollPane2.setMinimumSize(new Dimension(100, 20));
         splitPane1.setLeftComponent(scrollPane2);
         tree1 = new JTree();
+        tree1.setName("tree1");
         scrollPane2.setViewportView(tree1);
         toolbar = new JToolBar();
         mainPnl.add(toolbar, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
