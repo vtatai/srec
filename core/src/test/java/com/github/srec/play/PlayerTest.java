@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 
 import com.github.srec.testng.AbstractSRecTestNGTest;
 
-
 @Test
 public class PlayerTest extends AbstractSRecTestNGTest {
     private static final String TEST_SCRIPT_DIR = "src/test/resources/";
@@ -77,7 +76,6 @@ public class PlayerTest extends AbstractSRecTestNGTest {
     public void testFindByTypeIndex() {
         runTest("test_find_by_type_index.xml");
     }
-
 
     public void testClickCountOnTextField() {
         runTest("test_click_count_on_text_field.xml");
@@ -146,5 +144,9 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         assertEquals(errors.get(1).getLineNumber(), 21);
         assertEquals(errors.get(1).getOriginatingException().getCause().getMessage(),
    	            "Component [slider] is a javax.swing.JSlider, and not a JList or JComboBox");
+    }
+
+    public void testClickTree() {
+        runTest("test_click_tree.xml");
     }
 }
