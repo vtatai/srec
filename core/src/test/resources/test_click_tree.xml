@@ -1,0 +1,26 @@
+<suite name="test_click_tree" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://github.com/srec srec.xsd">
+    <test_case name="1">
+        <window_activate locator="TestForm"/>
+        <find locator="tree1" id="testTree" findComponentType="tree"/>
+
+        <click locator="id=testTree" node="JTree"/>
+        <click locator="id=testTree" node="colors" count="2"/>
+        <click locator="id=testTree" node="blue"/>
+
+        <select locator="calculationCB" item="Future Value"/>
+        <type locator="initialValueTF" text="100"/>
+        <type_special locator="initialValueTF" text="Tab"/>
+        <assert locator="initialValueTF" text="100"/>
+        <select locator="calculationCB" index="1"/>
+        <select locator="calculationCB" index="0"/>
+        <click locator="text=Ok"/>
+        <click locator="cb1"/>
+
+        <click locator="id=testTree" node="sports" count="2"/>
+        <click locator="id=testTree" node="soccer"/>
+        <click locator="id=testTree" node="sports" count="2"/>
+
+        <close locator="TestForm"/>
+    </test_case>
+</suite>
