@@ -1290,7 +1290,7 @@ public class JemmyDSL {
             TreeNode node = (TreeNode)parent.getLastPathComponent();
             Object o = node.toString();
 
-            if (o.equals(nodeLabel)) {
+            if (nodeLabel.equals(o)) {
                 return parent;
             } else {
                 if (node.getChildCount() >= 0) {
