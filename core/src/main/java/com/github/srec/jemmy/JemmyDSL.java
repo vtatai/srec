@@ -573,6 +573,7 @@ public class JemmyDSL {
         // The solution proposed here tries to guarantee that the textField has the focus
         // to make the test as closes as the human interactions as possible.
         operator.requestFocus();
+        operator.enableInputMethods(true);
         operator.pushKey(key, convertModifiers(modifiers));
     }
 
