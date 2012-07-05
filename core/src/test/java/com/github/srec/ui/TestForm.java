@@ -149,6 +149,7 @@ public class TestForm {
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run() {
+                System.getProperties().put("suppressSwingDropSupport", "true");
                 new TestForm().init();
             }
         });
