@@ -144,6 +144,9 @@ public class DefaultScreenShot implements ScreenShot {
 
     public String capture(String subdir, Rectangle screenRect, Robot robot) {
         BufferedImage image = robot.createScreenCapture(screenRect);
+        if (image == null) {
+        	return null;
+        }
         String captureFileName = "screenshot-" + counter++ + ".png";
         String pathname = PropertiesReader.getProperties().getProperty(PropertiesReader.SCREENSHOTS_DIR);
         if (isBlank(pathname)) {
