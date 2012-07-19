@@ -159,7 +159,7 @@ public class DefaultScreenShot implements ScreenShot {
         String finalFileName = pathname + File.separator + captureFileName;
         try {
             ImageIO.write(image, "png", new File(finalFileName));
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return finalFileName;
