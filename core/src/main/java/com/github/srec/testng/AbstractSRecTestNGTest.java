@@ -74,7 +74,7 @@ public abstract class AbstractSRecTestNGTest {
             } else {
                 throw e;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         } finally {
