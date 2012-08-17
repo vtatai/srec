@@ -1,5 +1,8 @@
 package com.github.srec.play;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import com.github.srec.Location;
 import com.github.srec.command.exception.CommandExecutionException;
 
@@ -50,6 +53,14 @@ public class PlayerError {
 
     @Override
     public String toString() {
-        return "Script error on test suite '" + testSuite + "', test case '" + testCase + "', at " + location + ", message:\n" + originatingException.getMessage();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Script error on test suite '").append(testSuite).append("', test case '");
+        sb.append(testCase).append("', at ").append(location).append(", message:\n").append(originatingException.getMessage());
+        sb.append("\nOrignal stack trace:\n");
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        originatingException.printStackTrace(pw);
+        sb.append(sw.toString());
+        return sb.toString();
     }
 }
