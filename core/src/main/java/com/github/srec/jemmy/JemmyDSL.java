@@ -963,13 +963,7 @@ public class JemmyDSL {
             return component;
         }
 
-        public Dialog activate(Long timeout) {
-            if (timeout != null) {
-                Timeouts currentTimeouts = JemmyProperties.getCurrentTimeouts();
-                Timeouts timeouts = currentTimeouts.cloneThis();
-                timeouts.setTimeout("DialogWaiter.WaitDialogTimeout", timeout);                
-                component.setTimeouts(timeouts);
-            }
+        public Dialog activate() {
             component.activate();
             currentWindow = this;
             return this;
