@@ -70,6 +70,7 @@ public abstract class AbstractSRecTestNGTest {
         } catch (ParseException e) {
             if (failOnError) {
                 e.printErrors();
+                e.printStackTrace();                
                 fail("Errors encountered during srec script run: " + e.getMessage());
             } else {
                 throw e;
