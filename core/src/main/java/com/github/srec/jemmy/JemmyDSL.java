@@ -527,7 +527,13 @@ public class JemmyDSL {
             logger.debug(" index = " + index);
         }
         if (index < 0 || index >= list.size()) {
-            return null;
+            if (required) {
+                throw new JemmyDSLException("Component " + id + " not found");                
+            } else {
+                componentMap.putComponent(id, null);
+                logger.debug("findByComponentType returned null");
+                return null;
+            }
         }
         java.awt.Component component = list.get(index);
         if (component == null) {
@@ -656,6 +662,9 @@ public class JemmyDSL {
             }
         } else {
             throw new JemmyDSLException("Unsupported locator: " + locator);
+        }
+        if (component == null) {
+            throw new JemmyDSLException("Component not found: " + locator);
         }
         return component;
     }
@@ -954,7 +963,13 @@ public class JemmyDSL {
             return component;
         }
 
-        public Dialog activate() {
+        public Dialog activate(Long timeout) {
+            if (timeout != null) {
+                Timeouts currentTimeouts = JemmyProperties.getCurrentTimeouts();
+                Timeouts timeouts = currentTimeouts.cloneThis();
+                timeouts.setTimeout("DialogWaiter.WaitDialogTimeout", timeout);                
+                component.setTimeouts(timeouts);
+            }
             component.activate();
             currentWindow = this;
             return this;
@@ -1170,7 +1185,7 @@ public class JemmyDSL {
         private final JComboBoxOperator component;
 
         public ComboBox(String locator) {
-            component = find(locator, JComboBoxOperator.class);
+            component = find(locator, JComboBoxOperator.class);            
         }
 
         public ComboBox(JComboBoxOperator comp) {
