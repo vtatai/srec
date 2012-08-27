@@ -860,10 +860,10 @@ public class JemmyDSL {
 			return KeyEvent.VK_F11;
 		} else if ("F12".equalsIgnoreCase(keyString)) {
 			return KeyEvent.VK_F12;
-		} else if ("N".equalsIgnoreCase(keyString)) {
-			return KeyEvent.VK_N;
 		} else if ("A".equalsIgnoreCase(keyString)) {
-	        return KeyEvent.VK_A;
+            return KeyEvent.VK_A;
+		} else if ("N".equalsIgnoreCase(keyString)) {
+			return KeyEvent.VK_N;		
 		} else if ("R".equalsIgnoreCase(keyString)) {
 			return KeyEvent.VK_R;
 		} else {
