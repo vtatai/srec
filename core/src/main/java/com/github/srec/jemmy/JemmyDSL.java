@@ -860,9 +860,11 @@ public class JemmyDSL {
 			return KeyEvent.VK_F11;
 		} else if ("F12".equalsIgnoreCase(keyString)) {
 			return KeyEvent.VK_F12;
-		} else if ("n".equalsIgnoreCase(keyString)) {
-			return KeyEvent.VK_N;
-		} else if ("r".equalsIgnoreCase(keyString)) {
+		} else if ("A".equalsIgnoreCase(keyString)) {
+            return KeyEvent.VK_A;
+		} else if ("N".equalsIgnoreCase(keyString)) {
+			return KeyEvent.VK_N;		
+		} else if ("R".equalsIgnoreCase(keyString)) {
 			return KeyEvent.VK_R;
 		} else {
 			throw new UnsupportedFeatureException("Type special for " + keyString
