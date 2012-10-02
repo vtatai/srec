@@ -1417,14 +1417,15 @@ public class JemmyDSL {
                             }
                         }
                         JTable table = (JTable)comp;
-                        TableCellRenderer renderer = table.getCellRenderer(0, 0);
+                        TableCellRenderer renderer = table.getCellRenderer(r, c);
+                        java.awt.Component renderer2 = renderer.getTableCellRendererComponent(table, table.getValueAt(r, c), false, false, r, c);                        
                         Object value;
-//                        if (renderer instanceof DefaultTableCellRenderer) {
-//                            DefaultTableCellRenderer dtcr = (DefaultTableCellRenderer) renderer;
-//                            value = dtcr.getText();                            
-//                        } else {
+                        if (renderer2 instanceof DefaultTableCellRenderer) {
+                            DefaultTableCellRenderer dtcr = (DefaultTableCellRenderer) renderer2;
+                            value = dtcr.getText();                            
+                        } else {
                             value = table.getValueAt(r, c);
-//                        }
+                        }
                         if (value == null) {
                             value = "";
                         }
