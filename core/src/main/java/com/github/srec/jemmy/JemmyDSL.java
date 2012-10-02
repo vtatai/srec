@@ -37,7 +37,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeNode;
@@ -1393,9 +1396,6 @@ public class JemmyDSL {
 
             @Override
             public boolean checkComponent(java.awt.Component comp) {
-                if (!"".equals(label)) {
-                    return super.checkComponent(comp);
-                } else if (comp instanceof JTable) {
                     if (((JTable) comp).getRowCount() > row
                             && ((JTable) comp).getColumnCount() > column) {
                         int r = row;
@@ -1416,13 +1416,20 @@ public class JemmyDSL {
                                 return (false);
                             }
                         }
-                        Object value = ((JTable) comp).getValueAt(r, c);
+                        JTable table = (JTable)comp;
+                        TableCellRenderer renderer = table.getCellRenderer(r, c);
+                        Object value;
+                        if (renderer instanceof DefaultTableCellRenderer) {
+                            DefaultTableCellRenderer dtcr = (DefaultTableCellRenderer) renderer;
+                            value = dtcr.getText();                            
+                        } else {
+                            value = table.getValueAt(r, c);
+                        }
                         if (value == null) {
                             value = "";
                         }
                         return (comparator.equals(value.toString(), label));
                     }
-                }
 
                 return (false);
             }
