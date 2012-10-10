@@ -103,6 +103,11 @@ public abstract class BaseCommand implements Command {
 		return ((BooleanValue) value).get();
 	}
 
+    protected static String[] coerceToArray(Value<?> value, ExecutionContext context) {
+        String list = coerceToString(value, context);
+        return list.split(" *, *");
+    }
+
 	/**
 	 * Finds a symbol which should wrap a Java object.
 	 * 

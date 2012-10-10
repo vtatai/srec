@@ -73,6 +73,32 @@ public class PlayerTest extends AbstractSRecTestNGTest {
         runTest("test_combo_list_above_component.xml");
     }
 
+    public void testComboAssert() {
+        runTest("test_combo_assert.xml");
+    }
+
+    public void testComboAssertError() {
+        Player p = runTest("test_combo_assert_error.xml", false, false);
+        assertEquals(p.getErrors().size(), 5);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 19);
+        assertEquals(p.getErrors().get(1).getLineNumber(), 25);
+        assertEquals(p.getErrors().get(2).getLineNumber(), 31);
+        assertEquals(p.getErrors().get(3).getLineNumber(), 37);
+        assertEquals(p.getErrors().get(4).getLineNumber(), 43);
+    }
+
+    public void testAssertListContentForCombo() {
+        runTest("test_assert_list_content_for_combo.xml");
+    }
+
+    public void testAssertListContentForComboError() {
+        Player p = runTest("test_assert_list_content_for_combo_error.xml", false, false);
+        assertEquals(p.getErrors().size(), 3);
+        assertEquals(p.getErrors().get(0).getLineNumber(), 18);
+        assertEquals(p.getErrors().get(1).getLineNumber(), 23);
+        assertEquals(p.getErrors().get(2).getLineNumber(), 28);
+    }
+
     public void testFindByTypeIndex() {
         runTest("test_find_by_type_index.xml");
     }
