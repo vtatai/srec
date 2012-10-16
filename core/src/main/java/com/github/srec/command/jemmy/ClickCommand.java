@@ -25,12 +25,14 @@ public class ClickCommand extends JemmyEventCommand {
     public static final String MODIFIERS = "modifiers";
     public static final String REQUEST_FOCUS = "requestFocus";
     public static final String NODE = "node";
+    public static final String INDEX = "index";
 
     public ClickCommand() {
         super("click", param(LOCATOR), param(MODIFIERS, Type.STRING, true, null),
                 param(TEXT_COLUMN, Type.NUMBER, true, null),
                 param(COUNT, Type.NUMBER, true, new NumberValue("1")),
                 param(NODE, Type.STRING, true, null),
+                param(INDEX, Type.NUMBER, true, new NumberValue("0")),
                 param(REQUEST_FOCUS, Type.BOOLEAN, true, new BooleanValue(false)));
     }
 
@@ -42,7 +44,7 @@ public class ClickCommand extends JemmyEventCommand {
                             asString(NODE, params, ctx));
         } else if (params.get(TEXT_COLUMN) == null)  {
             click(coerceToString(params.get(LOCATOR), ctx), asBigDecimal(COUNT, params).intValue(),
-                    asString(MODIFIERS, params, ctx), asBoolean(REQUEST_FOCUS, params));
+                    asString(MODIFIERS, params, ctx), asBoolean(REQUEST_FOCUS, params), asBigDecimal(INDEX, params).intValue());
         } else {
             textField(coerceToString(params.get(LOCATOR), ctx)).clickCharPosition(asBigDecimal(TEXT_COLUMN, params).intValue(),
                     asString(MODIFIERS, params, ctx), asBigDecimal(COUNT, params).intValue());
