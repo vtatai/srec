@@ -66,6 +66,7 @@ import org.netbeans.jemmy.operators.JDialogOperator;
 import org.netbeans.jemmy.operators.JFrameOperator;
 import org.netbeans.jemmy.operators.JInternalFrameOperator;
 import org.netbeans.jemmy.operators.JLabelOperator;
+import org.netbeans.jemmy.operators.JListOperator;
 import org.netbeans.jemmy.operators.JMenuBarOperator;
 import org.netbeans.jemmy.operators.JMenuItemOperator;
 import org.netbeans.jemmy.operators.JMenuOperator;
@@ -429,6 +430,9 @@ public class JemmyDSL {
         if (comp instanceof JInternalFrame) {
 			return new JInternalFrameOperator((JInternalFrame) comp);
 		}
+        if (comp instanceof javax.swing.JList) {
+            return new JListOperator((javax.swing.JList) comp);
+        }
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
@@ -486,6 +490,9 @@ public class JemmyDSL {
         if (comp instanceof JInternalFrameOperator) {
 			return new InternalFrame((JInternalFrame) ((JInternalFrameOperator) comp).getSource());
 		}
+        if (comp instanceof JListOperator) {
+            return new JList((JListOperator) comp);
+        }
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
@@ -556,7 +563,7 @@ public class JemmyDSL {
         return convertFind(operator);
     }
 
-    public static void click(String locator, int count, String modifiers, boolean requestFocus) {
+    public static void click(String locator, int count, String modifiers, boolean requestFocus, int index) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
         if (operator == null) {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
@@ -564,11 +571,16 @@ public class JemmyDSL {
         if (requestFocus) {
         		operator.requestFocus();
         }
-        operator.clickMouse(operator.getCenterXForClick(),
-                            operator.getCenterYForClick(),
-                            count,
-                            InputEvent.BUTTON1_MASK,
-                            convertModifiers(modifiers));
+        if (operator instanceof JListOperator) {
+            JListOperator jlistop = (JListOperator) operator;
+            jlistop.clickOnItem(index, count);
+        } else {
+            operator.clickMouse(operator.getCenterXForClick(),
+                    operator.getCenterYForClick(),
+                    count,
+                    InputEvent.BUTTON1_MASK,
+                    convertModifiers(modifiers));            
+        }
     }
 
     public static void typeSpecial(String locator, String keyString, String modifiers) {
@@ -1839,6 +1851,24 @@ public class JemmyDSL {
 
         @Override
         public JScrollBarOperator getComponent() {
+            return component;
+        }
+    }
+
+
+    public static class JList extends Component {
+        private final JListOperator component;
+
+        public JList(String locator) {
+            component = find(locator, JListOperator.class);
+        }
+
+        public JList(JListOperator component) {
+            this.component = component;
+        }
+
+        @Override
+        public JListOperator getComponent() {
             return component;
         }
     }
