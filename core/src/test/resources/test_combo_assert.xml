@@ -11,14 +11,15 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_find_by_type_index" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<suite name="test_combo_assert" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://github.com/srec srec.xsd">
     <test_case name="1">
         <window_activate locator="TestForm"/>
-        <tab locator="tabbedPane" text="Text"/>
-        <find_by_type id="textField" containerId="TestForm" findComponentType="text_field" index="6"/>
-        <type locator="id=textField" text="text field with index=6"/>
-        <assert locator="formattedTextField" text="text field with index=6"/>
+        <select locator="calculationCB" item="Current Value"/>
+        <assert_combobox locator="calculationCB" text="Current Value"/>
+        <assert_combobox locator="calculationCB" index="0"/>
+        <select locator="calculationCB" index="-1"/>
+        <assert_combobox locator="calculationCB" index="-1"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>

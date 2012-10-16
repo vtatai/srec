@@ -113,6 +113,7 @@ public class TestForm {
         internalFrame.pack();
         desktop.add(internalFrame);
 
+        calculationCB.setEditable(true);
         calculationCB.addItem("Current Value");
         calculationCB.addItem("Future Value");
         calculationCB.addItem("Wrong Value");

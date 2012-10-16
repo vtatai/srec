@@ -11,14 +11,21 @@
   ~ the specific language governing permissions and limitations under the License.
   -->
 
-<suite name="test_find_by_type_index" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<suite name="test_assert_list_content_for_combo_error" xmlns="http://github.com/srec" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://github.com/srec srec.xsd">
-    <test_case name="1">
+    <test_case name="wrong size">
         <window_activate locator="TestForm"/>
-        <tab locator="tabbedPane" text="Text"/>
-        <find_by_type id="textField" containerId="TestForm" findComponentType="text_field" index="6"/>
-        <type locator="id=textField" text="text field with index=6"/>
-        <assert locator="formattedTextField" text="text field with index=6"/>
+        <assert_list_content locator="calculationCB" content="Current Value, Future Value"/>
+        <close locator="TestForm"/>
+    </test_case>
+    <test_case name="one wrong value">
+        <window_activate locator="TestForm"/>
+        <assert_list_content locator="calculationCB" content="Current Valu, Future Value, Wrong Value"/>
+        <close locator="TestForm"/>
+    </test_case>
+    <test_case name="wrong order">
+        <window_activate locator="TestForm"/>
+        <assert_list_content locator="calculationCB" content="Current Value, Wrong Value, Future Value"/>
         <close locator="TestForm"/>
     </test_case>
 </suite>

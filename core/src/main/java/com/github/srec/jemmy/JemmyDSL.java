@@ -7,6 +7,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -1235,6 +1236,10 @@ public class JemmyDSL {
 
         public void assertSelected(String text) {
             component.waitItemSelected(text);
+        }
+
+        public void assertSelected(BigDecimal index) {
+            component.waitItemSelected(index.intValue());
         }
     }
 
