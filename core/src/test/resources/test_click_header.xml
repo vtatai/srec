@@ -15,7 +15,7 @@
         <assert locator="initialValueTF" text="100"/>
         <select locator="calculationCB" index="1"/>
         <select locator="calculationCB" index="0"/>
-        <click locator="text=Ok"/>
+        <click locator="text=Ok" button="left"/>
         <click locator="cb1"/>
         <assert_checked locator="cb1" checked="true"/>
         <assert_enabled locator="textField2" enabled="true"/>

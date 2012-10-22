@@ -17,7 +17,7 @@
         <window_activate locator="TestForm"/>
         <type locator="initialValueTF" text="100"/>
         <type_special locator="initialValueTF" text="Tab"/>
-        <click locator="initialValueTF" textColumn="0" count="2"/>
+        <click locator="initialValueTF" textColumn="0" count="2" button="left"/>
         <type_special locator="initialValueTF" text="Delete"/>
         <assert locator="initialValueTF" text=""/>
         <close locator="TestForm"/>

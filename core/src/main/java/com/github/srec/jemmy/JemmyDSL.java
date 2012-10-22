@@ -92,6 +92,7 @@ import antlr.debug.misc.JTreeASTPanel;
 
 import com.github.srec.UnsupportedFeatureException;
 import com.github.srec.command.exception.AssertionFailedException;
+import com.github.srec.command.jemmy.ClickCommand.Button;
 import com.github.srec.util.AWTTreeScanner;
 import com.github.srec.util.ScannerMatcher;
 import com.github.srec.util.Utils;
@@ -564,7 +565,7 @@ public class JemmyDSL {
         return convertFind(operator);
     }
 
-    public static void click(String locator, int count, String modifiers, boolean requestFocus, int index) {
+    public static void click(String locator, int count, String modifiers, boolean requestFocus, int index, com.github.srec.command.jemmy.ClickCommand.Button button) {
         final JComponentOperator operator = find(locator, JComponentOperator.class);
         if (operator == null) {
 			throw new JemmyDSLException("Could not find component for clicking " + locator);
@@ -579,7 +580,7 @@ public class JemmyDSL {
             operator.clickMouse(operator.getCenterXForClick(),
                     operator.getCenterYForClick(),
                     count,
-                    InputEvent.BUTTON1_MASK,
+                    button.getMask(),
                     convertModifiers(modifiers));            
         }
     }
@@ -1136,13 +1137,13 @@ public class JemmyDSL {
             return this;
         }
 
-        public TextField clickCharPosition(int pos, String modifiers, int count) {
+        public TextField clickCharPosition(int pos, String modifiers, int count, com.github.srec.command.jemmy.ClickCommand.Button b) {
             FontMetrics fm = component.getFontMetrics(component.getFont());
             component.clickMouse(fm.stringWidth(component.getText().substring(0, pos))
                                          + component.getInsets().left,
                                  component.getCenterYForClick(),
                                  count,
-                                 KeyEvent.BUTTON1_MASK,
+                                 b.getMask(),
                                  convertModifiers(modifiers));
             return this;
         }
@@ -1300,11 +1301,11 @@ public class JemmyDSL {
             return operator;
         }
 
-        public void click(int count, String node) {
+        public void click(int count, String node, com.github.srec.command.jemmy.ClickCommand.Button button) {
             TreePath path = findNode(component, node);
 
             if (path != null) {
-                operator.clickOnPath(path, count);
+                operator.clickOnPath(path, count, button.getMask());
             } else {
                 throw new JemmyDSLException("JTree node with label [" + node +
                         " wasn't found.");
