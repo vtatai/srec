@@ -2,6 +2,7 @@ package com.github.srec.jemmy;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
 
+import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -27,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -71,6 +73,7 @@ import org.netbeans.jemmy.operators.JListOperator;
 import org.netbeans.jemmy.operators.JMenuBarOperator;
 import org.netbeans.jemmy.operators.JMenuItemOperator;
 import org.netbeans.jemmy.operators.JMenuOperator;
+import org.netbeans.jemmy.operators.JPopupMenuOperator;
 import org.netbeans.jemmy.operators.JProgressBarOperator;
 import org.netbeans.jemmy.operators.JRadioButtonOperator;
 import org.netbeans.jemmy.operators.JScrollBarOperator;
@@ -435,6 +438,9 @@ public class JemmyDSL {
         if (comp instanceof javax.swing.JList) {
             return new JListOperator((javax.swing.JList) comp);
         }
+        if (comp instanceof JPopupMenu) {
+            return new JPopupMenuOperator((JPopupMenu) comp);
+        }
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
@@ -495,6 +501,9 @@ public class JemmyDSL {
         if (comp instanceof JListOperator) {
             return new JList((JListOperator) comp);
         }
+        if (comp instanceof JPopupMenuOperator) {
+            return new PopupMenu((JPopupMenuOperator) comp);
+        }        
         throw new JemmyDSLException("Unsupported find type " + comp);
     }
 
@@ -575,7 +584,21 @@ public class JemmyDSL {
         }
         if (operator instanceof JListOperator) {
             JListOperator jlistop = (JListOperator) operator;
-            jlistop.clickOnItem(index, count);
+            jlistop.clickOnItem(index, count); 
+        } else if (operator instanceof JPopupMenuOperator) {
+            JPopupMenuOperator popupOp = (JPopupMenuOperator) operator;
+            ComponentChooser chooser = new ComponentChooser() {                
+                public String getDescription() {
+                    return null;
+                }
+
+                @Override
+                public boolean checkComponent(java.awt.Component arg0) {
+                    return true;
+                }
+            };
+            java.awt.Component c = popupOp.findSubComponent(chooser, index);
+            new JMenuItemOperator((JMenuItem)c).clickMouse();
         } else {
             operator.clickMouse(operator.getCenterXForClick(),
                     operator.getCenterYForClick(),
@@ -1878,5 +1901,23 @@ public class JemmyDSL {
         public JListOperator getComponent() {
             return component;
         }
+    }
+    
+    public static class PopupMenu extends Component {
+        private final JPopupMenuOperator component;
+
+        public PopupMenu(String locator) {
+            component = find(locator, JPopupMenuOperator.class);
+        }
+
+        public PopupMenu(JPopupMenuOperator component) {
+            this.component = component;
+        }
+
+        @Override
+        public JPopupMenuOperator getComponent() {
+            return component;
+        }
+
     }
 }
