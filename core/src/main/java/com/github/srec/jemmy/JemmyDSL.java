@@ -581,7 +581,8 @@ public class JemmyDSL {
                     operator.getCenterYForClick(),
                     count,
                     button.getMask(),
-                    convertModifiers(modifiers));            
+                    convertModifiers(modifiers),
+                    button.isForPopup());            
         }
     }
 

@@ -32,7 +32,7 @@ public class ClickCommand extends JemmyEventCommand {
 
     public static enum Button {
         left(InputEvent.BUTTON1_MASK), 
-        right(InputEvent.BUTTON2_MASK);
+        right(InputEvent.BUTTON3_MASK);
         
         private int mask;
         
@@ -42,6 +42,10 @@ public class ClickCommand extends JemmyEventCommand {
         
         public int getMask() {
             return mask;
+        }
+
+        public boolean isForPopup() {
+            return this == right;
         }
     }
     
