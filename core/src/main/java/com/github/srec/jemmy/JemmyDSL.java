@@ -278,6 +278,10 @@ public class JemmyDSL {
     public static Tree tree(String locator) {
         return new Tree(locator);
     }
+    
+    public static JList listBox(String locator) {
+        return new JList(locator);
+    }
 
     /**
      * Finds a component and stores it under the given id. The component can later be used on other
@@ -584,7 +588,16 @@ public class JemmyDSL {
         }
         if (operator instanceof JListOperator) {
             JListOperator jlistop = (JListOperator) operator;
-            jlistop.clickOnItem(index, count); 
+            switch (button) {
+                case right :
+                    jlistop.clickForPopup();
+                    break;
+                case left : 
+                    jlistop.clickOnItem(index, count);
+                    break;
+            }
+
+            // 
         } else if (operator instanceof JPopupMenuOperator) {
             JPopupMenuOperator popupOp = (JPopupMenuOperator) operator;
             ComponentChooser chooser = new ComponentChooser() {                
@@ -817,6 +830,15 @@ public class JemmyDSL {
             throw new JemmyDSLException(e);
         }
     }
+    
+    public static void waitCheckedSelected(String locator, boolean checked, int index) {
+        JListOperator op = find(locator, JListOperator.class);
+        try {
+            waitComponentCheckedSelected(op, checked, index);
+        } catch (InterruptedException e) {
+            throw new JemmyDSLException(e);
+        }
+    }
 
     private static void waitComponentDisabled(final ComponentOperator op)
         throws InterruptedException {
@@ -863,6 +885,29 @@ public class JemmyDSL {
                                     "ComponentOperator.WaitComponentEnabledTimeout");
         waiter.waitAction(op.getSource());
     }
+    
+    private static void waitComponentCheckedSelected(final JListOperator op, final boolean checked, final int index)
+            throws InterruptedException {
+            Waiter waiter = new Waiter(new Waitable() {
+                @Override
+                public Object actionProduced(Object obj) {
+                    if (( (javax.swing.JList) obj).isSelectedIndex(index) != checked) {
+                        return null;
+                    } else {
+                        return obj;
+                    }
+                }
+
+                @Override
+                public String getDescription() {
+                    return ("Component description: " + op.getSource().getClass().toString());
+                }
+            });
+            waiter.setOutput(op.getOutput());
+            waiter.setTimeoutsToCloneOf(op.getTimeouts(),
+                                        "ComponentOperator.WaitComponentEnabledTimeout");
+            waiter.waitAction(op.getSource());
+        }
 
     private static int convertKey(String keyString) {
         if ("Tab".equalsIgnoreCase(keyString)) {
@@ -1900,6 +1945,15 @@ public class JemmyDSL {
         @Override
         public JListOperator getComponent() {
             return component;
+        }
+        
+        public void assertText(String text, int index) {
+            Object obj = component.getModel().getElementAt(index);
+            if (!obj.toString().equals(text)) {
+                String message = "The element of parameter: " + text + " is different from: " + obj;
+                throw new AssertionFailedException(message);
+            }
+
         }
     }
     
