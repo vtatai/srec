@@ -21,7 +21,10 @@ public class AssertCommand extends JemmyEventCommand {
 public static final String INDEX = "index";
     
     public AssertCommand() {
-        super("assert", params(LOCATOR, Type.STRING, "text", Type.STRING, INDEX, Type.NUMBER));
+        super("assert", param(LOCATOR, Type.STRING), 
+                param("text", Type.STRING),
+                param(INDEX, Type.NUMBER, true, null));
+              
     }
 
     @Override

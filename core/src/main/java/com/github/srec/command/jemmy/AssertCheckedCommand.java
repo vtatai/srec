@@ -4,6 +4,7 @@ import com.github.srec.command.ExecutionContext;
 import com.github.srec.command.SRecCommand;
 import com.github.srec.command.method.MethodParameter;
 import com.github.srec.command.value.BooleanValue;
+import com.github.srec.command.value.NumberValue;
 import com.github.srec.command.value.Type;
 import com.github.srec.command.value.Value;
 
@@ -22,10 +23,9 @@ public class AssertCheckedCommand extends JemmyEventCommand {
     public static final String INDEX = "index";
     public AssertCheckedCommand() {
         
-        
         super("assert_checked", new MethodParameter(LOCATOR, Type.STRING),
               new MethodParameter("checked", Type.BOOLEAN, true, BooleanValue.TRUE),
-              new MethodParameter(INDEX, Type.NUMBER));
+              param(INDEX, Type.NUMBER, true, null));
     }
 
     @Override
