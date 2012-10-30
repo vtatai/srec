@@ -12,19 +12,29 @@ import org.netbeans.jemmy.JemmyException;
 import java.util.Map;
 
 import static com.github.srec.jemmy.JemmyDSL.waitChecked;
+import static com.github.srec.jemmy.JemmyDSL.waitCheckedSelected;
 
 /**
  * @author Victor Tatai
  */
 @SRecCommand
 public class AssertCheckedCommand extends JemmyEventCommand {
+    public static final String INDEX = "index";
     public AssertCheckedCommand() {
+        
+        
         super("assert_checked", new MethodParameter(LOCATOR, Type.STRING),
-              new MethodParameter("checked", Type.BOOLEAN, true, BooleanValue.TRUE));
+              new MethodParameter("checked", Type.BOOLEAN, true, BooleanValue.TRUE),
+              new MethodParameter(INDEX, Type.NUMBER));
     }
 
     @Override
     protected void runJemmy(ExecutionContext ctx, Map<String, Value> params) throws JemmyException {
-        waitChecked(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("checked")));
+        if (params.get(INDEX) != null) {
+            waitCheckedSelected(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("checked")), (asBigDecimal(INDEX, params).intValue()));
+        } else {
+            waitChecked(coerceToString(params.get(LOCATOR), ctx), coerceToBoolean(params.get("checked")));
+        }
+        
     }
 }
